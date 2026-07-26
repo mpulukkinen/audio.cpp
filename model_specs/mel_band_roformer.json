@@ -30,6 +30,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "mel_band_roformer_q8_0",
@@ -38,20 +46,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Mel-Band-RoFormer-GGUF",
-      "required_files": [
-        "mel-band-roformer-q8_0.gguf"
+      "files": [
+        "Mel-Band-RoFormer-GGUF/mel-band-roformer-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Mel-Band-RoFormer-GGUF/mel-band-roformer-q8_0.gguf"
-        ],
-        "strip_prefix": "Mel-Band-RoFormer-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Mel-Band-RoFormer-GGUF"
     },
     {
       "id": "mel_band_roformer_f16",
@@ -59,20 +57,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Mel-Band-RoFormer-GGUF",
-      "required_files": [
-        "mel-band-roformer-f16.gguf"
+      "files": [
+        "Mel-Band-RoFormer-GGUF/mel-band-roformer-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Mel-Band-RoFormer-GGUF/mel-band-roformer-f16.gguf"
-        ],
-        "strip_prefix": "Mel-Band-RoFormer-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Mel-Band-RoFormer-GGUF"
     },
     {
       "id": "mel_band_roformer_safetensors",
@@ -80,16 +68,13 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "mel-roformer-mlx",
-      "required_files": [
+      "files": [
         "config.json",
         "model.safetensors"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "mlx-community/mel-roformer-mlx",
-        "revision": "main",
-        "gated": false
+        "repo": "mlx-community/mel-roformer-mlx"
       }
     }
   ]

@@ -41,6 +41,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "voxcpm2_q8_0",
@@ -49,20 +57,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "VoxCPM2-GGUF",
-      "required_files": [
-        "voxcpm2-q8_0.gguf"
+      "files": [
+        "VoxCPM2-GGUF/voxcpm2-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "VoxCPM2-GGUF/voxcpm2-q8_0.gguf"
-        ],
-        "strip_prefix": "VoxCPM2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "VoxCPM2-GGUF"
     },
     {
       "id": "voxcpm2_bf16",
@@ -70,20 +68,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "VoxCPM2-GGUF",
-      "required_files": [
-        "voxcpm2-bf16.gguf"
+      "files": [
+        "VoxCPM2-GGUF/voxcpm2-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "VoxCPM2-GGUF/voxcpm2-bf16.gguf"
-        ],
-        "strip_prefix": "VoxCPM2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "VoxCPM2-GGUF"
     },
     {
       "id": "voxcpm2_orig",
@@ -91,20 +79,10 @@
       "format": "gguf",
       "precision": "orig",
       "target_directory": "VoxCPM2-GGUF",
-      "required_files": [
-        "voxcpm2-orig.gguf"
+      "files": [
+        "VoxCPM2-GGUF/voxcpm2-orig.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "VoxCPM2-GGUF/voxcpm2-orig.gguf"
-        ],
-        "strip_prefix": "VoxCPM2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "VoxCPM2-GGUF"
     },
     {
       "id": "voxcpm2_safetensors",
@@ -112,18 +90,15 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "VoxCPM2",
-      "required_files": [
+      "files": [
         "config.json",
         "model.safetensors",
         "tokenizer.json",
         "tokenizer_config.json"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "OpenBMB/VoxCPM2",
-        "revision": "main",
-        "gated": false
+        "repo": "OpenBMB/VoxCPM2"
       }
     }
   ]

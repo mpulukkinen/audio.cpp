@@ -39,6 +39,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "fish_audio_s2_pro_q8_0",
@@ -47,20 +55,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Fish-Audio-S2-Pro-GGUF",
-      "required_files": [
-        "fish-audio-s2-pro-q8_0.gguf"
+      "files": [
+        "Fish-Audio-S2-Pro-GGUF/fish-audio-s2-pro-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Fish-Audio-S2-Pro-GGUF/fish-audio-s2-pro-q8_0.gguf"
-        ],
-        "strip_prefix": "Fish-Audio-S2-Pro-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Fish-Audio-S2-Pro-GGUF"
     },
     {
       "id": "fish_audio_s2_pro_bf16",
@@ -68,20 +66,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "Fish-Audio-S2-Pro-GGUF",
-      "required_files": [
-        "fish-audio-s2-pro-bf16.gguf"
+      "files": [
+        "Fish-Audio-S2-Pro-GGUF/fish-audio-s2-pro-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Fish-Audio-S2-Pro-GGUF/fish-audio-s2-pro-bf16.gguf"
-        ],
-        "strip_prefix": "Fish-Audio-S2-Pro-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Fish-Audio-S2-Pro-GGUF"
     }
   ]
 }

@@ -41,6 +41,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "miotts_1_7b_q8_0",
@@ -49,20 +57,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "MioTTS-1.7B-GGUF",
-      "required_files": [
-        "miotts-1.7b-q8_0.gguf"
+      "files": [
+        "MioTTS-1.7B-GGUF/miotts-1.7b-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "MioTTS-1.7B-GGUF/miotts-1.7b-q8_0.gguf"
-        ],
-        "strip_prefix": "MioTTS-1.7B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "MioTTS-1.7B-GGUF"
     },
     {
       "id": "miotts_1_7b_bf16",
@@ -70,20 +68,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "MioTTS-1.7B-GGUF",
-      "required_files": [
-        "miotts-1.7b-bf16.gguf"
+      "files": [
+        "MioTTS-1.7B-GGUF/miotts-1.7b-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "MioTTS-1.7B-GGUF/miotts-1.7b-bf16.gguf"
-        ],
-        "strip_prefix": "MioTTS-1.7B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "MioTTS-1.7B-GGUF"
     },
     {
       "id": "miotts_1_7b_orig",
@@ -91,20 +79,10 @@
       "format": "gguf",
       "precision": "orig",
       "target_directory": "MioTTS-1.7B-GGUF",
-      "required_files": [
-        "miotts-1.7b-orig.gguf"
+      "files": [
+        "MioTTS-1.7B-GGUF/miotts-1.7b-orig.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "MioTTS-1.7B-GGUF/miotts-1.7b-orig.gguf"
-        ],
-        "strip_prefix": "MioTTS-1.7B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "MioTTS-1.7B-GGUF"
     }
   ]
 }

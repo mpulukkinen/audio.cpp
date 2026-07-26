@@ -70,19 +70,13 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Llama-OuteTTS-1.0-1B-GGUF",
-      "required_files": [
-        "Llama-OuteTTS-1.0-1B_Q8.gguf"
+      "files": [
+        "Text to audio (TTS)/Llama-OuteTTS-1.0-1B_Q8.gguf"
       ],
-      "layout": "gguf",
+      "strip_prefix": "Text to audio (TTS)",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "mirek190/audio.cpp",
-        "revision": "main",
-        "include": [
-          "Text to audio (TTS)/Llama-OuteTTS-1.0-1B_Q8.gguf"
-        ],
-        "strip_prefix": "Text to audio (TTS)",
-        "gated": false
+        "repo": "mirek190/audio.cpp"
       }
     }
   ]

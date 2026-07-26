@@ -29,6 +29,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "sortformer_diar_4spk_v1_q8_0",
@@ -37,20 +45,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Sortformer-Diar-4spk-v1-GGUF",
-      "required_files": [
-        "sortformer-diar-4spk-v1-q8_0.gguf"
+      "files": [
+        "Sortformer-Diar-4spk-v1-GGUF/sortformer-diar-4spk-v1-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Sortformer-Diar-4spk-v1-GGUF/sortformer-diar-4spk-v1-q8_0.gguf"
-        ],
-        "strip_prefix": "Sortformer-Diar-4spk-v1-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Sortformer-Diar-4spk-v1-GGUF"
     },
     {
       "id": "sortformer_diar_4spk_v1_f16",
@@ -58,20 +56,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Sortformer-Diar-4spk-v1-GGUF",
-      "required_files": [
-        "sortformer-diar-4spk-v1-f16.gguf"
+      "files": [
+        "Sortformer-Diar-4spk-v1-GGUF/sortformer-diar-4spk-v1-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Sortformer-Diar-4spk-v1-GGUF/sortformer-diar-4spk-v1-f16.gguf"
-        ],
-        "strip_prefix": "Sortformer-Diar-4spk-v1-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Sortformer-Diar-4spk-v1-GGUF"
     },
     {
       "id": "sortformer_diar_4spk_v1_safetensors",
@@ -79,17 +67,14 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "diar_sortformer_4spk-v1",
-      "required_files": [
+      "files": [
         "config.json",
         "model.safetensors",
         "processor_config.json"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "nvidia/diar_sortformer_4spk-v1",
-        "revision": "main",
-        "gated": false
+        "repo": "nvidia/diar_sortformer_4spk-v1"
       }
     }
   ]

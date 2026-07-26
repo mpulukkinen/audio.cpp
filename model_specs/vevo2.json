@@ -105,6 +105,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "vevo2_q8_0",
@@ -113,20 +121,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Vevo2-GGUF",
-      "required_files": [
-        "vevo2-q8_0.gguf"
+      "files": [
+        "Vevo2-GGUF/vevo2-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Vevo2-GGUF/vevo2-q8_0.gguf"
-        ],
-        "strip_prefix": "Vevo2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Vevo2-GGUF"
     },
     {
       "id": "vevo2_f16",
@@ -134,20 +132,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Vevo2-GGUF",
-      "required_files": [
-        "vevo2-f16.gguf"
+      "files": [
+        "Vevo2-GGUF/vevo2-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Vevo2-GGUF/vevo2-f16.gguf"
-        ],
-        "strip_prefix": "Vevo2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Vevo2-GGUF"
     },
     {
       "id": "vevo2_orig",
@@ -155,20 +143,10 @@
       "format": "gguf",
       "precision": "orig",
       "target_directory": "Vevo2-GGUF",
-      "required_files": [
-        "vevo2-orig.gguf"
+      "files": [
+        "Vevo2-GGUF/vevo2-orig.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Vevo2-GGUF/vevo2-orig.gguf"
-        ],
-        "strip_prefix": "Vevo2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Vevo2-GGUF"
     }
   ]
 }

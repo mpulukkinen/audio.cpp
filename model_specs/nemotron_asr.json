@@ -31,6 +31,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "nemotron_asr_q8_0",
@@ -39,20 +47,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Nemotron-3.5-ASR-Streaming-0.6B-GGUF",
-      "required_files": [
-        "nemotron-3.5-asr-streaming-0.6b-q8_0.gguf"
+      "files": [
+        "Nemotron-3.5-ASR-Streaming-0.6B-GGUF/nemotron-3.5-asr-streaming-0.6b-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Nemotron-3.5-ASR-Streaming-0.6B-GGUF/nemotron-3.5-asr-streaming-0.6b-q8_0.gguf"
-        ],
-        "strip_prefix": "Nemotron-3.5-ASR-Streaming-0.6B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Nemotron-3.5-ASR-Streaming-0.6B-GGUF"
     },
     {
       "id": "nemotron_asr_f16",
@@ -60,20 +58,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Nemotron-3.5-ASR-Streaming-0.6B-GGUF",
-      "required_files": [
-        "nemotron-3.5-asr-streaming-0.6b-f16.gguf"
+      "files": [
+        "Nemotron-3.5-ASR-Streaming-0.6B-GGUF/nemotron-3.5-asr-streaming-0.6b-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Nemotron-3.5-ASR-Streaming-0.6B-GGUF/nemotron-3.5-asr-streaming-0.6b-f16.gguf"
-        ],
-        "strip_prefix": "Nemotron-3.5-ASR-Streaming-0.6B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Nemotron-3.5-ASR-Streaming-0.6B-GGUF"
     },
     {
       "id": "nemotron_asr_safetensors",
@@ -81,18 +69,15 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "nemotron-3.5-asr-streaming-0.6b",
-      "required_files": [
+      "files": [
         "config.json",
         "model.safetensors",
         "processor_config.json",
         "tokenizer.json"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "nvidia/nemotron-3.5-asr-streaming-0.6b",
-        "revision": "main",
-        "gated": false
+        "repo": "nvidia/nemotron-3.5-asr-streaming-0.6b"
       }
     }
   ]

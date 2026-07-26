@@ -45,6 +45,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "qwen3_tts_1_7b_base_q8_0",
@@ -53,20 +61,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Qwen3-TTS-12Hz-1.7B-Base-GGUF",
-      "required_files": [
-        "qwen3-tts-12hz-1.7b-base-q8_0_v2.gguf"
+      "files": [
+        "Qwen3-TTS-12Hz-1.7B-Base-GGUF/qwen3-tts-12hz-1.7b-base-q8_0_v2.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Qwen3-TTS-12Hz-1.7B-Base-GGUF/qwen3-tts-12hz-1.7b-base-q8_0_v2.gguf"
-        ],
-        "strip_prefix": "Qwen3-TTS-12Hz-1.7B-Base-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Qwen3-TTS-12Hz-1.7B-Base-GGUF"
     },
     {
       "id": "qwen3_tts_1_7b_base_bf16",
@@ -74,20 +72,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "Qwen3-TTS-12Hz-1.7B-Base-GGUF",
-      "required_files": [
-        "qwen3-tts-12hz-1.7b-base-bf16.gguf"
+      "files": [
+        "Qwen3-TTS-12Hz-1.7B-Base-GGUF/qwen3-tts-12hz-1.7b-base-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Qwen3-TTS-12Hz-1.7B-Base-GGUF/qwen3-tts-12hz-1.7b-base-bf16.gguf"
-        ],
-        "strip_prefix": "Qwen3-TTS-12Hz-1.7B-Base-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Qwen3-TTS-12Hz-1.7B-Base-GGUF"
     },
     {
       "id": "qwen3_tts_1_7b_base_orig",
@@ -95,20 +83,10 @@
       "format": "gguf",
       "precision": "orig",
       "target_directory": "Qwen3-TTS-12Hz-1.7B-Base-GGUF",
-      "required_files": [
-        "qwen3-tts-12hz-1.7b-base-orig.gguf"
+      "files": [
+        "Qwen3-TTS-12Hz-1.7B-Base-GGUF/qwen3-tts-12hz-1.7b-base-orig.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Qwen3-TTS-12Hz-1.7B-Base-GGUF/qwen3-tts-12hz-1.7b-base-orig.gguf"
-        ],
-        "strip_prefix": "Qwen3-TTS-12Hz-1.7B-Base-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Qwen3-TTS-12Hz-1.7B-Base-GGUF"
     },
     {
       "id": "qwen3_tts_1_7b_customvoice_q8_0",
@@ -116,20 +94,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF",
-      "required_files": [
-        "qwen3-tts-12hz-1.7b-customvoice-q8_0.gguf"
+      "files": [
+        "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF/qwen3-tts-12hz-1.7b-customvoice-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF/qwen3-tts-12hz-1.7b-customvoice-q8_0.gguf"
-        ],
-        "strip_prefix": "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF"
     },
     {
       "id": "qwen3_tts_1_7b_customvoice_bf16",
@@ -137,20 +105,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF",
-      "required_files": [
-        "qwen3-tts-12hz-1.7b-customvoice-bf16.gguf"
+      "files": [
+        "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF/qwen3-tts-12hz-1.7b-customvoice-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF/qwen3-tts-12hz-1.7b-customvoice-bf16.gguf"
-        ],
-        "strip_prefix": "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Qwen3-TTS-12Hz-1.7B-CustomVoice-GGUF"
     },
     {
       "id": "qwen3_tts_1_7b_voicedesign_q8_0",
@@ -158,20 +116,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF",
-      "required_files": [
-        "qwen3-tts-12hz-1.7b-voicedesign-q8_0.gguf"
+      "files": [
+        "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF/qwen3-tts-12hz-1.7b-voicedesign-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF/qwen3-tts-12hz-1.7b-voicedesign-q8_0.gguf"
-        ],
-        "strip_prefix": "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF"
     },
     {
       "id": "qwen3_tts_1_7b_voicedesign_bf16",
@@ -179,20 +127,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF",
-      "required_files": [
-        "qwen3-tts-12hz-1.7b-voicedesign-bf16.gguf"
+      "files": [
+        "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF/qwen3-tts-12hz-1.7b-voicedesign-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF/qwen3-tts-12hz-1.7b-voicedesign-bf16.gguf"
-        ],
-        "strip_prefix": "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Qwen3-TTS-12Hz-1.7B-VoiceDesign-GGUF"
     },
     {
       "id": "qwen3_tts_1_7b_base_safetensors",
@@ -200,7 +138,7 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "Qwen3-TTS-12Hz-1.7B-Base",
-      "required_files": [
+      "files": [
         "config.json",
         "generation_config.json",
         "model.safetensors",
@@ -208,12 +146,9 @@
         "speech_tokenizer/model.safetensors",
         "tokenizer_config.json"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
-        "revision": "main",
-        "gated": false
+        "repo": "Qwen/Qwen3-TTS-12Hz-1.7B-Base"
       }
     },
     {
@@ -222,7 +157,7 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "Qwen3-TTS-12Hz-0.6B-Base",
-      "required_files": [
+      "files": [
         "config.json",
         "generation_config.json",
         "model.safetensors",
@@ -230,12 +165,9 @@
         "speech_tokenizer/model.safetensors",
         "tokenizer_config.json"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
-        "revision": "main",
-        "gated": false
+        "repo": "Qwen/Qwen3-TTS-12Hz-0.6B-Base"
       }
     }
   ]

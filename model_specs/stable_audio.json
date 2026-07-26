@@ -62,6 +62,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "stable_audio_3_medium_q8_0",
@@ -70,20 +78,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Stable-Audio-3-Medium-GGUF",
-      "required_files": [
-        "stable-audio-3-medium-q8_0.gguf"
+      "files": [
+        "Stable-Audio-3-Medium-GGUF/stable-audio-3-medium-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Stable-Audio-3-Medium-GGUF/stable-audio-3-medium-q8_0.gguf"
-        ],
-        "strip_prefix": "Stable-Audio-3-Medium-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Stable-Audio-3-Medium-GGUF"
     },
     {
       "id": "stable_audio_3_medium_f16",
@@ -91,20 +89,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Stable-Audio-3-Medium-GGUF",
-      "required_files": [
-        "stable-audio-3-medium-f16.gguf"
+      "files": [
+        "Stable-Audio-3-Medium-GGUF/stable-audio-3-medium-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Stable-Audio-3-Medium-GGUF/stable-audio-3-medium-f16.gguf"
-        ],
-        "strip_prefix": "Stable-Audio-3-Medium-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Stable-Audio-3-Medium-GGUF"
     },
     {
       "id": "stable_audio_3_small_music_q8_0",
@@ -112,20 +100,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Stable-Audio-3-Small-Music-GGUF",
-      "required_files": [
-        "stable-audio-3-small-music-q8_0.gguf"
+      "files": [
+        "Stable-Audio-3-Small-Music-GGUF/stable-audio-3-small-music-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Stable-Audio-3-Small-Music-GGUF/stable-audio-3-small-music-q8_0.gguf"
-        ],
-        "strip_prefix": "Stable-Audio-3-Small-Music-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Stable-Audio-3-Small-Music-GGUF"
     },
     {
       "id": "stable_audio_3_small_music_f16",
@@ -133,20 +111,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Stable-Audio-3-Small-Music-GGUF",
-      "required_files": [
-        "stable-audio-3-small-music-f16.gguf"
+      "files": [
+        "Stable-Audio-3-Small-Music-GGUF/stable-audio-3-small-music-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Stable-Audio-3-Small-Music-GGUF/stable-audio-3-small-music-f16.gguf"
-        ],
-        "strip_prefix": "Stable-Audio-3-Small-Music-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Stable-Audio-3-Small-Music-GGUF"
     },
     {
       "id": "stable_audio_3_small_sfx_q8_0",
@@ -154,20 +122,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Stable-Audio-3-Small-SFX-GGUF",
-      "required_files": [
-        "stable-audio-3-small-sfx-q8_0.gguf"
+      "files": [
+        "Stable-Audio-3-Small-SFX-GGUF/stable-audio-3-small-sfx-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Stable-Audio-3-Small-SFX-GGUF/stable-audio-3-small-sfx-q8_0.gguf"
-        ],
-        "strip_prefix": "Stable-Audio-3-Small-SFX-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Stable-Audio-3-Small-SFX-GGUF"
     },
     {
       "id": "stable_audio_3_small_sfx_f16",
@@ -175,20 +133,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Stable-Audio-3-Small-SFX-GGUF",
-      "required_files": [
-        "stable-audio-3-small-sfx-f16.gguf"
+      "files": [
+        "Stable-Audio-3-Small-SFX-GGUF/stable-audio-3-small-sfx-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Stable-Audio-3-Small-SFX-GGUF/stable-audio-3-small-sfx-f16.gguf"
-        ],
-        "strip_prefix": "Stable-Audio-3-Small-SFX-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Stable-Audio-3-Small-SFX-GGUF"
     },
     {
       "id": "stable_audio_3_medium_safetensors",
@@ -196,16 +144,14 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "stable-audio-3-medium",
-      "required_files": [
+      "files": [
         "model_config.json",
         "model.safetensors"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
         "repo": "stabilityai/stable-audio-3-medium",
-        "revision": "main",
-        "gated": false
+        "gated": true
       }
     },
     {
@@ -214,16 +160,14 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "stable-audio-3-small-music",
-      "required_files": [
+      "files": [
         "model_config.json",
         "model.safetensors"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
         "repo": "stabilityai/stable-audio-3-small-music",
-        "revision": "main",
-        "gated": false
+        "gated": true
       }
     },
     {
@@ -232,16 +176,14 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "stable-audio-3-small-sfx",
-      "required_files": [
+      "files": [
         "model_config.json",
         "model.safetensors"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
         "repo": "stabilityai/stable-audio-3-small-sfx",
-        "revision": "main",
-        "gated": false
+        "gated": true
       }
     }
   ]

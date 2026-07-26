@@ -37,6 +37,10 @@ const json::Value & require_spec_field(const json::Value & object, std::string_v
     return *value;
 }
 
+bool has_spec_field(const json::Value & object, std::string_view key) {
+    return object.find(std::string(key)) != nullptr;
+}
+
 std::string require_spec_string(const json::Value & value, std::string_view path) {
     if (!value.is_string() || value.as_string().empty()) {
         fail(path, "expected non-empty string");
@@ -316,32 +320,76 @@ void validate_layout(const json::Value & value, std::string_view path) {
     }
 }
 
-void validate_package(const json::Value & value, const json::Value::Object & layouts, std::string_view path) {
+void validate_package_defaults(const json::Value & value, std::string_view path) {
     require_spec_object(value, path);
-    (void) require_spec_string(require_spec_field(value, "id", path), std::string(path) + ".id");
+    if (const auto * download = value.find("download")) {
+        validate_download(*download, std::string(path) + ".download");
+    }
+}
+
+struct ValidatedPackage {
+    std::string id;
+    bool is_default = false;
+};
+
+ValidatedPackage validate_package(const json::Value & value, std::string_view path, bool has_default_download) {
+    require_spec_object(value, path);
+    ValidatedPackage result;
+    result.id = require_spec_string(require_spec_field(value, "id", path), std::string(path) + ".id");
     (void) require_spec_string(require_spec_field(value, "display_name", path), std::string(path) + ".display_name");
     const auto format = require_spec_string(require_spec_field(value, "format", path), std::string(path) + ".format");
     validate_enum(format, source_formats(), std::string(path) + ".format", "format");
     const auto precision = require_spec_string(require_spec_field(value, "precision", path), std::string(path) + ".precision");
     validate_enum(precision, precisions(), std::string(path) + ".precision", "precision");
     (void) require_spec_string(require_spec_field(value, "target_directory", path), std::string(path) + ".target_directory");
-    validate_string_array(require_spec_field(value, "required_files", path), nullptr, std::string(path) + ".required_files", "required file");
-    const auto layout_id = require_spec_string(require_spec_field(value, "layout", path), std::string(path) + ".layout");
-    const auto layout_it = layouts.find(layout_id);
-    if (layout_it == layouts.end()) {
-        fail(std::string(path) + ".layout", "unknown layout '" + layout_id + "'");
+    validate_string_array(require_spec_field(value, "files", path), nullptr, std::string(path) + ".files", "file");
+    if (value.require("files").as_array().empty()) {
+        fail(std::string(path) + ".files", "files must not be empty");
     }
-    const auto layout_format =
-        require_spec_string(require_spec_field(layout_it->second, "format", std::string("layouts.") + layout_id),
-                       std::string("layouts.") + layout_id + ".format");
-    if (layout_format != format) {
-        fail(std::string(path) + ".layout",
-             "package format '" + format + "' does not match layout format '" + layout_format + "'");
+    if (const auto * default_package = value.find("default")) {
+        result.is_default = require_spec_bool(*default_package, std::string(path) + ".default");
     }
-    validate_download(require_spec_field(value, "download", path), std::string(path) + ".download");
+    if (const auto * download = value.find("download")) {
+        validate_download(*download, std::string(path) + ".download");
+    } else if (!has_default_download) {
+        fail(std::string(path) + ".download", "missing package download and package_defaults.download");
+    }
+    if (const auto * strip_prefix = value.find("strip_prefix")) {
+        (void) require_spec_string(*strip_prefix, std::string(path) + ".strip_prefix");
+    }
     if (const auto * description = value.find("description")) {
         (void) require_spec_string(*description, std::string(path) + ".description");
     }
+    return result;
+}
+
+std::unordered_set<std::string> validate_packages(
+    const json::Value & value,
+    std::string_view path,
+    bool has_default_download) {
+    const auto & packages = require_spec_array(value, path);
+    if (packages.empty()) {
+        fail(path, "packages must not be empty");
+    }
+    bool has_default = false;
+    std::unordered_set<std::string> package_ids;
+    for (size_t index = 0; index < packages.size(); ++index) {
+        const auto package_path = std::string(path) + "[" + std::to_string(index) + "]";
+        const auto package = validate_package(packages[index], package_path, has_default_download);
+        if (!package_ids.insert(package.id).second) {
+            fail(package_path + ".id", "duplicate package id '" + package.id + "'");
+        }
+        if (package.is_default) {
+            if (has_default) {
+                fail(package_path + ".default", "only one package can be default");
+            }
+            has_default = true;
+        }
+    }
+    if (!has_default) {
+        fail(path, "one package must be marked default");
+    }
+    return package_ids;
 }
 
 void validate_companions(const json::Value & value, const std::string & family, std::string_view path) {
@@ -418,21 +466,15 @@ void validate_v1(const json::Value & spec, std::string_view source_name) {
         validate_layout(layout, std::string(source_name) + ".layouts." + layout_id);
     }
 
+    const bool has_default_download =
+        has_spec_field(spec, "package_defaults") && has_spec_field(*spec.find("package_defaults"), "download");
+    if (const auto * package_defaults = spec.find("package_defaults")) {
+        validate_package_defaults(*package_defaults, std::string(source_name) + ".package_defaults");
+    }
+
     const auto packages_path = std::string(source_name) + ".packages";
     const auto & packages_field = require_spec_field(spec, "packages", source_name);
-    const auto & packages = require_spec_array(packages_field, packages_path);
-    if (packages.empty()) {
-        fail(std::string(source_name) + ".packages", "packages must not be empty");
-    }
-    std::unordered_set<std::string> package_ids;
-    for (size_t index = 0; index < packages.size(); ++index) {
-        const auto path = std::string(source_name) + ".packages[" + std::to_string(index) + "]";
-        const auto id = require_spec_string(require_spec_field(packages[index], "id", path), path + ".id");
-        if (!package_ids.insert(id).second) {
-            fail(path + ".id", "duplicate package id '" + id + "'");
-        }
-        validate_package(packages[index], layouts, path);
-    }
+    const auto package_ids = validate_packages(packages_field, packages_path, has_default_download);
     validate_companions(require_spec_field(spec, "companions", source_name), family, std::string(source_name) + ".companions");
     validate_ui(require_spec_field(spec, "ui", source_name), package_ids, std::string(source_name) + ".ui");
 
@@ -446,6 +488,14 @@ void validate_v1(const json::Value & spec, std::string_view source_name) {
 
 void validate_legacy(const json::Value & spec, std::string_view source_name) {
     (void) require_spec_string(require_spec_field(spec, "family", source_name), std::string(source_name) + ".family");
+    if (const auto * package_defaults = spec.find("package_defaults")) {
+        validate_package_defaults(*package_defaults, std::string(source_name) + ".package_defaults");
+    }
+    if (const auto * packages = spec.find("packages")) {
+        const bool has_default_download =
+            has_spec_field(spec, "package_defaults") && has_spec_field(*spec.find("package_defaults"), "download");
+        (void) validate_packages(*packages, std::string(source_name) + ".packages", has_default_download);
+    }
     const auto sources_path = std::string(source_name) + ".sources";
     const auto & sources_field = require_spec_field(spec, "sources", source_name);
     const auto & sources = require_spec_array(sources_field, sources_path);

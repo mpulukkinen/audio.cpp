@@ -41,6 +41,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "heartmula_q8_0",
@@ -49,20 +57,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "HeartMuLa-GGUF",
-      "required_files": [
-        "heartmula-q8_0.gguf"
+      "files": [
+        "HeartMuLa-GGUF/heartmula-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "HeartMuLa-GGUF/heartmula-q8_0.gguf"
-        ],
-        "strip_prefix": "HeartMuLa-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "HeartMuLa-GGUF"
     },
     {
       "id": "heartmula_f16",
@@ -70,20 +68,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "HeartMuLa-GGUF",
-      "required_files": [
-        "heartmula-f16.gguf"
+      "files": [
+        "HeartMuLa-GGUF/heartmula-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "HeartMuLa-GGUF/heartmula-f16.gguf"
-        ],
-        "strip_prefix": "HeartMuLa-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "HeartMuLa-GGUF"
     }
   ]
 }

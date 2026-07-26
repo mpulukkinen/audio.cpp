@@ -36,6 +36,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "miocodec_q8_0",
@@ -44,20 +52,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "MioCodec-25Hz-44.1kHz-v2-GGUF",
-      "required_files": [
-        "miocodec-25hz-44khz-v2-q8_0.gguf"
+      "files": [
+        "MioCodec-25Hz-44.1kHz-v2-GGUF/miocodec-25hz-44khz-v2-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "MioCodec-25Hz-44.1kHz-v2-GGUF/miocodec-25hz-44khz-v2-q8_0.gguf"
-        ],
-        "strip_prefix": "MioCodec-25Hz-44.1kHz-v2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "MioCodec-25Hz-44.1kHz-v2-GGUF"
     },
     {
       "id": "miocodec_f16",
@@ -65,20 +63,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "MioCodec-25Hz-44.1kHz-v2-GGUF",
-      "required_files": [
-        "miocodec-25hz-44khz-v2-f16.gguf"
+      "files": [
+        "MioCodec-25Hz-44.1kHz-v2-GGUF/miocodec-25hz-44khz-v2-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "MioCodec-25Hz-44.1kHz-v2-GGUF/miocodec-25hz-44khz-v2-f16.gguf"
-        ],
-        "strip_prefix": "MioCodec-25Hz-44.1kHz-v2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "MioCodec-25Hz-44.1kHz-v2-GGUF"
     },
     {
       "id": "miocodec_orig",
@@ -86,20 +74,10 @@
       "format": "gguf",
       "precision": "orig",
       "target_directory": "MioCodec-25Hz-44.1kHz-v2-GGUF",
-      "required_files": [
-        "miocodec-25hz-44khz-v2-orig.gguf"
+      "files": [
+        "MioCodec-25Hz-44.1kHz-v2-GGUF/miocodec-25hz-44khz-v2-orig.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "MioCodec-25Hz-44.1kHz-v2-GGUF/miocodec-25hz-44khz-v2-orig.gguf"
-        ],
-        "strip_prefix": "MioCodec-25Hz-44.1kHz-v2-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "MioCodec-25Hz-44.1kHz-v2-GGUF"
     }
   ]
 }

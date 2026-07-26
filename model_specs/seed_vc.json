@@ -124,6 +124,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "seed_vc_mlx_q8_0",
@@ -132,20 +140,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "SeedVC-MLX-GGUF",
-      "required_files": [
-        "seed-vc-mlx-q8_0.gguf"
+      "files": [
+        "SeedVC-MLX-GGUF/seed-vc-mlx-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "SeedVC-MLX-GGUF/seed-vc-mlx-q8_0.gguf"
-        ],
-        "strip_prefix": "SeedVC-MLX-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "SeedVC-MLX-GGUF"
     },
     {
       "id": "seed_vc_mlx_f16",
@@ -153,20 +151,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "SeedVC-MLX-GGUF",
-      "required_files": [
-        "seed-vc-mlx-f16.gguf"
+      "files": [
+        "SeedVC-MLX-GGUF/seed-vc-mlx-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "SeedVC-MLX-GGUF/seed-vc-mlx-f16.gguf"
-        ],
-        "strip_prefix": "SeedVC-MLX-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "SeedVC-MLX-GGUF"
     },
     {
       "id": "seed_vc_mlx_orig",
@@ -174,20 +162,10 @@
       "format": "gguf",
       "precision": "orig",
       "target_directory": "SeedVC-MLX-GGUF",
-      "required_files": [
-        "seed-vc-mlx-orig.gguf"
+      "files": [
+        "SeedVC-MLX-GGUF/seed-vc-mlx-orig.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "SeedVC-MLX-GGUF/seed-vc-mlx-orig.gguf"
-        ],
-        "strip_prefix": "SeedVC-MLX-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "SeedVC-MLX-GGUF"
     },
     {
       "id": "seed_vc_mlx_safetensors",
@@ -195,17 +173,14 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "SeedVC-MLX",
-      "required_files": [
+      "files": [
         "seed_vc_manifest.json",
         "v2/ar.safetensors",
         "v2/cfm.safetensors"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "mlx-community/SeedVC-MLX",
-        "revision": "main",
-        "gated": false
+        "repo": "mlx-community/SeedVC-MLX"
       }
     }
   ]

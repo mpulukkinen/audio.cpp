@@ -88,6 +88,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "ace_step_turbo_q8_0",
@@ -96,20 +104,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "ACE-Step1.5-GGUF",
-      "required_files": [
-        "ace-step-1.5-turbo-q8_0.gguf"
+      "files": [
+        "ACE-Step1.5-GGUF/turbo/ace-step-1.5-turbo-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "ACE-Step1.5-GGUF/turbo/ace-step-1.5-turbo-q8_0.gguf"
-        ],
-        "strip_prefix": "ACE-Step1.5-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "ACE-Step1.5-GGUF"
     },
     {
       "id": "ace_step_turbo_bf16",
@@ -117,20 +115,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "ACE-Step1.5-GGUF",
-      "required_files": [
-        "ace-step-1.5-turbo-bf16.gguf"
+      "files": [
+        "ACE-Step1.5-GGUF/turbo/ace-step-1.5-turbo-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "ACE-Step1.5-GGUF/turbo/ace-step-1.5-turbo-bf16.gguf"
-        ],
-        "strip_prefix": "ACE-Step1.5-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "ACE-Step1.5-GGUF"
     },
     {
       "id": "ace_step_base_q8_0",
@@ -138,20 +126,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "ACE-Step1.5-GGUF",
-      "required_files": [
-        "ace-step-1.5-base-q8_0.gguf"
+      "files": [
+        "ACE-Step1.5-GGUF/base/ace-step-1.5-base-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "ACE-Step1.5-GGUF/base/ace-step-1.5-base-q8_0.gguf"
-        ],
-        "strip_prefix": "ACE-Step1.5-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "ACE-Step1.5-GGUF"
     },
     {
       "id": "ace_step_base_bf16",
@@ -159,20 +137,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "ACE-Step1.5-GGUF",
-      "required_files": [
-        "ace-step-1.5-base-bf16.gguf"
+      "files": [
+        "ACE-Step1.5-GGUF/base/ace-step-1.5-base-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "ACE-Step1.5-GGUF/base/ace-step-1.5-base-bf16.gguf"
-        ],
-        "strip_prefix": "ACE-Step1.5-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "ACE-Step1.5-GGUF"
     }
   ]
 }

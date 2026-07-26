@@ -33,6 +33,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "higgs_audio_tts_4b_q8_0",
@@ -41,20 +49,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Higgs-Audio-v3-TTS-4B-GGUF",
-      "required_files": [
-        "higgs-audio-v3-tts-4b-q8_0.gguf"
+      "files": [
+        "Higgs-Audio-v3-TTS-4B-GGUF/higgs-audio-v3-tts-4b-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Higgs-Audio-v3-TTS-4B-GGUF/higgs-audio-v3-tts-4b-q8_0.gguf"
-        ],
-        "strip_prefix": "Higgs-Audio-v3-TTS-4B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Higgs-Audio-v3-TTS-4B-GGUF"
     },
     {
       "id": "higgs_audio_tts_4b_bf16",
@@ -62,20 +60,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "Higgs-Audio-v3-TTS-4B-GGUF",
-      "required_files": [
-        "higgs-audio-v3-tts-4b-bf16.gguf"
+      "files": [
+        "Higgs-Audio-v3-TTS-4B-GGUF/higgs-audio-v3-tts-4b-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Higgs-Audio-v3-TTS-4B-GGUF/higgs-audio-v3-tts-4b-bf16.gguf"
-        ],
-        "strip_prefix": "Higgs-Audio-v3-TTS-4B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Higgs-Audio-v3-TTS-4B-GGUF"
     }
   ]
 }

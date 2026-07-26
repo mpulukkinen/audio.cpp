@@ -39,6 +39,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "irodori_tts_600m_v3_voicedesign_q8_0",
@@ -47,20 +55,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Irodori-TTS-600M-v3-VoiceDesign-GGUF",
-      "required_files": [
-        "irodori-tts-600m-v3-voicedesign-q8_0.gguf"
+      "files": [
+        "Irodori-TTS-600M-v3-VoiceDesign-GGUF/irodori-tts-600m-v3-voicedesign-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Irodori-TTS-600M-v3-VoiceDesign-GGUF/irodori-tts-600m-v3-voicedesign-q8_0.gguf"
-        ],
-        "strip_prefix": "Irodori-TTS-600M-v3-VoiceDesign-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Irodori-TTS-600M-v3-VoiceDesign-GGUF"
     },
     {
       "id": "irodori_tts_600m_v3_voicedesign_f16",
@@ -68,20 +66,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Irodori-TTS-600M-v3-VoiceDesign-GGUF",
-      "required_files": [
-        "irodori-tts-600m-v3-voicedesign-f16.gguf"
+      "files": [
+        "Irodori-TTS-600M-v3-VoiceDesign-GGUF/irodori-tts-600m-v3-voicedesign-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Irodori-TTS-600M-v3-VoiceDesign-GGUF/irodori-tts-600m-v3-voicedesign-f16.gguf"
-        ],
-        "strip_prefix": "Irodori-TTS-600M-v3-VoiceDesign-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Irodori-TTS-600M-v3-VoiceDesign-GGUF"
     },
     {
       "id": "irodori_tts_500m_v3_q8_0",
@@ -89,20 +77,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Irodori-TTS-500M-v3-GGUF",
-      "required_files": [
-        "irodori-tts-500m-v3-q8_0.gguf"
+      "files": [
+        "Irodori-TTS-500M-v3-GGUF/irodori-tts-500m-v3-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Irodori-TTS-500M-v3-GGUF/irodori-tts-500m-v3-q8_0.gguf"
-        ],
-        "strip_prefix": "Irodori-TTS-500M-v3-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Irodori-TTS-500M-v3-GGUF"
     },
     {
       "id": "irodori_tts_500m_v3_f16",
@@ -110,20 +88,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Irodori-TTS-500M-v3-GGUF",
-      "required_files": [
-        "irodori-tts-500m-v3-f16.gguf"
+      "files": [
+        "Irodori-TTS-500M-v3-GGUF/irodori-tts-500m-v3-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Irodori-TTS-500M-v3-GGUF/irodori-tts-500m-v3-f16.gguf"
-        ],
-        "strip_prefix": "Irodori-TTS-500M-v3-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Irodori-TTS-500M-v3-GGUF"
     }
   ]
 }

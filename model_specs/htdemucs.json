@@ -33,6 +33,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "htdemucs_q8_0",
@@ -41,20 +49,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "HTDemucs-GGUF",
-      "required_files": [
-        "htdemucs-q8_0.gguf"
+      "files": [
+        "HTDemucs-GGUF/htdemucs-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "HTDemucs-GGUF/htdemucs-q8_0.gguf"
-        ],
-        "strip_prefix": "HTDemucs-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "HTDemucs-GGUF"
     },
     {
       "id": "htdemucs_f16",
@@ -62,20 +60,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "HTDemucs-GGUF",
-      "required_files": [
-        "htdemucs-f16.gguf"
+      "files": [
+        "HTDemucs-GGUF/htdemucs-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "HTDemucs-GGUF/htdemucs-f16.gguf"
-        ],
-        "strip_prefix": "HTDemucs-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "HTDemucs-GGUF"
     }
   ]
 }

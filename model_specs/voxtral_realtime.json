@@ -41,6 +41,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "voxtral_realtime_q8_0",
@@ -49,20 +57,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Voxtral-Mini-4B-Realtime-2602-GGUF",
-      "required_files": [
-        "voxtral-mini-4b-realtime-2602-q8_0.gguf"
+      "files": [
+        "Voxtral-Mini-4B-Realtime-2602-GGUF/voxtral-mini-4b-realtime-2602-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Voxtral-Mini-4B-Realtime-2602-GGUF/voxtral-mini-4b-realtime-2602-q8_0.gguf"
-        ],
-        "strip_prefix": "Voxtral-Mini-4B-Realtime-2602-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Voxtral-Mini-4B-Realtime-2602-GGUF"
     },
     {
       "id": "voxtral_realtime_q4_k",
@@ -70,20 +68,10 @@
       "format": "gguf",
       "precision": "q4_k",
       "target_directory": "Voxtral-Mini-4B-Realtime-2602-GGUF",
-      "required_files": [
-        "voxtral-mini-4b-realtime-2602-q4_k.gguf"
+      "files": [
+        "Voxtral-Mini-4B-Realtime-2602-GGUF/voxtral-mini-4b-realtime-2602-q4_k.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Voxtral-Mini-4B-Realtime-2602-GGUF/voxtral-mini-4b-realtime-2602-q4_k.gguf"
-        ],
-        "strip_prefix": "Voxtral-Mini-4B-Realtime-2602-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Voxtral-Mini-4B-Realtime-2602-GGUF"
     },
     {
       "id": "voxtral_realtime_bf16",
@@ -91,20 +79,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "Voxtral-Mini-4B-Realtime-2602-GGUF",
-      "required_files": [
-        "voxtral-mini-4b-realtime-2602-bf16.gguf"
+      "files": [
+        "Voxtral-Mini-4B-Realtime-2602-GGUF/voxtral-mini-4b-realtime-2602-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Voxtral-Mini-4B-Realtime-2602-GGUF/voxtral-mini-4b-realtime-2602-bf16.gguf"
-        ],
-        "strip_prefix": "Voxtral-Mini-4B-Realtime-2602-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Voxtral-Mini-4B-Realtime-2602-GGUF"
     }
   ]
 }

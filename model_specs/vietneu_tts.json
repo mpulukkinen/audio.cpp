@@ -61,19 +61,13 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "VieNeu-TTS-v3-Turbo-GGUF",
-      "required_files": [
+      "files": [
         "model.gguf"
       ],
-      "layout": "gguf",
+      "strip_prefix": ".",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "phuocnguyen90/VieNeu-TTS-v3-Turbo-GGUF",
-        "revision": "main",
-        "include": [
-          "model.gguf"
-        ],
-        "strip_prefix": ".",
-        "gated": false
+        "repo": "phuocnguyen90/VieNeu-TTS-v3-Turbo-GGUF"
       }
     }
   ]

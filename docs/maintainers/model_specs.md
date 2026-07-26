@@ -24,8 +24,9 @@ Top-level fields:
 | `runtime` | Runtime tags and default package format. |
 | `capabilities` | Stable capability booleans and language hints. |
 | `options` | Typed request/session/load options. |
+| `package_defaults` | Optional shared package metadata, such as a common download source. |
 | `packages` | Installable model packages and download metadata. |
-| `layouts` | Resource/tensor layouts used by packages. |
+| `layouts` | Typed resource/tensor layouts for future runtime package loading. |
 | `companions` | Runtime peer models or external resources. |
 | `ui` | UI/catalog hints. |
 | `sources` | Temporary runtime bridge for current package-spec loading. |
@@ -36,10 +37,40 @@ Common options must use canonical names such as `seed`, `language`,
 
 Model-specific options must be namespaced as `<family>.<name>`.
 
-`packages[].download` describes where an installer or UI can get a ready-to-use
-package. Supported download kinds are `huggingface_snapshot`, `local_snapshot`,
-`converter`, and `unsupported`. Public packages should be ready-to-use HF repos
-or standalone GGUF packages.
+Packages are install targets, not runtime layouts. Each package owns its display
+name, precision, target directory, and exact remote files. If several packages
+come from the same repo, put the shared source in `package_defaults.download`
+and keep package-level `download` only for overrides.
+
+```json
+{
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
+  "packages": [
+    {
+      "id": "qwen3_asr_1_7b_q8_0",
+      "display_name": "Qwen3-ASR 1.7B Q8_0 GGUF",
+      "default": true,
+      "format": "gguf",
+      "precision": "q8_0",
+      "target_directory": "Qwen3-ASR-1.7B-GGUF",
+      "files": ["Qwen3-ASR-1.7B-GGUF/qwen3-asr-1.7b-q8_0.gguf"],
+      "strip_prefix": "Qwen3-ASR-1.7B-GGUF"
+    }
+  ]
+}
+```
+
+Supported download kinds are `huggingface_snapshot`, `local_snapshot`,
+`converter`, and `unsupported`. `tools/model_manager_v2.py` intentionally
+installs only simple `huggingface_snapshot` packages; use the legacy manager for
+composite or converter-driven installs.
 
 The C++ `framework/model_spec` subsystem is the authoritative schema gate.
 `audiocpp_cli`, `audiocpp_server`, and GGUF loading fail when a typed schema field

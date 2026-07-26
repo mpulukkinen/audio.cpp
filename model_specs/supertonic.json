@@ -52,6 +52,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "supertonic_3_q8_0",
@@ -60,20 +68,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Supertonic-3-GGUF",
-      "required_files": [
-        "supertonic-3-q8_0.gguf"
+      "files": [
+        "Supertonic-3-GGUF/supertonic-3-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Supertonic-3-GGUF/supertonic-3-q8_0.gguf"
-        ],
-        "strip_prefix": "Supertonic-3-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Supertonic-3-GGUF"
     },
     {
       "id": "supertonic_3_f16",
@@ -81,20 +79,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Supertonic-3-GGUF",
-      "required_files": [
-        "supertonic-3-f16.gguf"
+      "files": [
+        "Supertonic-3-GGUF/supertonic-3-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Supertonic-3-GGUF/supertonic-3-f16.gguf"
-        ],
-        "strip_prefix": "Supertonic-3-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Supertonic-3-GGUF"
     },
     {
       "id": "supertonic_3_orig",
@@ -102,20 +90,10 @@
       "format": "gguf",
       "precision": "orig",
       "target_directory": "Supertonic-3-GGUF",
-      "required_files": [
-        "supertonic-3-orig.gguf"
+      "files": [
+        "Supertonic-3-GGUF/supertonic-3-orig.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Supertonic-3-GGUF/supertonic-3-orig.gguf"
-        ],
-        "strip_prefix": "Supertonic-3-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Supertonic-3-GGUF"
     },
     {
       "id": "supertonic_3_safetensors",
@@ -123,17 +101,14 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "supertonic-3",
-      "required_files": [
+      "files": [
         "config/tts.json",
         "config/unicode_indexer.json",
         "ggml/supertonic.safetensors"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "mlx-community/supertonic-3-mlx",
-        "revision": "main",
-        "gated": false
+        "repo": "mlx-community/supertonic-3-mlx"
       }
     }
   ]

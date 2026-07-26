@@ -37,6 +37,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "vibevoice_1_5b_q8_0",
@@ -45,20 +53,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "VibeVoice-1.5B-GGUF",
-      "required_files": [
-        "vibevoice-1.5b-q8_0.gguf"
+      "files": [
+        "VibeVoice-1.5B-GGUF/vibevoice-1.5b-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "VibeVoice-1.5B-GGUF/vibevoice-1.5b-q8_0.gguf"
-        ],
-        "strip_prefix": "VibeVoice-1.5B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "VibeVoice-1.5B-GGUF"
     },
     {
       "id": "vibevoice_1_5b_bf16",
@@ -66,20 +64,10 @@
       "format": "gguf",
       "precision": "bf16",
       "target_directory": "VibeVoice-1.5B-GGUF",
-      "required_files": [
-        "vibevoice-1.5b-bf16.gguf"
+      "files": [
+        "VibeVoice-1.5B-GGUF/vibevoice-1.5b-bf16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "VibeVoice-1.5B-GGUF/vibevoice-1.5b-bf16.gguf"
-        ],
-        "strip_prefix": "VibeVoice-1.5B-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "VibeVoice-1.5B-GGUF"
     }
   ]
 }

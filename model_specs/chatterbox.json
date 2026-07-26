@@ -56,6 +56,14 @@
       }
     }
   ],
+  "package_defaults": {
+    "download": {
+      "kind": "huggingface_snapshot",
+      "repo": "audio-cpp/audio.cpp-gguf",
+      "revision": "main",
+      "gated": false
+    }
+  },
   "packages": [
     {
       "id": "chatterbox_q8_0",
@@ -64,20 +72,10 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Chatterbox-GGUF",
-      "required_files": [
-        "chatterbox-q8_0.gguf"
+      "files": [
+        "Chatterbox-GGUF/chatterbox-q8_0.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Chatterbox-GGUF/chatterbox-q8_0.gguf"
-        ],
-        "strip_prefix": "Chatterbox-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Chatterbox-GGUF"
     },
     {
       "id": "chatterbox_f16",
@@ -85,20 +83,10 @@
       "format": "gguf",
       "precision": "f16",
       "target_directory": "Chatterbox-GGUF",
-      "required_files": [
-        "chatterbox-f16.gguf"
+      "files": [
+        "Chatterbox-GGUF/chatterbox-f16.gguf"
       ],
-      "layout": "gguf",
-      "download": {
-        "kind": "huggingface_snapshot",
-        "repo": "audio-cpp/audio.cpp-gguf",
-        "revision": "main",
-        "include": [
-          "Chatterbox-GGUF/chatterbox-f16.gguf"
-        ],
-        "strip_prefix": "Chatterbox-GGUF",
-        "gated": false
-      }
+      "strip_prefix": "Chatterbox-GGUF"
     },
     {
       "id": "chatterbox_safetensors",
@@ -106,18 +94,15 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "chatterbox",
-      "required_files": [
+      "files": [
         "ve.safetensors",
         "t3_cfg.safetensors",
         "s3gen.safetensors",
         "tokenizer.json"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "ResembleAI/chatterbox",
-        "revision": "main",
-        "gated": false
+        "repo": "ResembleAI/chatterbox"
       }
     }
   ]

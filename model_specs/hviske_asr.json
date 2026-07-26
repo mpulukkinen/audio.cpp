@@ -39,19 +39,13 @@
       "format": "gguf",
       "precision": "q8_0",
       "target_directory": "Hviske-v5.3-GGUF",
-      "required_files": [
-        "hviske-v5.3_Q8.gguf"
+      "files": [
+        "Audio to text (ASR)/hviske-v5.3_Q8.gguf"
       ],
-      "layout": "gguf",
+      "strip_prefix": "Audio to text (ASR)",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "mirek190/audio.cpp",
-        "revision": "main",
-        "include": [
-          "Audio to text (ASR)/hviske-v5.3_Q8.gguf"
-        ],
-        "strip_prefix": "Audio to text (ASR)",
-        "gated": false
+        "repo": "mirek190/audio.cpp"
       }
     },
     {
@@ -60,18 +54,15 @@
       "format": "safetensors",
       "precision": "native",
       "target_directory": "hviske-v5.3",
-      "required_files": [
+      "files": [
         "config.json",
         "generation_config.json",
         "model.safetensors",
         "tokenizer.model"
       ],
-      "layout": "safetensors",
       "download": {
         "kind": "huggingface_snapshot",
-        "repo": "syvai/hviske-v5.3",
-        "revision": "main",
-        "gated": false
+        "repo": "syvai/hviske-v5.3"
       }
     }
   ]
