@@ -77,8 +77,7 @@ void test_legacy_dependencies_schema() {
       "family": "peer_model",
       "scope": "session",
       "option": "peer_model_path",
-      "required": true,
-      "required_for": ["decode"]
+      "required": true
     },
     {
       "kind": "bundled_model",
@@ -87,8 +86,13 @@ void test_legacy_dependencies_schema() {
       "scope": "request",
       "option": "vad_model_path",
       "required": false,
-      "required_for": ["vad_chunking"],
-      "package": "silero_vad_builtin"
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "audio_chunk_mode",
+          "equals": "vad"
+        }
+      ]
     }
   ])JSON"));
     engine::model_spec::validate_spec(spec, "valid_legacy_dependencies");
@@ -101,8 +105,7 @@ void test_legacy_dependencies_schema() {
             "family": "peer_model",
             "scope": "session",
             "option_key": "toy_model.peer_model_path",
-            "required": true,
-            "required_for": ["decode"]
+            "required": true
           }
         ])JSON"),
         "missing required field 'option'");
@@ -114,8 +117,7 @@ void test_legacy_dependencies_schema() {
             "family": "peer_model",
             "scope": "prepare",
             "option": "peer_model_path",
-            "required": true,
-            "required_for": ["decode"]
+            "required": true
           }
         ])JSON"),
         "unknown dependency scope 'prepare'");
@@ -127,11 +129,74 @@ void test_legacy_dependencies_schema() {
             "family": "peer_model",
             "scope": "session",
             "option": "toy_model.peer_model_path",
-            "required": true,
-            "required_for": ["decode"]
+            "required": true
           }
         ])JSON"),
         "dependency option must be local");
+    expect_rejects(
+        "old_required_for",
+        legacy_spec_text(R"JSON([
+          {
+            "kind": "model",
+            "family": "peer_model",
+            "scope": "session",
+            "option": "peer_model_path",
+            "required": false,
+            "required_for": ["decode"]
+          }
+        ])JSON"),
+        "use typed required_when conditions");
+    expect_rejects(
+        "optional_missing_condition",
+        legacy_spec_text(R"JSON([
+          {
+            "kind": "model",
+            "family": "peer_model",
+            "scope": "session",
+            "option": "peer_model_path",
+            "required": false
+          }
+        ])JSON"),
+        "optional dependencies require typed conditions");
+    expect_rejects(
+        "required_with_condition",
+        legacy_spec_text(R"JSON([
+          {
+            "kind": "model",
+            "family": "peer_model",
+            "scope": "session",
+            "option": "peer_model_path",
+            "required": true,
+            "required_when": [
+              {
+                "scope": "request",
+                "option_key": "return_timestamps",
+                "equals": true
+              }
+            ]
+          }
+        ])JSON"),
+        "required dependencies must not have conditions");
+    expect_rejects(
+        "dependency_package_hint",
+        legacy_spec_text(R"JSON([
+          {
+            "kind": "model",
+            "family": "peer_model",
+            "scope": "session",
+            "option": "peer_model_path",
+            "required": false,
+            "required_when": [
+              {
+                "scope": "request",
+                "option_key": "return_timestamps",
+                "equals": true
+              }
+            ],
+            "package": "peer_model_q8_0"
+          }
+        ])JSON"),
+        "dependency package hints are not part of the core contract");
     expect_rejects(
         "bundled_missing_path",
         legacy_spec_text(R"JSON([
@@ -141,7 +206,13 @@ void test_legacy_dependencies_schema() {
             "scope": "session",
             "option": "vad_model_path",
             "required": false,
-            "required_for": ["vad_chunking"]
+            "required_when": [
+              {
+                "scope": "request",
+                "option_key": "audio_chunk_mode",
+                "equals": "vad"
+              }
+            ]
           }
         ])JSON"),
         "missing required field 'path'");
@@ -208,7 +279,18 @@ void test_typed_schema_renamed_dependencies() {
       "scope": "session",
       "option": "aligner_model_path",
       "required": false,
-      "required_for": ["timestamps"]
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "return_timestamps",
+          "equals": true
+        },
+        {
+          "scope": "request",
+          "option_key": "audio_chunk_seconds",
+          "equals": 15
+        }
+      ]
     }
   ],
   "ui": {
@@ -292,24 +374,65 @@ void test_typed_schema_renamed_dependencies() {
 }
 
 void test_dependency_option_mapping_from_production_spec() {
-    const auto dependencies = engine::model_spec::dependencies("miotts");
-    engine::test::require_eq(dependencies.size(), size_t{2}, "miotts dependency count");
-    engine::test::require_eq(dependencies[0].family, std::string("miocodec"), "miotts codec dependency family");
-    engine::test::require_eq(dependencies[0].scope, std::string("session"), "miotts codec dependency scope");
-    engine::test::require_eq(dependencies[0].option, std::string("codec_model_path"), "miotts codec dependency option");
+    const auto miotts_dependencies = engine::model_spec::dependencies("miotts");
+    engine::test::require_eq(miotts_dependencies.size(), size_t{2}, "miotts dependency count");
+    engine::test::require_eq(miotts_dependencies[0].family, std::string("miocodec"), "miotts codec dependency family");
+    engine::test::require_eq(miotts_dependencies[0].scope, std::string("session"), "miotts codec dependency scope");
+    engine::test::require_eq(miotts_dependencies[0].option, std::string("codec_model_path"), "miotts codec dependency option");
     engine::test::require_eq(
-        dependencies[0].option_key,
+        miotts_dependencies[0].option_key,
         std::string("miotts.codec_model_path"),
         "miotts codec derived option key");
-    engine::test::require(dependencies[0].required, "miotts codec dependency should be required");
+    engine::test::require(miotts_dependencies[0].required, "miotts codec dependency should be required");
+    engine::test::require(
+        miotts_dependencies[0].required_when.empty(),
+        "miotts required codec dependency should not have conditions");
 
-    engine::test::require_eq(dependencies[1].family, std::string("qwen3_asr"), "miotts ASR dependency family");
+    engine::test::require_eq(miotts_dependencies[1].family, std::string("qwen3_asr"), "miotts ASR dependency family");
     engine::test::require_eq(
-        dependencies[1].option_key,
+        miotts_dependencies[1].option_key,
         std::string("miotts.best_of_n_asr_model_path"),
         "miotts ASR derived option key");
-    engine::test::require(!dependencies[1].required, "miotts ASR dependency should be optional");
-    engine::test::require_eq(dependencies[1].required_for.front(), std::string("best_of_n"), "miotts ASR feature");
+    engine::test::require(!miotts_dependencies[1].required, "miotts ASR dependency should be optional");
+    engine::test::require_eq(miotts_dependencies[1].required_when.size(), size_t{2}, "miotts ASR dependency conditions");
+    engine::test::require_eq(
+        miotts_dependencies[1].required_when[0].scope,
+        std::string("session"),
+        "miotts ASR condition scope");
+    engine::test::require_eq(
+        miotts_dependencies[1].required_when[0].option_key,
+        std::string("miotts.best_of_n_enabled"),
+        "miotts ASR condition option key");
+    engine::test::require(
+        miotts_dependencies[1].required_when[0].equals_type == engine::model_spec::ModelSpecValueType::Bool,
+        "miotts ASR condition should compare bool");
+    engine::test::require(miotts_dependencies[1].required_when[0].equals_bool, "miotts ASR condition bool");
+
+    const auto qwen_dependencies = engine::model_spec::dependencies("qwen3_asr");
+    engine::test::require_eq(qwen_dependencies.size(), size_t{2}, "qwen3 ASR dependency count");
+    engine::test::require_eq(
+        qwen_dependencies[0].option_key,
+        std::string("qwen3_asr.forced_aligner_model_path"),
+        "qwen3 aligner derived option key");
+    engine::test::require_eq(
+        qwen_dependencies[0].required_when[0].option_key,
+        std::string("return_timestamps"),
+        "qwen3 aligner condition option key");
+    engine::test::require(
+        qwen_dependencies[0].required_when[0].equals_type == engine::model_spec::ModelSpecValueType::Bool,
+        "qwen3 aligner condition should compare bool");
+    engine::test::require(qwen_dependencies[0].required_when[0].equals_bool, "qwen3 aligner condition bool");
+    engine::test::require_eq(
+        qwen_dependencies[1].required_when[0].option_key,
+        std::string("audio_chunk_mode"),
+        "qwen3 VAD condition option key");
+    engine::test::require(
+        qwen_dependencies[1].required_when[0].equals_type == engine::model_spec::ModelSpecValueType::String,
+        "qwen3 VAD condition should compare string");
+    engine::test::require_eq(
+        qwen_dependencies[1].required_when[0].equals_string,
+        std::string("vad"),
+        "qwen3 VAD condition string");
 }
 
 void test_loading_and_resource_bundle() {

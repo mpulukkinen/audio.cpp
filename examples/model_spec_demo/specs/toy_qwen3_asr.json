@@ -207,8 +207,12 @@
       "scope": "session",
       "option": "forced_aligner",
       "required": false,
-      "required_for": [
-        "timestamps"
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "return_timestamps",
+          "equals": true
+        }
       ]
     },
     {
@@ -218,8 +222,12 @@
       "scope": "session",
       "option": "vad",
       "required": false,
-      "required_for": [
-        "long_audio"
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "audio_chunk_mode",
+          "equals": "vad"
+        }
       ]
     }
   ],

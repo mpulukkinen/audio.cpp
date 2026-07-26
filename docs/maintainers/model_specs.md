@@ -67,12 +67,17 @@ and keep package-level `download` only for overrides.
 }
 ```
 
-Dependencies describe extra model-level resources required by optional runtime
-features. Use `kind: "model"` for another installable model family, and
-`kind: "bundled_model"` for an in-repo bundled model asset. Do not use
-dependencies for sidecars or tensor files that are already part of `sources`.
-The `scope` field is typed as `load`, `session`, or `request`; the public
+Dependencies describe extra model-level resources required by runtime features.
+Use `kind: "model"` for another model family, and `kind: "bundled_model"` for an
+in-repo bundled model asset. Do not use dependencies for sidecars or tensor
+files that are already part of `sources`. The dependency `scope` says where the
+dependency path is consumed (`load`, `session`, or `request`), and its public
 runtime option key is derived as `<family>.<option>`.
+
+Required dependencies are unconditional. Optional dependencies must declare
+typed `required_when` rows. Each row is a condition over a public option key.
+Common request keys such as `return_timestamps` stay unprefixed; model-specific
+keys stay namespaced. The dependency is needed when any row matches.
 
 ```json
 {
@@ -83,7 +88,13 @@ runtime option key is derived as `<family>.<option>`.
       "scope": "session",
       "option": "forced_aligner_model_path",
       "required": false,
-      "required_for": ["word_timestamps"]
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "return_timestamps",
+          "equals": true
+        }
+      ]
     },
     {
       "kind": "bundled_model",
@@ -92,7 +103,13 @@ runtime option key is derived as `<family>.<option>`.
       "scope": "session",
       "option": "vad_model_path",
       "required": false,
-      "required_for": ["vad_chunking"]
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "audio_chunk_mode",
+          "equals": "vad"
+        }
+      ]
     }
   ]
 }

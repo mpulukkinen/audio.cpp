@@ -162,8 +162,12 @@
       "scope": "session",
       "option": "forced_aligner_model_path",
       "required": false,
-      "required_for": [
-        "word_timestamps"
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "return_timestamps",
+          "equals": true
+        }
       ]
     },
     {
@@ -173,8 +177,17 @@
       "scope": "session",
       "option": "vad_model_path",
       "required": false,
-      "required_for": [
-        "vad_chunking"
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "audio_chunk_mode",
+          "equals": "vad"
+        },
+        {
+          "scope": "request",
+          "option_key": "return_timestamps",
+          "equals": true
+        }
       ]
     }
   ]

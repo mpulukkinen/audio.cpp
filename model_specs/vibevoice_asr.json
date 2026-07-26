@@ -96,8 +96,12 @@
       "scope": "session",
       "option": "vad_model_path",
       "required": false,
-      "required_for": [
-        "vad_chunking"
+      "required_when": [
+        {
+          "scope": "request",
+          "option_key": "audio_chunk_mode",
+          "equals": "vad"
+        }
       ]
     }
   ]

@@ -106,10 +106,7 @@
       "family": "miocodec",
       "scope": "session",
       "option": "codec_model_path",
-      "required": true,
-      "required_for": [
-        "audio_decode"
-      ]
+      "required": true
     },
     {
       "kind": "model",
@@ -117,8 +114,17 @@
       "scope": "session",
       "option": "best_of_n_asr_model_path",
       "required": false,
-      "required_for": [
-        "best_of_n"
+      "required_when": [
+        {
+          "scope": "session",
+          "option_key": "miotts.best_of_n_enabled",
+          "equals": true
+        },
+        {
+          "scope": "request",
+          "option_key": "miotts.best_of_n_enabled",
+          "equals": true
+        }
       ]
     }
   ]

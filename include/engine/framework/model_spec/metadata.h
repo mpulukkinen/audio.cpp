@@ -9,6 +9,21 @@
 
 namespace engine::model_spec {
 
+enum class ModelSpecValueType {
+    Bool,
+    Number,
+    String,
+};
+
+struct ModelDependencyCondition {
+    std::string scope;
+    std::string option_key;
+    ModelSpecValueType equals_type = ModelSpecValueType::String;
+    bool equals_bool = false;
+    double equals_number = 0.0;
+    std::string equals_string;
+};
+
 struct ModelDependency {
     std::string kind;
     std::string family;
@@ -16,9 +31,8 @@ struct ModelDependency {
     std::string option;
     std::string option_key;
     bool required = false;
-    std::vector<std::string> required_for;
+    std::vector<ModelDependencyCondition> required_when;
     std::optional<std::string> path;
-    std::optional<std::string> package;
 };
 
 [[nodiscard]] std::optional<runtime::CapabilitySet> advertised_capabilities(std::string_view family);

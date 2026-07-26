@@ -140,6 +140,7 @@ const std::unordered_set<std::string> & common_options() {
         "text_chunk_mode", "text_chunk_size", "max_new_tokens", "temperature", "top_p", "top_k",
         "repetition_penalty", "do_sample", "return_timestamps", "duration_scale", "min_seconds",
         "max_seconds", "speaking_rate", "pitch_shift", "energy_scale", "num_inference_steps",
+        "audio_chunk_mode", "audio_chunk_seconds",
     };
     return values;
 }
@@ -407,13 +408,47 @@ void validate_dependencies(const json::Value & value, const std::string & family
             fail(item_path + ".option", "dependency option must be local; the public key is derived as " + family + ".<option>");
         }
         validate_option_name(family + "." + option, family, item_path + ".option");
-        (void) require_spec_bool(require_spec_field(dependency, "required", item_path), item_path + ".required");
-        validate_string_array(require_spec_field(dependency, "required_for", item_path), nullptr, item_path + ".required_for", "requirement");
+        const auto required = require_spec_bool(require_spec_field(dependency, "required", item_path), item_path + ".required");
+        if (dependency.find("required_for") != nullptr) {
+            fail(item_path + ".required_for", "use typed required_when conditions");
+        }
+        if (dependency.find("package") != nullptr) {
+            fail(item_path + ".package", "dependency package hints are not part of the core contract");
+        }
+        if (const auto * required_when = dependency.find("required_when")) {
+            if (required) {
+                fail(item_path + ".required_when", "required dependencies must not have conditions");
+            }
+            const auto & conditions = require_spec_array(*required_when, item_path + ".required_when");
+            if (conditions.empty()) {
+                fail(item_path + ".required_when", "required_when must not be empty");
+            }
+            for (size_t condition_index = 0; condition_index < conditions.size(); ++condition_index) {
+                const auto condition_path =
+                    item_path + ".required_when[" + std::to_string(condition_index) + "]";
+                const auto & condition = conditions[condition_index];
+                require_spec_object(condition, condition_path);
+                const auto condition_scope = require_spec_string(
+                    require_spec_field(condition, "scope", condition_path),
+                    condition_path + ".scope");
+                validate_enum(condition_scope, dependency_scopes(), condition_path + ".scope", "dependency scope");
+                const auto option_key = require_spec_string(
+                    require_spec_field(condition, "option_key", condition_path),
+                    condition_path + ".option_key");
+                validate_option_name(option_key, family, condition_path + ".option_key");
+                const auto & equals = require_spec_field(condition, "equals", condition_path);
+                if (!equals.is_bool() && !equals.is_number() && !equals.is_string()) {
+                    fail(condition_path + ".equals", "expected bool, number, or string");
+                }
+                if (equals.is_string() && equals.as_string().empty()) {
+                    fail(condition_path + ".equals", "expected non-empty string");
+                }
+            }
+        } else if (!required) {
+            fail(item_path + ".required_when", "optional dependencies require typed conditions");
+        }
         if (kind == "bundled_model") {
             (void) require_spec_string(require_spec_field(dependency, "path", item_path), item_path + ".path");
-        }
-        if (const auto * package = dependency.find("package")) {
-            (void) require_spec_string(*package, item_path + ".package");
         }
     }
 }

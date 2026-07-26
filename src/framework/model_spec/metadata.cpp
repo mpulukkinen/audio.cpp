@@ -116,10 +116,27 @@ std::vector<runtime::CliOptionInfo> parse_cli_options(const json::Value * value)
     return options;
 }
 
-std::vector<std::string> parse_string_array(const json::Value & value) {
-    std::vector<std::string> out;
-    for (const auto & item : value.as_array()) {
-        out.push_back(item.as_string());
+std::vector<ModelDependencyCondition> parse_dependency_conditions(const json::Value * value) {
+    std::vector<ModelDependencyCondition> out;
+    if (value == nullptr || value->is_null()) {
+        return out;
+    }
+    for (const auto & item : value->as_array()) {
+        ModelDependencyCondition condition;
+        condition.scope = json::require_string(item, "scope");
+        condition.option_key = json::require_string(item, "option_key");
+        const auto & equals = item.require("equals");
+        if (equals.is_bool()) {
+            condition.equals_type = ModelSpecValueType::Bool;
+            condition.equals_bool = equals.as_bool();
+        } else if (equals.is_number()) {
+            condition.equals_type = ModelSpecValueType::Number;
+            condition.equals_number = equals.as_number();
+        } else {
+            condition.equals_type = ModelSpecValueType::String;
+            condition.equals_string = equals.as_string();
+        }
+        out.push_back(std::move(condition));
     }
     return out;
 }
@@ -170,12 +187,9 @@ std::vector<ModelDependency> dependencies(std::string_view family) {
         dependency.option = json::require_string(item, "option");
         dependency.option_key = family_string + "." + dependency.option;
         dependency.required = json::require_bool(item, "required");
-        dependency.required_for = parse_string_array(item.require("required_for"));
+        dependency.required_when = parse_dependency_conditions(item.find("required_when"));
         if (const auto * path = item.find("path")) {
             dependency.path = path->as_string();
-        }
-        if (const auto * package = item.find("package")) {
-            dependency.package = package->as_string();
         }
         out.push_back(std::move(dependency));
     }
