@@ -84,26 +84,16 @@ BUILD_ARGS=(
     --build-dir "$BUILD_DIR"
     --build-type RelWithDebInfo
     --deployment-build
-    --native-cpu OFF
+    --cpu-all-variants
     --jobs "$JOBS"
     --target audiocpp_cli
     --target audiocpp_server
     --target audiocpp_gguf
 )
 
-case "$ARCH" in
-    x86_64|amd64)
-        # ggml's per-ISA runtime selection is mature on x86-64. Some of its
-        # highest ARM variants require assembler support that is not available
-        # on every ARM64 release runner, so ARM packages use the baseline CPU
-        # backend configured above.
-        BUILD_ARGS+=(--cpu-all-variants)
-        ;;
-esac
-
 (
     cd "$REPO_ROOT"
-    bash scripts/build_linux.sh "${BUILD_ARGS[@]}"
+    scripts/build_linux.sh "${BUILD_ARGS[@]}"
 )
 
 for binary in audiocpp_cli audiocpp_server audiocpp_gguf; do

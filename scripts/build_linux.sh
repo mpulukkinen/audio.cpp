@@ -13,9 +13,7 @@ WITH_TESTS="OFF"
 WITH_EXAMPLES="OFF"
 WITH_WARMBENCH="OFF"
 AUDIOCPP_DEPLOYMENT_BUILD="OFF"
-DEPLOYMENT_BUILD_SET="OFF"
-AUDIOCPP_MODEL_SET="full"
-AUDIOCPP_MODELS=""
+CPU_ALL_VARIANTS="OFF"
 NATIVE_CPU="ON"
 LLAMAFILE="ON"
 TARGETS=()
@@ -91,26 +89,10 @@ while [[ $# -gt 0 ]]; do
             DEPLOYMENT_BUILD_SET="ON"
             shift
             ;;
-        --no-deployment-build)
-            AUDIOCPP_DEPLOYMENT_BUILD="OFF"
-            DEPLOYMENT_BUILD_SET="ON"
+        --cpu-all-variants)
+            CPU_ALL_VARIANTS="ON"
+            NATIVE_CPU="OFF"
             shift
-            ;;
-        --model-set)
-            case "$2" in
-                full|core|custom)
-                    AUDIOCPP_MODEL_SET="$2"
-                    ;;
-                *)
-                    echo "--model-set must be full, core, or custom" >&2
-                    exit 1
-                    ;;
-            esac
-            shift 2
-            ;;
-        --models)
-            AUDIOCPP_MODELS="$2"
-            shift 2
             ;;
         --native-cpu)
             case "$2" in
@@ -330,24 +312,21 @@ echo "Building examples: $WITH_EXAMPLES"
 echo "Building tests: $WITH_TESTS"
 echo "Building warmbench: $WITH_WARMBENCH"
 echo "Deployment build: $AUDIOCPP_DEPLOYMENT_BUILD"
-echo "Model composite: $AUDIOCPP_MODEL_SET"
-if [[ -n "$AUDIOCPP_MODELS" ]]; then
-    echo "Selected models: $AUDIOCPP_MODELS"
-fi
+echo "CPU all variants: $CPU_ALL_VARIANTS"
 
-CMAKE_ARGS=(
-    -S .
-    -B "$BUILD_DIR"
-    -G "$GENERATOR"
-    -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
-    -DENGINE_ENABLE_CUDA="$ENGINE_ENABLE_CUDA"
-    -DENGINE_ENABLE_VULKAN="$ENGINE_ENABLE_VULKAN"
-    -DENGINE_ENABLE_HIP="$ENGINE_ENABLE_HIP"
-    -DENGINE_ENABLE_NATIVE_CPU="$NATIVE_CPU"
-    -DENGINE_ENABLE_LLAMAFILE="$LLAMAFILE"
-    -DENGINE_BUILD_EXAMPLES="$WITH_EXAMPLES"
-    -DENGINE_BUILD_TESTS="$WITH_TESTS"
-    -DENGINE_BUILD_WARMBENCH="$WITH_WARMBENCH"
+"${RUNNER[@]}" cmake \
+    -S . \
+    -B "$BUILD_DIR" \
+    -G "$GENERATOR" \
+    -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+    -DENGINE_ENABLE_CUDA="$ENGINE_ENABLE_CUDA" \
+    -DENGINE_ENABLE_VULKAN="$ENGINE_ENABLE_VULKAN" \
+    -DENGINE_ENABLE_NATIVE_CPU="$NATIVE_CPU" \
+    -DENGINE_ENABLE_CPU_ALL_VARIANTS="$CPU_ALL_VARIANTS" \
+    -DENGINE_ENABLE_LLAMAFILE="$LLAMAFILE" \
+    -DENGINE_BUILD_EXAMPLES="$WITH_EXAMPLES" \
+    -DENGINE_BUILD_TESTS="$WITH_TESTS" \
+    -DENGINE_BUILD_WARMBENCH="$WITH_WARMBENCH" \
     -DAUDIOCPP_DEPLOYMENT_BUILD="$AUDIOCPP_DEPLOYMENT_BUILD"
     -DAUDIOCPP_MODEL_SET="$AUDIOCPP_MODEL_SET"
     -DAUDIOCPP_MODELS="$AUDIOCPP_MODELS"
