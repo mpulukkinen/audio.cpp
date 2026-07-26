@@ -215,7 +215,7 @@ VibeVoice ASR is an offline ASR model with greedy, sampling, and beam-search dec
 | Timestamps | Segment and speaker-turn timestamps when produced |
 
 ```bash
-audiocpp_cli --task asr --family vibevoice_asr --model models/VibeVoice-ASR --backend cuda --audio speech_16k.wav --text-out transcript.txt
+audiocpp_cli --task asr --family vibevoice_asr --model models/VibeVoice-ASR-GGUF/vibevoice-asr-q8_0.gguf --backend cuda --audio assets/resources/sample_16k.wav --text-out transcript.txt
 ```
 
 VibeVoice-ASR also accepts a standalone audio.cpp-native GGUF. Pass the shard
@@ -231,7 +231,13 @@ directory may contain only `model.gguf`.
 Structured output:
 
 ```bash
-audiocpp_cli --task asr --family vibevoice_asr --model models/VibeVoice-ASR --backend cuda --audio meeting.wav --text "The recording is a meeting conversation." --text-out transcript.txt --segments-out segments.json --turns-out turns.json
+audiocpp_cli --task asr --family vibevoice_asr --model models/VibeVoice-ASR-GGUF/vibevoice-asr-q8_0.gguf --backend cuda --audio meeting.wav --text "The recording is a meeting conversation." --text-out transcript.txt --segments-out segments.json --turns-out turns.json
+```
+
+With VAD chunking, provide the bundled Silero VAD model:
+
+```bash
+audiocpp_cli --task asr --family vibevoice_asr --model models/VibeVoice-ASR-GGUF/vibevoice-asr-q8_0.gguf --backend cuda --audio assets/resources/sample_16k.wav --audio-chunk-mode vad --session-option vibevoice_asr.vad_model_path=assets/framework/models/silero_vad --text-out transcript.txt
 ```
 
 | Option | Values | Default | Meaning |
