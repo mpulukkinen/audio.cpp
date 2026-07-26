@@ -1,5 +1,21 @@
 {
   "family": "qwen3_tts",
+  "display_name": "Qwen3-TTS",
+  "category": "tts",
+  "status": "supported",
+  "tasks": [
+    "tts",
+    "clone",
+    "design"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

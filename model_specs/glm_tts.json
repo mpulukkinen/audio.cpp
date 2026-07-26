@@ -1,5 +1,20 @@
 {
   "family": "glm_tts",
+  "display_name": "GLM-TTS",
+  "category": "tts",
+  "status": "community",
+  "tasks": [
+    "tts",
+    "clone"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

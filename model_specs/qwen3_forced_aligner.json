@@ -1,5 +1,19 @@
 {
   "family": "qwen3_forced_aligner",
+  "display_name": "Qwen3 Forced Aligner",
+  "category": "speech_analysis",
+  "status": "supported",
+  "tasks": [
+    "align"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

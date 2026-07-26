@@ -1,5 +1,21 @@
 {
   "family": "supertonic",
+  "display_name": "Supertonic 3",
+  "category": "tts",
+  "status": "supported",
+  "tasks": [
+    "tts"
+  ],
+  "modes": [
+    "offline",
+    "streaming"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf",
+      "stream"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

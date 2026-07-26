@@ -1,5 +1,20 @@
 {
   "family": "miotts",
+  "display_name": "MioTTS",
+  "category": "tts",
+  "status": "supported",
+  "tasks": [
+    "tts",
+    "clone"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

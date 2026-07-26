@@ -1,5 +1,21 @@
 {
   "family": "miocodec",
+  "display_name": "MioCodec",
+  "category": "audio_tools",
+  "status": "supported",
+  "tasks": [
+    "codec",
+    "vc",
+    "s2s"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

@@ -1,5 +1,21 @@
 {
   "family": "stable_audio",
+  "display_name": "Stable Audio 3",
+  "category": "audio_generation",
+  "status": "supported",
+  "tasks": [
+    "music",
+    "sfx",
+    "edit"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

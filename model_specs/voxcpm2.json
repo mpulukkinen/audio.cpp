@@ -1,5 +1,23 @@
 {
   "family": "voxcpm2",
+  "display_name": "VoxCPM2",
+  "category": "tts",
+  "status": "supported",
+  "tasks": [
+    "tts",
+    "clone",
+    "design"
+  ],
+  "modes": [
+    "offline",
+    "streaming"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf",
+      "stream"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

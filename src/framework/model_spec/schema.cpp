@@ -220,12 +220,6 @@ void validate_capabilities(const json::Value & value, std::string_view path) {
 void validate_runtime(const json::Value & value, std::string_view path) {
     require_spec_object(value, path);
     validate_string_array(require_spec_field(value, "tags", path), &runtime_tags(), std::string(path) + ".tags", "runtime tag");
-    if (const auto * default_format = value.find("default_format")) {
-        validate_enum(require_spec_string(*default_format, std::string(path) + ".default_format"),
-                      source_formats(),
-                      std::string(path) + ".default_format",
-                      "format");
-    }
 }
 
 void validate_hf_snapshot_download(const json::Value & value, std::string_view path) {

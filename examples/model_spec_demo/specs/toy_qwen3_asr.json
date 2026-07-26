@@ -16,8 +16,7 @@
       "cuda",
       "vulkan",
       "cpu"
-    ],
-    "default_format": "safetensors"
+    ]
   },
   "capabilities": {
     "timestamps": true,

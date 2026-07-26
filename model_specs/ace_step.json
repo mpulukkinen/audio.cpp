@@ -1,5 +1,20 @@
 {
   "family": "ace_step",
+  "display_name": "ACE-Step",
+  "category": "audio_generation",
+  "status": "supported",
+  "tasks": [
+    "music",
+    "edit"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

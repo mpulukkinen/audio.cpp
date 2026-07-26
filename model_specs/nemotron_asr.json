@@ -1,5 +1,21 @@
 {
   "family": "nemotron_asr",
+  "display_name": "Nemotron 3.5 ASR",
+  "category": "asr",
+  "status": "supported",
+  "tasks": [
+    "asr"
+  ],
+  "modes": [
+    "offline",
+    "streaming"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf",
+      "stream"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

@@ -21,7 +21,7 @@ Top-level fields:
 | `status` | Typed status: `supported`, `community`, `experimental`, `wip`, or `unsupported`. |
 | `tasks` | Typed task tags such as `asr`, `tts`, `clone`, `vc`, or `align`. |
 | `modes` | Supported run modes: `offline` and/or `streaming`. |
-| `runtime` | Runtime tags and default package format. |
+| `runtime` | Runtime tags such as `gguf` or `stream`. |
 | `capabilities` | Stable capability booleans and language hints. |
 | `options` | Typed request/session/load options. |
 | `package_defaults` | Optional shared package metadata, such as a common download source. |

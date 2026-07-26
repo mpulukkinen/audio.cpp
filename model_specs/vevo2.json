@@ -1,5 +1,24 @@
 {
   "family": "vevo2",
+  "display_name": "Vevo2",
+  "category": "voice_conversion",
+  "status": "supported",
+  "tasks": [
+    "tts",
+    "music",
+    "vc",
+    "edit",
+    "svc",
+    "s2s"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

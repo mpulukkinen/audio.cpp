@@ -1,5 +1,21 @@
 {
   "family": "higgs_audio_stt",
+  "display_name": "Higgs Audio v3 STT",
+  "category": "asr",
+  "status": "supported",
+  "tasks": [
+    "asr"
+  ],
+  "modes": [
+    "offline",
+    "streaming"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf",
+      "stream"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

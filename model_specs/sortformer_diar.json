@@ -1,5 +1,19 @@
 {
   "family": "sortformer_diar",
+  "display_name": "Sortformer Diarization",
+  "category": "speech_analysis",
+  "status": "supported",
+  "tasks": [
+    "diar"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

@@ -1,5 +1,23 @@
 {
   "family": "omnivoice",
+  "display_name": "OmniVoice",
+  "category": "tts",
+  "status": "supported",
+  "tasks": [
+    "tts",
+    "clone",
+    "design"
+  ],
+  "modes": [
+    "offline",
+    "streaming"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf",
+      "stream"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

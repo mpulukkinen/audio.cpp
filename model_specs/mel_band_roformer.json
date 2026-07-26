@@ -1,5 +1,19 @@
 {
   "family": "mel_band_roformer",
+  "display_name": "Mel-Band RoFormer",
+  "category": "audio_tools",
+  "status": "supported",
+  "tasks": [
+    "sep"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

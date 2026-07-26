@@ -1,5 +1,21 @@
 {
   "family": "voxtral_realtime",
+  "display_name": "Voxtral Mini 4B Realtime",
+  "category": "asr",
+  "status": "supported",
+  "tasks": [
+    "asr"
+  ],
+  "modes": [
+    "offline",
+    "streaming"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf",
+      "stream"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

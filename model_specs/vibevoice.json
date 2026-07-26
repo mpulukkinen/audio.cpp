@@ -1,5 +1,20 @@
 {
   "family": "vibevoice",
+  "display_name": "VibeVoice",
+  "category": "tts",
+  "status": "supported",
+  "tasks": [
+    "tts",
+    "dialogue"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",

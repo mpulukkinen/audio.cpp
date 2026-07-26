@@ -1,5 +1,20 @@
 {
   "family": "higgs_audio_tts",
+  "display_name": "Higgs Audio v3 TTS",
+  "category": "tts",
+  "status": "supported",
+  "tasks": [
+    "tts",
+    "clone"
+  ],
+  "modes": [
+    "offline"
+  ],
+  "runtime": {
+    "tags": [
+      "gguf"
+    ]
+  },
   "sources": [
     {
       "format": "gguf",
