@@ -104,5 +104,71 @@
         "whisper_weights": "whisper:model.safetensors"
       }
     }
+  ],
+  "packages": [
+    {
+      "id": "vevo2_q8_0",
+      "display_name": "Vevo2 Q8_0 GGUF",
+      "default": true,
+      "format": "gguf",
+      "precision": "q8_0",
+      "target_directory": "Vevo2-GGUF",
+      "required_files": [
+        "vevo2-q8_0.gguf"
+      ],
+      "layout": "gguf",
+      "download": {
+        "kind": "huggingface_snapshot",
+        "repo": "audio-cpp/audio.cpp-gguf",
+        "revision": "main",
+        "include": [
+          "Vevo2-GGUF/vevo2-q8_0.gguf"
+        ],
+        "strip_prefix": "Vevo2-GGUF",
+        "gated": false
+      }
+    },
+    {
+      "id": "vevo2_f16",
+      "display_name": "Vevo2 F16 GGUF",
+      "format": "gguf",
+      "precision": "f16",
+      "target_directory": "Vevo2-GGUF",
+      "required_files": [
+        "vevo2-f16.gguf"
+      ],
+      "layout": "gguf",
+      "download": {
+        "kind": "huggingface_snapshot",
+        "repo": "audio-cpp/audio.cpp-gguf",
+        "revision": "main",
+        "include": [
+          "Vevo2-GGUF/vevo2-f16.gguf"
+        ],
+        "strip_prefix": "Vevo2-GGUF",
+        "gated": false
+      }
+    },
+    {
+      "id": "vevo2_orig",
+      "display_name": "Vevo2 Original-Dtype GGUF",
+      "format": "gguf",
+      "precision": "orig",
+      "target_directory": "Vevo2-GGUF",
+      "required_files": [
+        "vevo2-orig.gguf"
+      ],
+      "layout": "gguf",
+      "download": {
+        "kind": "huggingface_snapshot",
+        "repo": "audio-cpp/audio.cpp-gguf",
+        "revision": "main",
+        "include": [
+          "Vevo2-GGUF/vevo2-orig.gguf"
+        ],
+        "strip_prefix": "Vevo2-GGUF",
+        "gated": false
+      }
+    }
   ]
 }

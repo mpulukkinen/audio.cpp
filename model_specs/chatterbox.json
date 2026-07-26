@@ -55,5 +55,70 @@
         "t3_multilingual_v3_weights": "model:t3_mtl23ls_v3.safetensors"
       }
     }
+  ],
+  "packages": [
+    {
+      "id": "chatterbox_q8_0",
+      "display_name": "Chatterbox Q8_0 GGUF",
+      "default": true,
+      "format": "gguf",
+      "precision": "q8_0",
+      "target_directory": "Chatterbox-GGUF",
+      "required_files": [
+        "chatterbox-q8_0.gguf"
+      ],
+      "layout": "gguf",
+      "download": {
+        "kind": "huggingface_snapshot",
+        "repo": "audio-cpp/audio.cpp-gguf",
+        "revision": "main",
+        "include": [
+          "Chatterbox-GGUF/chatterbox-q8_0.gguf"
+        ],
+        "strip_prefix": "Chatterbox-GGUF",
+        "gated": false
+      }
+    },
+    {
+      "id": "chatterbox_f16",
+      "display_name": "Chatterbox F16 GGUF",
+      "format": "gguf",
+      "precision": "f16",
+      "target_directory": "Chatterbox-GGUF",
+      "required_files": [
+        "chatterbox-f16.gguf"
+      ],
+      "layout": "gguf",
+      "download": {
+        "kind": "huggingface_snapshot",
+        "repo": "audio-cpp/audio.cpp-gguf",
+        "revision": "main",
+        "include": [
+          "Chatterbox-GGUF/chatterbox-f16.gguf"
+        ],
+        "strip_prefix": "Chatterbox-GGUF",
+        "gated": false
+      }
+    },
+    {
+      "id": "chatterbox_safetensors",
+      "display_name": "Chatterbox Safetensors",
+      "format": "safetensors",
+      "precision": "native",
+      "target_directory": "chatterbox",
+      "required_files": [
+        "ve.safetensors",
+        "t3_cfg.safetensors",
+        "s3gen.safetensors",
+        "tokenizer.json"
+      ],
+      "layout": "safetensors",
+      "download": {
+        "kind": "huggingface_snapshot",
+        "repo": "ResembleAI/chatterbox",
+        "revision": "main",
+        "gated": false
+      }
+    }
   ]
 }

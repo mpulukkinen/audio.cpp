@@ -65,5 +65,29 @@
         "campplus_weights": "model:frontend/campplus.safetensors"
       }
     }
+  ],
+  "packages": [
+    {
+      "id": "glm_tts_q8_0",
+      "display_name": "GLM-TTS Q8_0 GGUF",
+      "default": true,
+      "format": "gguf",
+      "precision": "q8_0",
+      "target_directory": "GLM-TTS-GGUF",
+      "required_files": [
+        "GLM-TTS_Q8.gguf"
+      ],
+      "layout": "gguf",
+      "download": {
+        "kind": "huggingface_snapshot",
+        "repo": "mirek190/audio.cpp",
+        "revision": "main",
+        "include": [
+          "Text to audio (TTS)/GLM-TTS_Q8.gguf"
+        ],
+        "strip_prefix": "Text to audio (TTS)",
+        "gated": false
+      }
+    }
   ]
 }
