@@ -1040,6 +1040,14 @@ if (ENGINE_BUILD_TESTS)
         COMMAND gguf_tensor_source_test
     )
 
+    add_engine_unittest(model_spec_system_test tests/unittests/test_model_spec_system.cpp)
+    target_include_directories(model_spec_system_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests/unittests)
+
+    add_test(
+        NAME model_spec_system_test
+        COMMAND model_spec_system_test
+    )
+
     add_engine_unittest(scaled_dot_product_attention_test tests/unittests/test_scaled_dot_product_attention.cpp)
 
     add_test(

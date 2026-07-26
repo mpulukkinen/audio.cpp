@@ -116,6 +116,14 @@ std::vector<runtime::CliOptionInfo> parse_cli_options(const json::Value * value)
     return options;
 }
 
+std::vector<std::string> parse_string_array(const json::Value & value) {
+    std::vector<std::string> out;
+    for (const auto & item : value.as_array()) {
+        out.push_back(item.as_string());
+    }
+    return out;
+}
+
 }  // namespace
 
 std::optional<runtime::CapabilitySet> advertised_capabilities(std::string_view family) {
@@ -143,6 +151,34 @@ std::optional<runtime::ModelCliInterface> cli_interface(std::string_view family)
     out.request_options = parse_cli_options(options->find("request"));
     out.session_options = parse_cli_options(options->find("session"));
     out.load_options = parse_cli_options(options->find("load"));
+    return out;
+}
+
+std::vector<ModelDependency> dependencies(std::string_view family) {
+    const auto family_string = std::string(family);
+    const auto spec = load_spec_for_family(family);
+    const auto * rows = spec.find("dependencies");
+    if (rows == nullptr || rows->is_null()) {
+        return {};
+    }
+    std::vector<ModelDependency> out;
+    for (const auto & item : rows->as_array()) {
+        ModelDependency dependency;
+        dependency.kind = json::require_string(item, "kind");
+        dependency.family = json::require_string(item, "family");
+        dependency.scope = json::require_string(item, "scope");
+        dependency.option = json::require_string(item, "option");
+        dependency.option_key = family_string + "." + dependency.option;
+        dependency.required = json::require_bool(item, "required");
+        dependency.required_for = parse_string_array(item.require("required_for"));
+        if (const auto * path = item.find("path")) {
+            dependency.path = path->as_string();
+        }
+        if (const auto * package = item.find("package")) {
+            dependency.package = package->as_string();
+        }
+        out.push_back(std::move(dependency));
+    }
     return out;
 }
 

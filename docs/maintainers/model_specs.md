@@ -1,8 +1,8 @@
 # Model Specs
 
 `model_specs/*.json` is the target source of truth for model metadata, package
-layout, downloads, UI hints, CLI options, runtime capabilities, and companion
-models.
+layout, downloads, UI hints, CLI options, runtime capabilities, and runtime
+dependencies.
 
 The only accepted spec shapes are the current source-layout specs already used
 by production models, and the typed schema shown here for new metadata/catalog
@@ -27,7 +27,7 @@ Top-level fields:
 | `package_defaults` | Optional shared package metadata, such as a common download source. |
 | `packages` | Installable model packages and download metadata. |
 | `layouts` | Typed resource/tensor layouts for future runtime package loading. |
-| `companions` | Runtime peer models or external resources. |
+| `dependencies` | Runtime peer models or bundled model assets needed for optional features. |
 | `ui` | UI/catalog hints. |
 | `sources` | Temporary runtime bridge for current package-spec loading. |
 
@@ -62,6 +62,37 @@ and keep package-level `download` only for overrides.
       "target_directory": "Qwen3-ASR-1.7B-GGUF",
       "files": ["Qwen3-ASR-1.7B-GGUF/qwen3-asr-1.7b-q8_0.gguf"],
       "strip_prefix": "Qwen3-ASR-1.7B-GGUF"
+    }
+  ]
+}
+```
+
+Dependencies describe extra model-level resources required by optional runtime
+features. Use `kind: "model"` for another installable model family, and
+`kind: "bundled_model"` for an in-repo bundled model asset. Do not use
+dependencies for sidecars or tensor files that are already part of `sources`.
+The `scope` field is typed as `load`, `session`, or `request`; the public
+runtime option key is derived as `<family>.<option>`.
+
+```json
+{
+  "dependencies": [
+    {
+      "kind": "model",
+      "family": "qwen3_forced_aligner",
+      "scope": "session",
+      "option": "forced_aligner_model_path",
+      "required": false,
+      "required_for": ["word_timestamps"]
+    },
+    {
+      "kind": "bundled_model",
+      "family": "silero_vad",
+      "path": "assets/framework/models/silero_vad",
+      "scope": "session",
+      "option": "vad_model_path",
+      "required": false,
+      "required_for": ["vad_chunking"]
     }
   ]
 }

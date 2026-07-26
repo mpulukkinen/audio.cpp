@@ -200,22 +200,23 @@
       }
     }
   },
-  "companions": [
+  "dependencies": [
     {
-      "id": "toy_qwen3_forced_aligner",
       "kind": "model",
       "family": "qwen3_forced_aligner",
-      "option": "toy_qwen3_asr.forced_aligner",
+      "scope": "session",
+      "option": "forced_aligner",
       "required": false,
       "required_for": [
         "timestamps"
       ]
     },
     {
-      "id": "toy_vad",
-      "kind": "model",
+      "kind": "bundled_model",
       "family": "silero_vad",
-      "option": "toy_qwen3_asr.vad",
+      "path": "assets/framework/models/silero_vad",
+      "scope": "session",
+      "option": "vad",
       "required": false,
       "required_for": [
         "long_audio"

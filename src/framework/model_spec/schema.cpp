@@ -106,8 +106,13 @@ const std::unordered_set<std::string> & download_kinds() {
     return values;
 }
 
-const std::unordered_set<std::string> & companion_kinds() {
-    static const std::unordered_set<std::string> values = {"model", "file", "directory", "external"};
+const std::unordered_set<std::string> & dependency_kinds() {
+    static const std::unordered_set<std::string> values = {"model", "bundled_model"};
+    return values;
+}
+
+const std::unordered_set<std::string> & dependency_scopes() {
+    static const std::unordered_set<std::string> values = {"load", "session", "request"};
     return values;
 }
 
@@ -386,24 +391,30 @@ std::unordered_set<std::string> validate_packages(
     return package_ids;
 }
 
-void validate_companions(const json::Value & value, const std::string & family, std::string_view path) {
-    const auto & companions = require_spec_array(value, path);
-    for (size_t index = 0; index < companions.size(); ++index) {
+void validate_dependencies(const json::Value & value, const std::string & family, std::string_view path) {
+    const auto & dependencies = require_spec_array(value, path);
+    for (size_t index = 0; index < dependencies.size(); ++index) {
         const auto item_path = std::string(path) + "[" + std::to_string(index) + "]";
-        const auto & companion = companions[index];
-        require_spec_object(companion, item_path);
-        (void) require_spec_string(require_spec_field(companion, "id", item_path), item_path + ".id");
-        const auto kind = require_spec_string(require_spec_field(companion, "kind", item_path), item_path + ".kind");
-        validate_enum(kind, companion_kinds(), item_path + ".kind", "companion kind");
-        if (const auto * companion_family = companion.find("family")) {
-            (void) require_spec_string(*companion_family, item_path + ".family");
+        const auto & dependency = dependencies[index];
+        require_spec_object(dependency, item_path);
+        const auto kind = require_spec_string(require_spec_field(dependency, "kind", item_path), item_path + ".kind");
+        validate_enum(kind, dependency_kinds(), item_path + ".kind", "dependency kind");
+        (void) require_spec_string(require_spec_field(dependency, "family", item_path), item_path + ".family");
+        const auto scope = require_spec_string(require_spec_field(dependency, "scope", item_path), item_path + ".scope");
+        validate_enum(scope, dependency_scopes(), item_path + ".scope", "dependency scope");
+        const auto option = require_spec_string(require_spec_field(dependency, "option", item_path), item_path + ".option");
+        if (option.find('.') != std::string::npos) {
+            fail(item_path + ".option", "dependency option must be local; the public key is derived as " + family + ".<option>");
         }
-        if (const auto * option = companion.find("option")) {
-            const auto option_name = require_spec_string(*option, item_path + ".option");
-            validate_option_name(option_name, family, item_path + ".option");
+        validate_option_name(family + "." + option, family, item_path + ".option");
+        (void) require_spec_bool(require_spec_field(dependency, "required", item_path), item_path + ".required");
+        validate_string_array(require_spec_field(dependency, "required_for", item_path), nullptr, item_path + ".required_for", "requirement");
+        if (kind == "bundled_model") {
+            (void) require_spec_string(require_spec_field(dependency, "path", item_path), item_path + ".path");
         }
-        (void) require_spec_bool(require_spec_field(companion, "required", item_path), item_path + ".required");
-        validate_string_array(require_spec_field(companion, "required_for", item_path), nullptr, item_path + ".required_for", "requirement");
+        if (const auto * package = dependency.find("package")) {
+            (void) require_spec_string(*package, item_path + ".package");
+        }
     }
 }
 
@@ -469,7 +480,7 @@ void validate_v1(const json::Value & spec, std::string_view source_name) {
     const auto packages_path = std::string(source_name) + ".packages";
     const auto & packages_field = require_spec_field(spec, "packages", source_name);
     const auto package_ids = validate_packages(packages_field, packages_path, has_default_download);
-    validate_companions(require_spec_field(spec, "companions", source_name), family, std::string(source_name) + ".companions");
+    validate_dependencies(require_spec_field(spec, "dependencies", source_name), family, std::string(source_name) + ".dependencies");
     validate_ui(require_spec_field(spec, "ui", source_name), package_ids, std::string(source_name) + ".ui");
 
     const auto sources_path = std::string(source_name) + ".sources";
@@ -481,7 +492,7 @@ void validate_v1(const json::Value & spec, std::string_view source_name) {
 }
 
 void validate_legacy(const json::Value & spec, std::string_view source_name) {
-    (void) require_spec_string(require_spec_field(spec, "family", source_name), std::string(source_name) + ".family");
+    const auto family = require_spec_string(require_spec_field(spec, "family", source_name), std::string(source_name) + ".family");
     if (const auto * package_defaults = spec.find("package_defaults")) {
         validate_package_defaults(*package_defaults, std::string(source_name) + ".package_defaults");
     }
@@ -489,6 +500,9 @@ void validate_legacy(const json::Value & spec, std::string_view source_name) {
         const bool has_default_download =
             has_spec_field(spec, "package_defaults") && has_spec_field(*spec.find("package_defaults"), "download");
         (void) validate_packages(*packages, std::string(source_name) + ".packages", has_default_download);
+    }
+    if (const auto * dependencies = spec.find("dependencies")) {
+        validate_dependencies(*dependencies, family, std::string(source_name) + ".dependencies");
     }
     const auto sources_path = std::string(source_name) + ".sources";
     const auto & sources_field = require_spec_field(spec, "sources", source_name);

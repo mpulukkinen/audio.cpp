@@ -154,5 +154,28 @@
         "repo": "Qwen/Qwen3-ASR-0.6B"
       }
     }
+  ],
+  "dependencies": [
+    {
+      "kind": "model",
+      "family": "qwen3_forced_aligner",
+      "scope": "session",
+      "option": "forced_aligner_model_path",
+      "required": false,
+      "required_for": [
+        "word_timestamps"
+      ]
+    },
+    {
+      "kind": "bundled_model",
+      "family": "silero_vad",
+      "path": "assets/framework/models/silero_vad",
+      "scope": "session",
+      "option": "vad_model_path",
+      "required": false,
+      "required_for": [
+        "vad_chunking"
+      ]
+    }
   ]
 }

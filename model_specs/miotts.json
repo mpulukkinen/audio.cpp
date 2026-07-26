@@ -99,5 +99,27 @@
       ],
       "strip_prefix": "MioTTS-1.7B-GGUF"
     }
+  ],
+  "dependencies": [
+    {
+      "kind": "model",
+      "family": "miocodec",
+      "scope": "session",
+      "option": "codec_model_path",
+      "required": true,
+      "required_for": [
+        "audio_decode"
+      ]
+    },
+    {
+      "kind": "model",
+      "family": "qwen3_asr",
+      "scope": "session",
+      "option": "best_of_n_asr_model_path",
+      "required": false,
+      "required_for": [
+        "best_of_n"
+      ]
+    }
   ]
 }
