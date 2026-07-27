@@ -35,6 +35,335 @@
       "prompt_editing"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "route",
+        "type": "enum",
+        "description": "VeVo2 route.",
+        "values": [
+          "zero_shot_tts",
+          "text_to_singing",
+          "svs",
+          "style_preserved_vc",
+          "style_preserved_svc",
+          "style_converted_vc",
+          "style_converted_svc",
+          "editing",
+          "singing_style_conversion",
+          "humming_to_singing",
+          "instrument_to_singing"
+        ],
+        "required": false
+      },
+      {
+        "name": "source_audio",
+        "type": "audio_path",
+        "description": "Source speech or singing audio for conversion/editing routes.",
+        "required": false
+      },
+      {
+        "name": "target_voice",
+        "type": "audio_path",
+        "description": "Target timbre reference audio.",
+        "required": false
+      },
+      {
+        "name": "prosody_ref",
+        "type": "audio_path",
+        "description": "Prosody or melody reference audio.",
+        "required": false
+      },
+      {
+        "name": "style_ref",
+        "type": "audio_path",
+        "description": "Style reference audio.",
+        "required": false
+      },
+      {
+        "name": "target_text",
+        "type": "string",
+        "description": "Text or lyrics to vocalize.",
+        "required": false
+      },
+      {
+        "name": "style_ref_text",
+        "type": "string",
+        "description": "Transcript for the style reference when text conditioning is used.",
+        "required": false
+      },
+      {
+        "name": "use_prosody_code",
+        "type": "bool",
+        "description": "Enable explicit prosody-code conditioning.",
+        "required": false
+      },
+      {
+        "name": "predict_target_prosody",
+        "type": "bool",
+        "description": "Predict target prosody during AR generation.",
+        "required": false
+      },
+      {
+        "name": "use_pitch_shift",
+        "type": "bool",
+        "description": "Pitch-align source/prosody/style references to the target voice.",
+        "required": false
+      },
+      {
+        "name": "source_shift_steps",
+        "type": "int",
+        "description": "Manual pitch-shift semitone steps for source audio.",
+        "required": false
+      },
+      {
+        "name": "prosody_shift_steps",
+        "type": "int",
+        "description": "Manual pitch-shift semitone steps for prosody reference audio.",
+        "required": false
+      },
+      {
+        "name": "style_shift_steps",
+        "type": "int",
+        "description": "Manual pitch-shift semitone steps for style reference audio.",
+        "required": false
+      },
+      {
+        "name": "target_duration_seconds",
+        "type": "float",
+        "description": "Target output duration hint for flow matching.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "reference_duration_seconds",
+        "type": "float",
+        "description": "Trim target voice reference duration before conditioning.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "temperature",
+        "type": "float",
+        "description": "AR sampling temperature.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "top_k",
+        "type": "int",
+        "description": "AR top-k sampling limit.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "top_p",
+        "type": "float",
+        "description": "AR nucleus sampling threshold.",
+        "required": false,
+        "min": 0.0,
+        "max": 1.0
+      },
+      {
+        "name": "repetition_penalty",
+        "type": "float",
+        "description": "AR repetition penalty.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "max_tokens",
+        "type": "int",
+        "description": "Maximum generated AR content/style tokens.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "num_inference_steps",
+        "type": "int",
+        "description": "Flow-matching denoising steps.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Request seed; omitted means random.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "fm_noise_path",
+        "type": "path",
+        "description": "Optional flow-matching noise tensor file.",
+        "required": false
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Default matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "conv_weight_type",
+        "type": "enum",
+        "description": "Default convolution weight storage type.",
+        "preset": "weight_type_conv",
+        "required": false
+      },
+      {
+        "name": "ar_weight_type",
+        "type": "enum",
+        "description": "AR matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "ar_weight_context_mb",
+        "type": "int",
+        "description": "AR weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "ar_prefill_graph_arena_mb",
+        "type": "int",
+        "description": "AR prefill graph context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "ar_decode_graph_arena_mb",
+        "type": "int",
+        "description": "AR decode graph context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "whisper_weight_type",
+        "type": "enum",
+        "description": "Whisper matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "whisper_conv_weight_type",
+        "type": "enum",
+        "description": "Whisper convolution weight storage type.",
+        "preset": "weight_type_conv",
+        "required": false
+      },
+      {
+        "name": "whisper_weight_context_mb",
+        "type": "int",
+        "description": "Whisper weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "whisper_graph_arena_mb",
+        "type": "int",
+        "description": "Whisper graph context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "tokenizer_weight_type",
+        "type": "enum",
+        "description": "Tokenizer matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "tokenizer_conv_weight_type",
+        "type": "enum",
+        "description": "Tokenizer convolution weight storage type.",
+        "preset": "weight_type_conv",
+        "required": false
+      },
+      {
+        "name": "tokenizer_weight_context_mb",
+        "type": "int",
+        "description": "Tokenizer weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "tokenizer_graph_arena_mb",
+        "type": "int",
+        "description": "Tokenizer graph context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "fm_weight_type",
+        "type": "enum",
+        "description": "Flow-matching matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "fm_conv_weight_type",
+        "type": "enum",
+        "description": "Flow-matching convolution weight storage type.",
+        "preset": "weight_type_conv",
+        "required": false
+      },
+      {
+        "name": "fm_weight_context_mb",
+        "type": "int",
+        "description": "Flow-matching weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "fm_graph_arena_mb",
+        "type": "int",
+        "description": "Flow-matching graph context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "vocoder_weight_type",
+        "type": "enum",
+        "description": "Vocoder matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "vocoder_conv_weight_type",
+        "type": "enum",
+        "description": "Vocoder convolution weight storage type.",
+        "preset": "weight_type_conv",
+        "required": false
+      },
+      {
+        "name": "vocoder_weight_context_mb",
+        "type": "int",
+        "description": "Vocoder weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "vocoder_graph_arena_mb",
+        "type": "int",
+        "description": "Vocoder graph context size.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": [
+      {
+        "name": "whisper_path",
+        "type": "path",
+        "description": "Local Whisper model directory used by VeVo2 feature extraction.",
+        "required": false
+      }
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

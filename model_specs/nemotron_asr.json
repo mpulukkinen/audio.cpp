@@ -14,6 +14,89 @@
     "en"
   ],
   "capabilities": {},
+  "options": {
+    "request": [
+      {
+        "name": "language",
+        "type": "string",
+        "description": "ASR prompt language such as en-US, da-DK, or auto.",
+        "required": false
+      },
+      {
+        "name": "lookahead_tokens",
+        "type": "int",
+        "description": "Chunk-limited encoder right context; supported values come from processor_config.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "max_tokens",
+        "type": "int",
+        "description": "Maximum RNNT generated tokens; 0 uses the model-derived limit.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "keep_language_tags",
+        "type": "bool",
+        "description": "Keep language tag tokens in decoded text.",
+        "required": false,
+        "default": false
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Shared matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "matmul_weight_type",
+        "type": "enum",
+        "description": "Encoder and decoder matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "conv_weight_type",
+        "type": "enum",
+        "description": "Convolution weight storage type.",
+        "preset": "weight_type_conv",
+        "required": false
+      },
+      {
+        "name": "weight_context_mb",
+        "type": "int",
+        "description": "Weight context arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "encoder_graph_arena_mb",
+        "type": "int",
+        "description": "Encoder graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "decoder_graph_arena_mb",
+        "type": "int",
+        "description": "Decoder graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release the offline encoder graph after each offline request; default false.",
+        "required": false,
+        "default": false
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf",

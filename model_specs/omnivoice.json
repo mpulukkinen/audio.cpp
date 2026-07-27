@@ -24,6 +24,36 @@
       "voice_design"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Text chunking mode; default tag_aware.",
+        "preset": "text_chunk_mode_full",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "session": [
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release staged runtime graphs after request phases; default false.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "perf_mode",
+        "type": "enum",
+        "description": "Generator performance mode; default off keeps the exact-safe attention path.",
+        "preset": "perf_mode_flash_attention",
+        "required": false,
+        "default": "off"
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf",

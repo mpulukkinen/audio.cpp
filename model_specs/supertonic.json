@@ -19,6 +19,74 @@
       "long_form"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "voice_id",
+        "type": "enum",
+        "description": "Preset voice style id, default M1.",
+        "values": [
+          "M1",
+          "M2",
+          "M3",
+          "M4",
+          "M5",
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5"
+        ],
+        "required": false
+      },
+      {
+        "name": "num_inference_steps",
+        "type": "int",
+        "description": "Flow denoising steps, default 8.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "speaking_rate",
+        "type": "float",
+        "description": "Speech speed multiplier, default 1.05.",
+        "required": false,
+        "default": 1.0,
+        "min": 0.0
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Noise seed, default 1234.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Long-form text chunking mode.",
+        "preset": "text_chunk_mode_full",
+        "required": false
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Supertonic weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "style_cache_slots",
+        "type": "int",
+        "description": "Preset voice style cache slots; default 4.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf",

@@ -18,6 +18,77 @@
       "speaker_reference"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "reference_text",
+        "type": "string",
+        "description": "Transcript of the reference speaker WAV.",
+        "required": false
+      },
+      {
+        "name": "speaker_embedding_path",
+        "type": "path",
+        "description": "Path to the speaker embedding .emb.txt file.",
+        "required": false
+      },
+      {
+        "name": "speaker_embedding",
+        "type": "float_list",
+        "description": "Comma-separated list of 192 speaker embedding float values.",
+        "required": false
+      },
+      {
+        "name": "subtalker_temperature",
+        "type": "float",
+        "description": "Acoustic decoder sampling temperature (default 0.8).",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "subtalker_do_sample",
+        "type": "bool",
+        "description": "Enable sampling in the acoustic decoder (default true).",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "text_chunk_size",
+        "type": "int",
+        "description": "Maximum character budget per chunk (default 200).",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Text chunking mode (default 'default').",
+        "values": [
+          "default",
+          "endline",
+          "tag_aware"
+        ],
+        "required": false
+      }
+    ],
+    "session": [
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release the talker cached-step graph after each request; default false.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "voice_prompt_cache_slots",
+        "type": "int",
+        "description": "Voice prompt cache slots; default 1.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

@@ -159,6 +159,7 @@ add_compile_options(
 add_library(engine_runtime STATIC
     src/framework/assets/resource_bundle.cpp
     src/framework/model_spec/package.cpp
+    src/framework/model_spec/options.cpp
     src/framework/model_spec/schema.cpp
     src/framework/assets/tensor_source.cpp
     src/framework/assets/torch_bin.cpp

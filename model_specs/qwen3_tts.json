@@ -23,6 +23,34 @@
       "voice_design"
     ]
   },
+  "options": {
+    "request": [],
+    "session": [
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release the talker cached-step graph after each request; default false.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "perf_mode",
+        "type": "enum",
+        "description": "Q8_0-only attention performance mode; default off keeps the exact-safe path.",
+        "preset": "perf_mode_flash_attention",
+        "required": false,
+        "default": "off"
+      },
+      {
+        "name": "voice_prompt_cache_slots",
+        "type": "int",
+        "description": "Voice prompt cache slots; default 1.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

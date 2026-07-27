@@ -25,6 +25,142 @@
       "prompt_editing"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "duration_seconds",
+        "type": "float_list",
+        "description": "Target duration per prompt.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "num_inference_steps",
+        "type": "int",
+        "description": "RF diffusion steps.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "guidance_scale",
+        "type": "float",
+        "description": "Classifier-free guidance scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "sampler",
+        "type": "enum",
+        "description": "Diffusion sampler.",
+        "values": [
+          "pingpong",
+          "euler",
+          "dpmpp-2m",
+          "dpmpp-3m-sde"
+        ],
+        "required": false
+      },
+      {
+        "name": "apg_scale",
+        "type": "float",
+        "description": "Adaptive projected guidance scale.",
+        "required": false
+      },
+      {
+        "name": "negative_prompt",
+        "type": "string",
+        "description": "Negative prompt text.",
+        "required": false
+      },
+      {
+        "name": "batch_size",
+        "type": "int",
+        "description": "Prompt batch size.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "duration_padding_seconds",
+        "type": "float",
+        "description": "Extra generated padding before truncation.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "truncate_output_to_duration",
+        "type": "bool",
+        "description": "Trim decoded audio to requested duration.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "chunked_decode",
+        "type": "bool",
+        "description": "Decode the vocoder in chunks.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "init_noise_level",
+        "type": "float",
+        "description": "Strength for audio-conditioned generation.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "audio_input_kind",
+        "type": "enum",
+        "description": "How to use request audio input.",
+        "values": [
+          "init_audio",
+          "inpaint_audio"
+        ],
+        "required": false
+      },
+      {
+        "name": "inpaint_mask_start_seconds",
+        "type": "float_list",
+        "description": "Inpaint region start times.",
+        "required": false
+      },
+      {
+        "name": "inpaint_mask_end_seconds",
+        "type": "float_list",
+        "description": "Inpaint region end times.",
+        "required": false
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Torch RNG seed.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "session": [
+      {
+        "name": "max_batch",
+        "type": "int",
+        "description": "Maximum prompt batch size; default 1.",
+        "required": false
+      },
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Stable Audio weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release staged runtime graphs after each request; default false.",
+        "required": false,
+        "default": false
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

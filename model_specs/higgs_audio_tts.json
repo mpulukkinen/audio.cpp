@@ -18,6 +18,135 @@
       "speaker_reference"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "max_tokens",
+        "type": "int",
+        "description": "Maximum generated AR tokens; default 2048, 0 uses the default.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "temperature",
+        "type": "float",
+        "description": "AR sampling temperature.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "top_k",
+        "type": "int",
+        "description": "AR top-k sampling limit.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "top_p",
+        "type": "float",
+        "description": "AR nucleus sampling probability.",
+        "required": false,
+        "min": 0.0,
+        "max": 1.0
+      },
+      {
+        "name": "repetition_penalty",
+        "type": "float",
+        "description": "Accepted for Python API compatibility; Higgs audio sampling does not consume it.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Torch RNG seed.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "text_chunk_size",
+        "type": "int",
+        "description": "Long-form text chunk size; default 1024.",
+        "required": false,
+        "min": 0,
+        "default": 256
+      },
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Framework text chunking mode.",
+        "preset": "text_chunk_mode_full",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "AR and codec weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "ar_weight_type",
+        "type": "enum",
+        "description": "Autoregressive decoder weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "codec_weight_type",
+        "type": "enum",
+        "description": "Codec weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "ar_weight_context_mb",
+        "type": "int",
+        "description": "AR weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_weight_context_mb",
+        "type": "int",
+        "description": "Codec weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "ar_decode_graph_arena_mb",
+        "type": "int",
+        "description": "AR decode graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_decode_graph_arena_mb",
+        "type": "int",
+        "description": "Codec decode graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_encode_graph_arena_mb",
+        "type": "int",
+        "description": "Codec encode graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "reference_cache_slots",
+        "type": "int",
+        "description": "Encoded reference-audio cache slots; default 1.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

@@ -19,6 +19,103 @@
       "speaker_reference"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "max_tokens",
+        "type": "int",
+        "description": "Maximum generated audio frames.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "do_sample",
+        "type": "bool",
+        "description": "Enable stochastic audio-token sampling.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "temperature",
+        "type": "float",
+        "description": "Audio-token sampling temperature.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "top_p",
+        "type": "float",
+        "description": "Audio-token nucleus sampling limit.",
+        "required": false,
+        "min": 0.0,
+        "max": 1.0
+      },
+      {
+        "name": "top_k",
+        "type": "int",
+        "description": "Audio-token top-k sampling limit.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "repetition_penalty",
+        "type": "float",
+        "description": "Audio-token repetition penalty.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "text_temperature",
+        "type": "float",
+        "description": "Text-gate sampling temperature.",
+        "required": false
+      },
+      {
+        "name": "text_top_p",
+        "type": "float",
+        "description": "Text-gate nucleus sampling limit.",
+        "required": false
+      },
+      {
+        "name": "text_top_k",
+        "type": "int",
+        "description": "Text-gate top-k sampling limit.",
+        "required": false
+      },
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Long-form text chunking mode; default splitter.",
+        "preset": "text_chunk_mode_full",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Backbone weight storage type.",
+        "values": [
+          "auto",
+          "native",
+          "f32",
+          "f16",
+          "bf16",
+          "q8_0"
+        ],
+        "required": false
+      },
+      {
+        "name": "reference_cache_slots",
+        "type": "int",
+        "description": "Prepared reference-voice cache slots; default 1, set 0 to disable.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

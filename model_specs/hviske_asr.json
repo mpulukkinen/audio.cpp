@@ -13,6 +13,125 @@
     "multilingual"
   ],
   "capabilities": {},
+  "options": {
+    "request": [
+      {
+        "name": "language",
+        "type": "string",
+        "description": "ASR language code; defaults to da.",
+        "required": false
+      },
+      {
+        "name": "punctuation",
+        "type": "bool",
+        "description": "Enable or disable punctuation tokens in the decoder prompt.",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "max_tokens",
+        "type": "int",
+        "description": "Maximum generated transcript tokens.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "num_beams",
+        "type": "int",
+        "description": "Beam-search beam count; 1 uses greedy or sampling decode.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "length_penalty",
+        "type": "float",
+        "description": "Beam-search length penalty.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "do_sample",
+        "type": "bool",
+        "description": "Enable sampling instead of greedy decode when num_beams is 1.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "temperature",
+        "type": "float",
+        "description": "Sampling temperature.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "top_k",
+        "type": "int",
+        "description": "Top-k sampling limit; 0 disables top-k.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "top_p",
+        "type": "float",
+        "description": "Nucleus sampling limit.",
+        "required": false,
+        "min": 0.0,
+        "max": 1.0
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Sampling seed.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "conv_weight_type",
+        "type": "enum",
+        "description": "Convolution weight storage type.",
+        "preset": "weight_type_conv",
+        "required": false
+      },
+      {
+        "name": "weight_context_mb",
+        "type": "int",
+        "description": "Weight context arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "encoder_graph_arena_mb",
+        "type": "int",
+        "description": "Encoder graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "decoder_prefill_graph_arena_mb",
+        "type": "int",
+        "description": "Decoder prefill graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "decoder_decode_graph_arena_mb",
+        "type": "int",
+        "description": "Decoder cached-step graph arena size.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

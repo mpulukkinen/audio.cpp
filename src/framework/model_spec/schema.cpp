@@ -1,5 +1,7 @@
 #include "engine/framework/model_spec/schema.h"
+#include "engine/framework/model_spec/options.h"
 
+#include <algorithm>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -118,8 +120,15 @@ const std::unordered_set<std::string> & dependency_scopes() {
 }
 
 const std::unordered_set<std::string> & option_types() {
-    static const std::unordered_set<std::string> values = {"bool", "int", "float", "string", "enum", "path", "audio_path"};
+    static const std::unordered_set<std::string> values = {
+        "bool", "int", "float", "string", "enum", "path", "audio_path",
+        "string_list", "float_list", "path_list", "audio_path_list",
+    };
     return values;
+}
+
+bool is_numeric_option_type(const std::string & type) {
+    return type == "int" || type == "float" || type == "float_list";
 }
 
 const std::unordered_set<std::string> & runtime_tags() {
@@ -157,17 +166,6 @@ const std::unordered_set<std::string> & capabilities_for_task(const std::string 
     };
     const auto it = values.find(task);
     return it == values.end() ? empty : it->second;
-}
-
-const std::unordered_set<std::string> & common_options() {
-    static const std::unordered_set<std::string> values = {
-        "seed", "language", "voice_ref", "reference_text", "prompt_audio", "source_audio", "target_voice",
-        "text_chunk_mode", "text_chunk_size", "max_new_tokens", "temperature", "top_p", "top_k",
-        "repetition_penalty", "do_sample", "return_timestamps", "duration_scale", "min_seconds",
-        "max_seconds", "speaking_rate", "pitch_shift", "energy_scale", "num_inference_steps",
-        "audio_chunk_mode", "audio_chunk_seconds",
-    };
-    return values;
 }
 
 void validate_enum(const std::string & value,
@@ -213,38 +211,132 @@ std::unordered_set<std::string> validate_nonempty_string_set(
     return values;
 }
 
-void validate_option_name(const std::string & name, const std::string & family, std::string_view path) {
-    if (common_options().find(name) != common_options().end()) {
+void validate_request_option_name(const std::string & name, const std::string & family, std::string_view path) {
+    if (name.find('.') == std::string::npos) {
         return;
     }
     const std::string prefix = family + ".";
     if (name.rfind(prefix, 0) == 0 && name.size() > prefix.size()) {
         return;
     }
-    fail(path, "option '" + name + "' must be canonical or namespaced as " + family + ".<name>");
+    fail(path, "dotted request option '" + name + "' must use namespace " + family + ".<name>");
 }
 
-void validate_option(const json::Value & value, const std::string & family, std::string_view path) {
+void validate_local_option_name(
+    const std::string & name,
+    const std::string & family,
+    std::string_view scope,
+    std::string_view path) {
+    if (name.find('.') != std::string::npos) {
+        fail(path, std::string(scope) + " option must be local; the public key is derived as " + family + ".<name>");
+    }
+}
+
+void validate_option(
+    const json::Value & value,
+    const std::string & family,
+    std::string_view scope,
+    std::string_view path) {
     require_spec_object(value, path);
     const auto name = require_spec_string(require_spec_field(value, "name", path), std::string(path) + ".name");
-    validate_option_name(name, family, std::string(path) + ".name");
+    if (scope == "request") {
+        validate_request_option_name(name, family, std::string(path) + ".name");
+    } else {
+        validate_local_option_name(name, family, scope, std::string(path) + ".name");
+    }
     const auto type = require_spec_string(require_spec_field(value, "type", path), std::string(path) + ".type");
     validate_enum(type, option_types(), std::string(path) + ".type", "option type");
-    const auto * values = value.find("values");
-    if (type == "enum") {
-        if (values == nullptr) {
-            fail(std::string(path) + ".values", "enum option requires values");
+    if (const auto it = shared_option_contracts().find(name); it != shared_option_contracts().end()) {
+        if (it->second.find(type) == it->second.end()) {
+            fail(std::string(path) + ".type", "shared option '" + name + "' must use its registered type");
         }
-        validate_string_array(*values, nullptr, std::string(path) + ".values", "enum value");
-        if (values->as_array().empty()) {
-            fail(std::string(path) + ".values", "enum option values must not be empty");
+    }
+    const auto * preset = value.find("preset");
+    const auto * values = value.find("values");
+    if (preset != nullptr) {
+        const auto preset_name = require_spec_string(*preset, std::string(path) + ".preset");
+        if (type != "enum") {
+            fail(std::string(path) + ".preset", "presets are allowed only for enum options");
+        }
+        if (option_presets().find(preset_name) == option_presets().end()) {
+            fail(std::string(path) + ".preset", "unknown option preset '" + preset_name + "'");
+        }
+        if (values != nullptr) {
+            fail(std::string(path) + ".values", "enum options must use either preset or values, not both");
+        }
+    }
+    if (type == "enum") {
+        if (preset == nullptr && values == nullptr) {
+            fail(std::string(path) + ".values", "enum option requires values or preset");
+        }
+        if (values != nullptr) {
+            validate_string_array(*values, nullptr, std::string(path) + ".values", "enum value");
+            if (values->as_array().empty()) {
+                fail(std::string(path) + ".values", "enum option values must not be empty");
+            }
         }
     } else if (values != nullptr) {
         fail(std::string(path) + ".values", "values are allowed only for enum options");
     }
+    (void) require_spec_bool(require_spec_field(value, "required", path), std::string(path) + ".required");
     const auto * default_value = value.find("default");
-    if (default_value != nullptr && default_value->is_null()) {
-        fail(std::string(path) + ".default", "use absent default instead of null");
+    if (default_value != nullptr) {
+        const auto default_path = std::string(path) + ".default";
+        if (default_value->is_null()) {
+            fail(default_path, "use absent default instead of null");
+        }
+        if (type == "bool" && !default_value->is_bool()) {
+            fail(default_path, "expected bool default");
+        }
+        if ((type == "int" || type == "float") && !default_value->is_number()) {
+            fail(default_path, "expected numeric default");
+        }
+        if ((type == "string" || type == "path" || type == "audio_path" || type == "enum") &&
+            !default_value->is_string()) {
+            fail(default_path, "expected string default");
+        }
+        if ((type == "string_list" || type == "float_list" || type == "path_list" || type == "audio_path_list") &&
+            !default_value->is_array()) {
+            fail(default_path, "expected array default");
+        }
+        if (type == "enum") {
+            if (preset != nullptr) {
+                const auto & allowed = require_option_preset(preset->as_string());
+                if (std::find(allowed.begin(), allowed.end(), default_value->as_string()) == allowed.end()) {
+                    fail(default_path, "default is not in preset values");
+                }
+            } else if (values != nullptr) {
+                bool found = false;
+                for (const auto & item : values->as_array()) {
+                    found = found || item.as_string() == default_value->as_string();
+                }
+                if (!found) {
+                    fail(default_path, "default is not in enum values");
+                }
+            }
+        }
+    }
+    const auto * min_value = value.find("min");
+    const auto * max_value = value.find("max");
+    if ((min_value != nullptr || max_value != nullptr) && !is_numeric_option_type(type)) {
+        fail(std::string(path), "min/max are allowed only for int or float options");
+    }
+    if (min_value != nullptr && !min_value->is_number()) {
+        fail(std::string(path) + ".min", "expected numeric min");
+    }
+    if (max_value != nullptr && !max_value->is_number()) {
+        fail(std::string(path) + ".max", "expected numeric max");
+    }
+    if (min_value != nullptr && max_value != nullptr && min_value->as_number() > max_value->as_number()) {
+        fail(std::string(path) + ".min", "min must not exceed max");
+    }
+    if (default_value != nullptr && default_value->is_number()) {
+        if (min_value != nullptr && default_value->as_number() < min_value->as_number()) {
+            fail(std::string(path) + ".default", "default is below min");
+        }
+        if (max_value != nullptr && default_value->as_number() > max_value->as_number()) {
+            fail(std::string(path) + ".default", "default exceeds max");
+        }
     }
     (void) require_spec_string(require_spec_field(value, "description", path), std::string(path) + ".description");
 }
@@ -255,7 +347,7 @@ void validate_options(const json::Value & value, const std::string & family, std
         const auto child_path = std::string(path) + "." + scope;
         const auto & rows = require_spec_array(require_spec_field(value, scope, path), child_path);
         for (size_t index = 0; index < rows.size(); ++index) {
-            validate_option(rows[index], family, child_path + "[" + std::to_string(index) + "]");
+            validate_option(rows[index], family, scope, child_path + "[" + std::to_string(index) + "]");
         }
     }
 }
@@ -461,7 +553,7 @@ void validate_dependencies(const json::Value & value, const std::string & family
         if (option.find('.') != std::string::npos) {
             fail(item_path + ".option", "dependency option must be local; the public key is derived as " + family + ".<option>");
         }
-        validate_option_name(family + "." + option, family, item_path + ".option");
+        validate_request_option_name(family + "." + option, family, item_path + ".option");
         const auto required = require_spec_bool(require_spec_field(dependency, "required", item_path), item_path + ".required");
         if (dependency.find("required_for") != nullptr) {
             fail(item_path + ".required_for", "use typed required_when conditions");
@@ -489,7 +581,7 @@ void validate_dependencies(const json::Value & value, const std::string & family
                 const auto option_key = require_spec_string(
                     require_spec_field(condition, "option_key", condition_path),
                     condition_path + ".option_key");
-                validate_option_name(option_key, family, condition_path + ".option_key");
+                validate_request_option_name(option_key, family, condition_path + ".option_key");
                 const auto & equals = require_spec_field(condition, "equals", condition_path);
                 if (!equals.is_bool() && !equals.is_number() && !equals.is_string()) {
                     fail(condition_path + ".equals", "expected bool, number, or string");
@@ -579,36 +671,7 @@ void validate_v1(const json::Value & spec, std::string_view source_name) {
 }
 
 void validate_legacy(const json::Value & spec, std::string_view source_name) {
-    const auto family = require_spec_string(require_spec_field(spec, "family", source_name), std::string(source_name) + ".family");
-    std::unordered_set<std::string> task_ids;
-    if (const auto * tasks_value = spec.find("tasks")) {
-        task_ids = validate_nonempty_string_set(
-            *tasks_value, &tasks(), std::string(source_name) + ".tasks", "task");
-    }
-    if (const auto * modes_value = spec.find("modes")) {
-        validate_nonempty_string_set(
-            *modes_value, &modes(), std::string(source_name) + ".modes", "mode");
-    }
-    if (const auto * languages = spec.find("languages")) {
-        validate_nonempty_string_set(*languages, nullptr, std::string(source_name) + ".languages", "language");
-    }
-    if (const auto * capabilities = spec.find("capabilities")) {
-        if (task_ids.empty()) {
-            fail(std::string(source_name) + ".capabilities", "capabilities require tasks");
-        }
-        validate_capabilities(*capabilities, task_ids, std::string(source_name) + ".capabilities");
-    }
-    if (const auto * package_defaults = spec.find("package_defaults")) {
-        validate_package_defaults(*package_defaults, std::string(source_name) + ".package_defaults");
-    }
-    if (const auto * packages = spec.find("packages")) {
-        const bool has_default_download =
-            has_spec_field(spec, "package_defaults") && has_spec_field(*spec.find("package_defaults"), "download");
-        (void) validate_packages(*packages, std::string(source_name) + ".packages", has_default_download);
-    }
-    if (const auto * dependencies = spec.find("dependencies")) {
-        validate_dependencies(*dependencies, family, std::string(source_name) + ".dependencies");
-    }
+    (void) require_spec_string(require_spec_field(spec, "family", source_name), std::string(source_name) + ".family");
     const auto sources_path = std::string(source_name) + ".sources";
     const auto & sources_field = require_spec_field(spec, "sources", source_name);
     const auto & sources = require_spec_array(sources_field, sources_path);

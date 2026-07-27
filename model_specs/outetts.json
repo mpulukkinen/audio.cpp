@@ -18,6 +18,152 @@
       "speaker_reference"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "max_tokens",
+        "type": "int",
+        "description": "Maximum generated audio tokens per chunk. When omitted, OuteTTS estimates a safe value from each chunk.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "temperature",
+        "type": "float",
+        "description": "Sampling temperature; official cloning default 0.4.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "top_k",
+        "type": "int",
+        "description": "Top-k sampling; official default 40.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "top_p",
+        "type": "float",
+        "description": "Nucleus sampling; official default 0.9.",
+        "required": false,
+        "min": 0.0,
+        "max": 1.0
+      },
+      {
+        "name": "min_p",
+        "type": "float",
+        "description": "Minimum probability relative to the best token; official default 0.05.",
+        "required": false,
+        "min": 0.0,
+        "max": 1.0
+      },
+      {
+        "name": "repetition_penalty",
+        "type": "float",
+        "description": "Windowed repetition penalty; official default 1.1.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "repetition_window",
+        "type": "int",
+        "description": "Recent-token penalty window; official value 64.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Sampling seed; cloning defaults to 4099 for native weights and 42 for quantized weights.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "reference_text",
+        "type": "string",
+        "description": "Transcript matching the reference voice audio for voice cloning.",
+        "required": false
+      },
+      {
+        "name": "reference_language",
+        "type": "string",
+        "description": "Language code used to align the reference transcript; default en.",
+        "required": false
+      },
+      {
+        "name": "text_chunk_size",
+        "type": "int",
+        "description": "Framework long-form text chunk size; default 256 characters. Chunks are split further when required by max_tokens.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Framework long-form text chunking mode.",
+        "preset": "text_chunk_mode_full",
+        "required": false
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Language-model weight storage type. Quantized CUDA voice cloning is expanded to F32 in memory for generation correctness.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "llama_weight_context_mb",
+        "type": "int",
+        "description": "Language-model weight context size in MiB.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "constant_context_mb",
+        "type": "int",
+        "description": "Language-model constant tensor context size in MiB.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "dac_weight_context_mb",
+        "type": "int",
+        "description": "DAC decoder weight context size in MiB.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "dac_graph_arena_mb",
+        "type": "int",
+        "description": "DAC decoder graph context size in MiB.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "aligner_path",
+        "type": "path",
+        "description": "Optional Qwen3 Forced Aligner override. Cloning automatically uses the aligner embedded in a standalone OuteTTS GGUF when present.",
+        "required": false
+      },
+      {
+        "name": "reference_cache_slots",
+        "type": "int",
+        "description": "Prepared reference-profile cache slots; default 1, set 0 to disable.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release cached-step and aligner runtime state after use; default false.",
+        "required": false,
+        "default": false
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

@@ -17,6 +17,19 @@
       "stems"
     ]
   },
+  "options": {
+    "request": [],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "HTDemucs weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

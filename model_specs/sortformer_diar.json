@@ -17,6 +17,47 @@
       "speaker_turns"
     ]
   },
+  "options": {
+    "request": [],
+    "session": [
+      {
+        "name": "graph_arena_mb",
+        "type": "int",
+        "description": "Inference graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "weight_context_mb",
+        "type": "int",
+        "description": "Weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "All weight storage type; default f32.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "matmul_weight_type",
+        "type": "enum",
+        "description": "Matmul weight storage type; defaults to sortformer_diar.weight_type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "conv_weight_type",
+        "type": "enum",
+        "description": "Convolution weight storage type; defaults to sortformer_diar.weight_type.",
+        "preset": "weight_type_conv",
+        "required": false
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

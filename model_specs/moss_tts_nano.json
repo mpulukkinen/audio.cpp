@@ -19,6 +19,159 @@
       "speaker_reference"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "max_tokens",
+        "type": "int",
+        "description": "Maximum generated audio frames.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "do_sample",
+        "type": "bool",
+        "description": "Enable stochastic audio-token sampling.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "temperature",
+        "type": "float",
+        "description": "Audio-token sampling temperature.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "top_p",
+        "type": "float",
+        "description": "Audio-token nucleus sampling limit.",
+        "required": false,
+        "min": 0.0,
+        "max": 1.0
+      },
+      {
+        "name": "top_k",
+        "type": "int",
+        "description": "Audio-token top-k sampling limit.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "repetition_penalty",
+        "type": "float",
+        "description": "Audio-token repetition penalty.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "text_temperature",
+        "type": "float",
+        "description": "Text-gate sampling temperature.",
+        "required": false
+      },
+      {
+        "name": "text_top_p",
+        "type": "float",
+        "description": "Text-gate nucleus sampling limit.",
+        "required": false
+      },
+      {
+        "name": "text_top_k",
+        "type": "int",
+        "description": "Text-gate top-k sampling limit.",
+        "required": false
+      },
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Long-form text chunking mode; default splitter.",
+        "preset": "text_chunk_mode_full",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Global and local-frame weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "global_weight_type",
+        "type": "enum",
+        "description": "Global transformer weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "local_frame_weight_type",
+        "type": "enum",
+        "description": "Local frame decoder weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "global_prefill_graph_arena_mb",
+        "type": "int",
+        "description": "Global transformer prefill graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "global_decode_graph_arena_mb",
+        "type": "int",
+        "description": "Global transformer decode graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "global_weight_context_mb",
+        "type": "int",
+        "description": "Global transformer weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "local_frame_graph_arena_mb",
+        "type": "int",
+        "description": "Local frame decoder graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "local_frame_weight_context_mb",
+        "type": "int",
+        "description": "Local frame decoder weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "audio_tokenizer_encoder_graph_arena_mb",
+        "type": "int",
+        "description": "Audio tokenizer encoder graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "audio_tokenizer_decoder_graph_arena_mb",
+        "type": "int",
+        "description": "Audio tokenizer decoder graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "audio_tokenizer_weight_context_mb",
+        "type": "int",
+        "description": "Audio tokenizer weight context size.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

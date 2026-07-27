@@ -13,6 +13,11 @@
     "en"
   ],
   "capabilities": {},
+  "options": {
+    "request": [],
+    "session": [],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

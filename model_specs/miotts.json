@@ -19,6 +19,83 @@
       "speaker_reference"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "best_of_n",
+        "type": "int",
+        "description": "Generate n candidates for this request and select by ASR scoring.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "best_of_n_enabled",
+        "type": "bool",
+        "description": "Enable best-of-N candidate selection for this request.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "best_of_n_language",
+        "type": "enum",
+        "description": "Language used when scoring best-of-N candidates.",
+        "preset": "best_of_n_language",
+        "required": false,
+        "default": "auto"
+      }
+    ],
+    "session": [
+      {
+        "name": "codec_path",
+        "type": "path",
+        "description": "MioCodec model directory used by MioTTS acoustic decoding.",
+        "required": false
+      },
+      {
+        "name": "best_of_n_enabled",
+        "type": "bool",
+        "description": "Enable best-of-N candidate selection by default.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "best_of_n_default",
+        "type": "int",
+        "description": "Default best-of-N candidate count.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "best_of_n_max",
+        "type": "int",
+        "description": "Maximum best-of-N candidate count.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "best_of_n_language",
+        "type": "enum",
+        "description": "Default language used when scoring best-of-N candidates.",
+        "preset": "best_of_n_language",
+        "required": false,
+        "default": "auto"
+      },
+      {
+        "name": "best_of_n_asr_path",
+        "type": "path",
+        "description": "Qwen3-ASR model directory used by best-of-N scoring.",
+        "required": false
+      },
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "MioTTS language-model matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"
@@ -114,14 +191,14 @@
       "kind": "model",
       "family": "miocodec",
       "scope": "session",
-      "option": "codec_model_path",
+      "option": "codec_path",
       "required": true
     },
     {
       "kind": "model",
       "family": "qwen3_asr",
       "scope": "session",
-      "option": "best_of_n_asr_model_path",
+      "option": "best_of_n_asr_path",
       "required": false,
       "required_when": [
         {
@@ -131,7 +208,7 @@
         },
         {
           "scope": "request",
-          "option_key": "miotts.best_of_n_enabled",
+          "option_key": "best_of_n_enabled",
           "equals": true
         }
       ]

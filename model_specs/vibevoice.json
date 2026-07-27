@@ -19,6 +19,101 @@
       "long_form"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "voice_samples",
+        "type": "audio_path_list",
+        "description": "Comma-separated speaker reference WAV paths for multi-speaker prompts.",
+        "required": false
+      },
+      {
+        "name": "num_inference_steps",
+        "type": "int",
+        "description": "Diffusion inference steps.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "guidance_scale",
+        "type": "float",
+        "description": "Classifier-free guidance scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "max_length_times",
+        "type": "float",
+        "description": "Generation length multiplier.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "prompt_noise_path",
+        "type": "path",
+        "description": "F32 prompt acoustic noise file.",
+        "required": false
+      },
+      {
+        "name": "diffusion_noise_path",
+        "type": "path",
+        "description": "F32 initial diffusion noise file.",
+        "required": false
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Tokenizer, connector, decoder, and diffusion-head weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "tokenizer_weight_type",
+        "type": "enum",
+        "description": "Audio tokenizer weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "connector_weight_type",
+        "type": "enum",
+        "description": "Acoustic and semantic connector weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "decoder_weight_type",
+        "type": "enum",
+        "description": "Language decoder weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "diffusion_head_weight_type",
+        "type": "enum",
+        "description": "Diffusion prediction head weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      }
+    ],
+    "load": [
+      {
+        "name": "lora_path",
+        "type": "path",
+        "description": "Fine-tune adapter dir (LM LoRA + diffusion head + acoustic/semantic connectors) merged at load time.",
+        "required": false
+      },
+      {
+        "name": "lora_scale",
+        "type": "float",
+        "description": "LoRA merge scale override; defaults to lora_alpha / r.",
+        "required": false,
+        "min": 0.0
+      }
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

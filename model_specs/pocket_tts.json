@@ -18,6 +18,19 @@
       "speaker_reference"
     ]
   },
+  "options": {
+    "request": [],
+    "session": [
+      {
+        "name": "voice_state_cache_slots",
+        "type": "int",
+        "description": "Prepared voice-state cache slots; default 4, set 0 to disable.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

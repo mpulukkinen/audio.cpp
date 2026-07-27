@@ -22,6 +22,87 @@
       "singing"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "route",
+        "type": "enum",
+        "description": "Seed-VC route. Defaults to v2_vc for VC and v1_svc for SVC.",
+        "values": [
+          "v2_vc",
+          "v1_svc",
+          "v1_whisper_bigvgan_vc",
+          "v1_xlsr_hift_vc"
+        ],
+        "required": false
+      },
+      {
+        "name": "length_adjust",
+        "type": "float",
+        "description": "Duration multiplier; default 1.0.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "num_inference_steps",
+        "type": "int",
+        "description": "Diffusion steps; default 30.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "inference_cfg_rate",
+        "type": "float",
+        "description": "V1 CFG rate; default 0.7.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "intelligibility_cfg_rate",
+        "type": "float",
+        "description": "V2 intelligibility CFG rate; default 0.7.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "similarity_cfg_rate",
+        "type": "float",
+        "description": "V2 similarity CFG rate; default 0.7.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "f0_condition",
+        "type": "bool",
+        "description": "Enable V1 F0 conditioning.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "auto_f0_adjust",
+        "type": "bool",
+        "description": "Enable automatic V1 F0 adjustment.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "semi_tone_shift",
+        "type": "int",
+        "description": "V1 semitone shift; default 0.",
+        "required": false
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Seed-VC weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

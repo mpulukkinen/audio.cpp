@@ -17,6 +17,207 @@
       "lyrics"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "lyrics",
+        "type": "string",
+        "description": "Lyrics text.",
+        "required": false
+      },
+      {
+        "name": "tags",
+        "type": "string_list",
+        "description": "Comma-separated music tags.",
+        "required": false
+      },
+      {
+        "name": "duration_seconds",
+        "type": "float",
+        "description": "Maximum generated audio duration.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "temperature",
+        "type": "float",
+        "description": "Audio token sampling temperature.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "top_k",
+        "type": "int",
+        "description": "Audio token top-k sampling limit.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "guidance_scale",
+        "type": "float",
+        "description": "MuLa classifier-free guidance scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "codec_duration",
+        "type": "float",
+        "description": "Codec detokenization chunk duration.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "num_inference_steps",
+        "type": "int",
+        "description": "Codec flow solver steps.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "codec_guidance_scale",
+        "type": "float",
+        "description": "Codec classifier-free guidance scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "infinite_mode",
+        "type": "bool",
+        "description": "Generate long outputs by splitting lyrics into bounded HeartMuLa requests.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "text_chunk_size",
+        "type": "int",
+        "description": "Text chunk size for infinite mode.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "infinite_chunk_audio_length_ms",
+        "type": "int",
+        "description": "Per-chunk audio cap for infinite mode.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Torch RNG seed.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "MuLa and codec weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "mula_weight_type",
+        "type": "enum",
+        "description": "MuLa weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "codec_weight_type",
+        "type": "enum",
+        "description": "Codec weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "mula_weight_context_mb",
+        "type": "int",
+        "description": "MuLa weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_weight_context_mb",
+        "type": "int",
+        "description": "Codec weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mula_constant_context_mb",
+        "type": "int",
+        "description": "MuLa reusable constant context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mula_backbone_prefill_graph_arena_mb",
+        "type": "int",
+        "description": "MuLa backbone prefill graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mula_backbone_step_graph_arena_mb",
+        "type": "int",
+        "description": "MuLa backbone cached-step graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mula_decoder_prefill_graph_arena_mb",
+        "type": "int",
+        "description": "MuLa decoder prefill graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mula_decoder_step_graph_arena_mb",
+        "type": "int",
+        "description": "MuLa decoder cached-step graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mula_frame_embedding_graph_arena_mb",
+        "type": "int",
+        "description": "MuLa frame-embedding graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_flow_estimator_graph_arena_mb",
+        "type": "int",
+        "description": "Codec flow-estimator graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_conditioning_graph_arena_mb",
+        "type": "int",
+        "description": "Codec conditioning graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_scalar_decoder_graph_arena_mb",
+        "type": "int",
+        "description": "Codec scalar-decoder graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release staged runtime graphs after each request; default false.",
+        "required": false,
+        "default": false
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

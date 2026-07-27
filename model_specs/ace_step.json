@@ -21,6 +21,286 @@
       "prompt_editing"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "route",
+        "type": "enum",
+        "description": "ACE-Step route.",
+        "values": [
+          "text2music",
+          "complete",
+          "lego",
+          "extract",
+          "cover",
+          "cover-nofsq",
+          "repaint"
+        ],
+        "required": false
+      },
+      {
+        "name": "lyrics",
+        "type": "string",
+        "description": "Vocal lyrics.",
+        "required": false
+      },
+      {
+        "name": "duration_seconds",
+        "type": "float",
+        "description": "Target duration in seconds.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "language",
+        "type": "string",
+        "description": "Vocal language for lyrics.",
+        "required": false
+      },
+      {
+        "name": "track_name",
+        "type": "string",
+        "description": "Track name used by lego and extract routes.",
+        "required": false
+      },
+      {
+        "name": "complete_track_classes",
+        "type": "string_list",
+        "description": "Track classes for complete route.",
+        "required": false
+      },
+      {
+        "name": "repaint_start",
+        "type": "float",
+        "description": "Start time for repaint route.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "repaint_end",
+        "type": "float",
+        "description": "End time for repaint route.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "repaint_mode",
+        "type": "enum",
+        "description": "Preset repaint blending policy.",
+        "values": [
+          "balanced",
+          "conservative",
+          "aggressive"
+        ],
+        "required": false,
+        "default": "balanced"
+      },
+      {
+        "name": "repaint_strength",
+        "type": "float",
+        "description": "Repaint strength.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "num_inference_steps",
+        "type": "int",
+        "description": "Diffusion denoising steps.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "guidance_scale",
+        "type": "float",
+        "description": "Diffusion guidance scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Generation seed.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "bpm",
+        "type": "int",
+        "description": "Force BPM metadata.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "keyscale",
+        "type": "float",
+        "description": "Force key metadata.",
+        "required": false
+      },
+      {
+        "name": "timesignature",
+        "type": "string",
+        "description": "Force time signature metadata.",
+        "required": false
+      },
+      {
+        "name": "negative_prompt",
+        "type": "string",
+        "description": "Negative prompt.",
+        "required": false
+      },
+      {
+        "name": "audio_codes",
+        "type": "string",
+        "description": "Use supplied ACE semantic code text instead of planner generation.",
+        "required": false
+      },
+      {
+        "name": "audio_cover_strength",
+        "type": "float",
+        "description": "Cover strength for cover/edit-style conditioning.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "cover_noise_strength",
+        "type": "float",
+        "description": "Noise strength for cover conditioning.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "lm_temperature",
+        "type": "float",
+        "description": "Planner sampling temperature.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "lm_cfg_scale",
+        "type": "float",
+        "description": "Planner CFG scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "lm_top_k",
+        "type": "int",
+        "description": "Planner top-k; 0 disables top-k.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "lm_top_p",
+        "type": "float",
+        "description": "Planner top-p.",
+        "required": false,
+        "min": 0.0,
+        "max": 1.0
+      },
+      {
+        "name": "lm_repetition_penalty",
+        "type": "float",
+        "description": "Planner repetition penalty.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "sampler_mode",
+        "type": "enum",
+        "description": "Diffusion sampler mode.",
+        "values": [
+          "euler",
+          "heun"
+        ],
+        "required": false
+      },
+      {
+        "name": "retake_seed",
+        "type": "int",
+        "description": "Optional retake noise seed; -1 clears it.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "retake_variance",
+        "type": "float",
+        "description": "Retake noise mixing strength.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "flow_edit_morph",
+        "type": "bool",
+        "description": "Status: parsed for text2music, but not usable because the flow-edit diffusion overlay is not implemented.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "dcw_enabled",
+        "type": "bool",
+        "description": "Status: experimental dynamic-cfg wavelet path; keep disabled unless validating that path.",
+        "required": false,
+        "default": false
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Shared ACE-Step weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "dit_weight_type",
+        "type": "enum",
+        "description": "DiT weight storage type; f16 is promoted to bf16.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "planner_weight_type",
+        "type": "enum",
+        "description": "Planner LM weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "text_encoder_weight_type",
+        "type": "enum",
+        "description": "Text encoder weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "vae_weight_type",
+        "type": "enum",
+        "description": "VAE weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release staged runtime graphs after each request; default false.",
+        "required": false,
+        "default": false
+      }
+    ],
+    "load": [
+      {
+        "name": "dit_path",
+        "type": "enum",
+        "description": "DiT variant inside the model package.",
+        "values": [
+          "acestep-v15-turbo",
+          "acestep-v15-base"
+        ],
+        "required": false,
+        "default": "acestep-v15-turbo"
+      }
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

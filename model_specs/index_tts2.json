@@ -23,6 +23,165 @@
       "emotion_control"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "emotion_alpha",
+        "type": "float",
+        "description": "Blend strength for explicit emotion conditioning.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "emotion_vector",
+        "type": "float_list",
+        "description": "Eight-value explicit emotion vector.",
+        "required": false
+      },
+      {
+        "name": "use_emotion_text",
+        "type": "bool",
+        "description": "Infer emotion from text instead of reference audio.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "emotion_text",
+        "type": "string",
+        "description": "Text used when emotion-text conditioning is enabled.",
+        "required": false
+      },
+      {
+        "name": "use_random_emotion",
+        "type": "bool",
+        "description": "Use random emotion weights in the emotion mixer.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "interval_silence_ms",
+        "type": "int",
+        "description": "Silence inserted between generated text chunks.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Framework text chunking mode used when text_chunk_size is set.",
+        "preset": "text_chunk_mode_full",
+        "required": false,
+        "default": "default"
+      },
+      {
+        "name": "length_penalty",
+        "type": "float",
+        "description": "GPT beam-search length penalty.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "num_beams",
+        "type": "int",
+        "description": "GPT beam count.",
+        "required": false,
+        "min": 1
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Matmul weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "conv_weight_type",
+        "type": "enum",
+        "description": "Convolution weight storage type.",
+        "preset": "weight_type_conv",
+        "required": false
+      },
+      {
+        "name": "gpt_graph_arena_mb",
+        "type": "int",
+        "description": "GPT graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "s2mel_graph_arena_mb",
+        "type": "int",
+        "description": "S2Mel graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "reference_graph_arena_mb",
+        "type": "int",
+        "description": "Reference encoder and codec graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "emotion_text_prefill_graph_arena_mb",
+        "type": "int",
+        "description": "Emotion-text prefill graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "emotion_text_decode_graph_arena_mb",
+        "type": "int",
+        "description": "Emotion-text cached-step graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "emotion_text_max_tokens",
+        "type": "int",
+        "description": "Maximum generated tokens for emotion-text classification; default 256.",
+        "required": false
+      },
+      {
+        "name": "weight_context_mb",
+        "type": "int",
+        "description": "Shared weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release staged reference and conditioning graphs after request phases; default false.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "speaker_cache_slots",
+        "type": "int",
+        "description": "Prepared speaker-reference cache slots; default 1.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "emotion_cache_slots",
+        "type": "int",
+        "description": "Prepared emotion-reference cache slots; default 1.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "emotion_text_cache_slots",
+        "type": "int",
+        "description": "Emotion-text weight cache slots; default 1.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

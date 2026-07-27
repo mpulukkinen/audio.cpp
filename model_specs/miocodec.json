@@ -25,6 +25,11 @@
       "speaker_reference"
     ]
   },
+  "options": {
+    "request": [],
+    "session": [],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

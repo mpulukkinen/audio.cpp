@@ -22,6 +22,187 @@
       "voice_design"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "num_inference_steps",
+        "type": "int",
+        "description": "RF diffusion steps.",
+        "required": false,
+        "min": 1
+      },
+      {
+        "name": "duration_seconds",
+        "type": "float",
+        "description": "Explicit output duration.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "duration_scale",
+        "type": "float",
+        "description": "Predicted-duration multiplier.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Text chunking mode; default endline.",
+        "values": [
+          "japanese",
+          "endline"
+        ],
+        "required": false
+      },
+      {
+        "name": "min_seconds",
+        "type": "float",
+        "description": "Minimum generated duration.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "max_seconds",
+        "type": "float",
+        "description": "Maximum generated duration.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "text_guidance_scale",
+        "type": "float",
+        "description": "Text classifier-free guidance scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "speaker_guidance_scale",
+        "type": "float",
+        "description": "Speaker classifier-free guidance scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "caption_guidance_scale",
+        "type": "float",
+        "description": "Caption classifier-free guidance scale.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "guidance_mode",
+        "type": "enum",
+        "description": "Classifier-free guidance combination mode.",
+        "values": [
+          "independent"
+        ],
+        "required": false,
+        "default": "independent"
+      },
+      {
+        "name": "guidance_min_t",
+        "type": "float",
+        "description": "Minimum diffusion time for guidance.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "guidance_max_t",
+        "type": "float",
+        "description": "Maximum diffusion time for guidance.",
+        "required": false,
+        "min": 0.0
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "description": "Torch RNG seed.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "trim_tail",
+        "type": "bool",
+        "description": "Trim trailing silence-like samples.",
+        "required": false,
+        "default": true
+      }
+    ],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Model weight storage type.",
+        "preset": "weight_type_full",
+        "required": false
+      },
+      {
+        "name": "codec_weight_type",
+        "type": "enum",
+        "description": "DACVAE codec weight storage type.",
+        "preset": "weight_type_codec_q8",
+        "required": false
+      },
+      {
+        "name": "condition_graph_arena_mb",
+        "type": "int",
+        "description": "Condition encoder graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "rf_graph_arena_mb",
+        "type": "int",
+        "description": "RF sampler graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_graph_arena_mb",
+        "type": "int",
+        "description": "DACVAE codec graph arena size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "condition_weight_context_mb",
+        "type": "int",
+        "description": "Condition encoder weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "rf_weight_context_mb",
+        "type": "int",
+        "description": "RF sampler weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "codec_weight_context_mb",
+        "type": "int",
+        "description": "DACVAE codec weight context size.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Release staged runtime graphs after request phases; default true.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "reference_cache_slots",
+        "type": "int",
+        "description": "Prepared reference-speaker cache slots; default 1.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf"

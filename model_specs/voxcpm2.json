@@ -24,6 +24,35 @@
       "voice_design"
     ]
   },
+  "options": {
+    "request": [
+      {
+        "name": "text_chunk_mode",
+        "type": "enum",
+        "description": "Text chunking mode; default tag_aware.",
+        "preset": "text_chunk_mode_full",
+        "required": false,
+        "default": "default"
+      }
+    ],
+    "session": [
+      {
+        "name": "mem_saver",
+        "type": "bool",
+        "description": "Use tighter graph workspaces and release request runtime graphs; default false.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "prompt_cache_slots",
+        "type": "int",
+        "description": "Prompt and prompt-audio embedding cache slots; default 1.",
+        "required": false,
+        "min": 0
+      }
+    ],
+    "load": []
+  },
   "runtime": {
     "tags": [
       "gguf",
