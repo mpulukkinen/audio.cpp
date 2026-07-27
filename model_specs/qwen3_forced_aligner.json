@@ -9,6 +9,14 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "multilingual"
+  ],
+  "capabilities": {
+    "align": [
+      "word_timestamps"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

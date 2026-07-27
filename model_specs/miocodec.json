@@ -11,6 +11,20 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "language_agnostic"
+  ],
+  "capabilities": {
+    "codec": [
+      "encode_decode"
+    ],
+    "vc": [
+      "speaker_reference"
+    ],
+    "s2s": [
+      "speaker_reference"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

@@ -9,6 +9,14 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "en"
+  ],
+  "capabilities": {
+    "music": [
+      "lyrics"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

@@ -21,8 +21,9 @@ Top-level fields:
 | `status` | Typed status: `supported`, `community`, `experimental`, `wip`, or `unsupported`. |
 | `tasks` | Typed task tags such as `asr`, `tts`, `clone`, `vc`, or `align`. |
 | `modes` | Supported run modes: `offline` and/or `streaming`. |
+| `languages` | Family-level language scope, such as `en`, `zh`, `ja`, `multilingual`, or `language_agnostic`. |
 | `runtime` | Runtime tags such as `gguf` or `stream`. |
-| `capabilities` | Stable capability booleans and language hints. |
+| `capabilities` | Stable task-keyed capability tags. |
 | `options` | Typed request/session/load options. |
 | `package_defaults` | Optional shared package metadata, such as a common download source. |
 | `packages` | Installable model packages and download metadata. |
@@ -36,6 +37,23 @@ Common options must use canonical names such as `seed`, `language`,
 `temperature`, `top_p`, `top_k`, and `return_timestamps`.
 
 Model-specific options must be namespaced as `<family>.<name>`.
+
+`tasks` are the single typed operation vocabulary for the family. Keep model
+implementation compatibility, such as serving voice cloning through an existing
+TTS session internally, out of the spec.
+
+`capabilities` is keyed by task, and omitted tasks mean no extra advertised
+capability beyond the task itself. Keep capabilities typed and concrete:
+
+```json
+{
+  "languages": ["zh", "en"],
+  "capabilities": {
+    "clone": ["speaker_reference"],
+    "design": ["voice_design"]
+  }
+}
+```
 
 Packages are install targets, not runtime layouts. Each package owns its display
 name, precision, target directory, and exact remote files. If several packages

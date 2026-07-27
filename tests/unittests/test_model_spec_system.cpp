@@ -71,6 +71,7 @@ void expect_rejects(const std::string & label, const std::string & spec_text, co
 }
 
 void test_legacy_dependencies_schema() {
+    // Valid legacy specs accept required model dependencies and conditional bundled dependencies.
     const auto spec = json::parse(legacy_spec_text(R"JSON([
     {
       "kind": "model",
@@ -97,6 +98,7 @@ void test_legacy_dependencies_schema() {
   ])JSON"));
     engine::model_spec::validate_spec(spec, "valid_legacy_dependencies");
 
+    // Dependency rows must use the current local "option" field, not the old option_key field.
     expect_rejects(
         "old_option_key",
         legacy_spec_text(R"JSON([
@@ -109,6 +111,7 @@ void test_legacy_dependencies_schema() {
           }
         ])JSON"),
         "missing required field 'option'");
+    // Dependency scopes are typed and reject unknown values.
     expect_rejects(
         "invalid_scope",
         legacy_spec_text(R"JSON([
@@ -121,6 +124,7 @@ void test_legacy_dependencies_schema() {
           }
         ])JSON"),
         "unknown dependency scope 'prepare'");
+    // Dependency options are local names; the family namespace is derived by the framework.
     expect_rejects(
         "namespaced_local_option",
         legacy_spec_text(R"JSON([
@@ -133,6 +137,7 @@ void test_legacy_dependencies_schema() {
           }
         ])JSON"),
         "dependency option must be local");
+    // Free-form required_for was replaced by typed required_when conditions.
     expect_rejects(
         "old_required_for",
         legacy_spec_text(R"JSON([
@@ -146,6 +151,7 @@ void test_legacy_dependencies_schema() {
           }
         ])JSON"),
         "use typed required_when conditions");
+    // Optional dependencies must say exactly when they become required.
     expect_rejects(
         "optional_missing_condition",
         legacy_spec_text(R"JSON([
@@ -158,6 +164,7 @@ void test_legacy_dependencies_schema() {
           }
         ])JSON"),
         "optional dependencies require typed conditions");
+    // Required dependencies are unconditional and must not also have required_when rows.
     expect_rejects(
         "required_with_condition",
         legacy_spec_text(R"JSON([
@@ -177,6 +184,7 @@ void test_legacy_dependencies_schema() {
           }
         ])JSON"),
         "required dependencies must not have conditions");
+    // Dependency package hints are intentionally outside the core runtime contract.
     expect_rejects(
         "dependency_package_hint",
         legacy_spec_text(R"JSON([
@@ -197,6 +205,7 @@ void test_legacy_dependencies_schema() {
           }
         ])JSON"),
         "dependency package hints are not part of the core contract");
+    // Bundled dependencies must provide the bundled asset path.
     expect_rejects(
         "bundled_missing_path",
         legacy_spec_text(R"JSON([
@@ -219,6 +228,7 @@ void test_legacy_dependencies_schema() {
 }
 
 void test_typed_schema_renamed_dependencies() {
+    // Valid typed specs accept top-level languages, task-keyed capabilities, and typed dependency conditions.
     const auto typed = json::parse(R"JSON({
   "schema_version": 1,
   "family": "typed_model",
@@ -227,15 +237,12 @@ void test_typed_schema_renamed_dependencies() {
   "status": "experimental",
   "tasks": ["asr"],
   "modes": ["offline"],
+  "languages": ["en"],
   "runtime": {
     "tags": ["gguf"]
   },
   "capabilities": {
-    "timestamps": true,
-    "speaker_reference": false,
-    "style_condition": false,
-    "voice_design": false,
-    "languages": ["en"]
+    "asr": ["word_timestamps"]
   },
   "options": {
     "request": [],
@@ -316,6 +323,7 @@ void test_typed_schema_renamed_dependencies() {
 })JSON");
     engine::model_spec::validate_spec(typed, "typed_dependencies");
 
+    // The old "companions" block is rejected in favor of typed dependencies.
     expect_rejects(
         "typed_rejects_companions",
         R"JSON({
@@ -326,13 +334,10 @@ void test_typed_schema_renamed_dependencies() {
           "status": "experimental",
           "tasks": ["asr"],
           "modes": ["offline"],
+          "languages": ["en"],
           "runtime": {"tags": ["gguf"]},
           "capabilities": {
-            "timestamps": true,
-            "speaker_reference": false,
-            "style_condition": false,
-            "voice_design": false,
-            "languages": ["en"]
+            "asr": ["word_timestamps"]
           },
           "options": {"request": [], "session": [], "load": []},
           "packages": [
@@ -371,9 +376,166 @@ void test_typed_schema_renamed_dependencies() {
           ]
         })JSON",
         "missing required field 'dependencies'");
+
+    // Task names are typed and reject unknown operation ids.
+    expect_rejects(
+        "typed_rejects_unknown_task",
+        R"JSON({
+          "schema_version": 1,
+          "family": "typed_model",
+          "display_name": "Typed Model",
+          "category": "tts",
+          "status": "experimental",
+          "tasks": ["bad_task"],
+          "modes": ["offline"],
+          "languages": ["en"],
+          "runtime": {"tags": ["gguf"]},
+          "capabilities": {},
+          "options": {"request": [], "session": [], "load": []},
+          "packages": [
+            {
+              "id": "typed_model_q8",
+              "display_name": "Typed Model Q8",
+              "format": "gguf",
+              "precision": "q8_0",
+              "target_directory": "Typed-Model",
+              "download": {"kind": "huggingface_snapshot", "repo": "audio-cpp/typed-model"},
+              "files": ["typed-model-q8_0.gguf"],
+              "default": true
+            }
+          ],
+          "layouts": {
+            "gguf": {
+              "format": "gguf",
+              "roots": {"model": ".", "weights": "$gguf"},
+              "files": {"config": "model:config.json"},
+              "tensors": {"weights": "weights:"}
+            }
+          },
+          "dependencies": [],
+          "ui": {
+            "recommended_package": "typed_model_q8",
+            "tags": ["TTS"],
+            "docs": ["docs/tts.md"]
+          },
+          "sources": [
+            {
+              "format": "gguf",
+              "roots": {"model": ".", "weights": "$gguf"},
+              "files": {"config": "model:config.json"},
+              "tensors": {"weights": "weights:"}
+            }
+          ]
+        })JSON",
+        "unknown task 'bad_task'");
+
+    // Capability keys must be one of the model's declared tasks.
+    expect_rejects(
+        "typed_rejects_capability_for_undeclared_task",
+        R"JSON({
+          "schema_version": 1,
+          "family": "typed_model",
+          "display_name": "Typed Model",
+          "category": "tts",
+          "status": "experimental",
+          "tasks": ["tts"],
+          "modes": ["offline"],
+          "languages": ["en"],
+          "runtime": {"tags": ["gguf"]},
+          "capabilities": {"clone": ["speaker_reference"]},
+          "options": {"request": [], "session": [], "load": []},
+          "packages": [
+            {
+              "id": "typed_model_q8",
+              "display_name": "Typed Model Q8",
+              "format": "gguf",
+              "precision": "q8_0",
+              "target_directory": "Typed-Model",
+              "download": {"kind": "huggingface_snapshot", "repo": "audio-cpp/typed-model"},
+              "files": ["typed-model-q8_0.gguf"],
+              "default": true
+            }
+          ],
+          "layouts": {
+            "gguf": {
+              "format": "gguf",
+              "roots": {"model": ".", "weights": "$gguf"},
+              "files": {"config": "model:config.json"},
+              "tensors": {"weights": "weights:"}
+            }
+          },
+          "dependencies": [],
+          "ui": {
+            "recommended_package": "typed_model_q8",
+            "tags": ["TTS"],
+            "docs": ["docs/tts.md"]
+          },
+          "sources": [
+            {
+              "format": "gguf",
+              "roots": {"model": ".", "weights": "$gguf"},
+              "files": {"config": "model:config.json"},
+              "tensors": {"weights": "weights:"}
+            }
+          ]
+        })JSON",
+        "capability key must be one of this model's tasks");
+
+    // Capability values are typed per task, so ASR timestamp capabilities cannot be attached to TTS.
+    expect_rejects(
+        "typed_rejects_unknown_capability",
+        R"JSON({
+          "schema_version": 1,
+          "family": "typed_model",
+          "display_name": "Typed Model",
+          "category": "tts",
+          "status": "experimental",
+          "tasks": ["tts"],
+          "modes": ["offline"],
+          "languages": ["en"],
+          "runtime": {"tags": ["gguf"]},
+          "capabilities": {"tts": ["word_timestamps"]},
+          "options": {"request": [], "session": [], "load": []},
+          "packages": [
+            {
+              "id": "typed_model_q8",
+              "display_name": "Typed Model Q8",
+              "format": "gguf",
+              "precision": "q8_0",
+              "target_directory": "Typed-Model",
+              "download": {"kind": "huggingface_snapshot", "repo": "audio-cpp/typed-model"},
+              "files": ["typed-model-q8_0.gguf"],
+              "default": true
+            }
+          ],
+          "layouts": {
+            "gguf": {
+              "format": "gguf",
+              "roots": {"model": ".", "weights": "$gguf"},
+              "files": {"config": "model:config.json"},
+              "tensors": {"weights": "weights:"}
+            }
+          },
+          "dependencies": [],
+          "ui": {
+            "recommended_package": "typed_model_q8",
+            "tags": ["TTS"],
+            "docs": ["docs/tts.md"]
+          },
+          "sources": [
+            {
+              "format": "gguf",
+              "roots": {"model": ".", "weights": "$gguf"},
+              "files": {"config": "model:config.json"},
+              "tensors": {"weights": "weights:"}
+            }
+          ]
+        })JSON",
+        "unknown capability 'word_timestamps'");
 }
 
 void test_dependency_option_mapping_from_production_spec() {
+    // Production dependency metadata derives public option keys and preserves typed conditions.
     const auto miotts_dependencies = engine::model_spec::dependencies("miotts");
     engine::test::require_eq(miotts_dependencies.size(), size_t{2}, "miotts dependency count");
     engine::test::require_eq(miotts_dependencies[0].family, std::string("miocodec"), "miotts codec dependency family");
@@ -436,6 +598,7 @@ void test_dependency_option_mapping_from_production_spec() {
 }
 
 void test_loading_and_resource_bundle() {
+    // Resource bundles resolve required files, tensor source files, and missing optional files.
     const auto root = make_temp_root();
     const auto model_root = root / "model";
     std::filesystem::create_directories(model_root);

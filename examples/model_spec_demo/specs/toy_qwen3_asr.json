@@ -10,23 +10,22 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "auto",
+    "en",
+    "zh"
+  ],
+  "capabilities": {
+    "asr": [
+      "word_timestamps"
+    ]
+  },
   "runtime": {
     "tags": [
       "server",
       "cuda",
       "vulkan",
       "cpu"
-    ]
-  },
-  "capabilities": {
-    "timestamps": true,
-    "speaker_reference": false,
-    "style_condition": false,
-    "voice_design": false,
-    "languages": [
-      "auto",
-      "en",
-      "zh"
     ]
   },
   "options": {

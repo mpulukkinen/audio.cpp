@@ -10,6 +10,15 @@
     "offline",
     "streaming"
   ],
+  "languages": [
+    "multilingual"
+  ],
+  "capabilities": {
+    "tts": [
+      "built_in_voices",
+      "long_form"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf",

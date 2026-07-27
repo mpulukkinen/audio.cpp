@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <unordered_set>
 
 namespace engine::model_spec {
@@ -64,7 +65,7 @@ void require_spec_number(const json::Value & value, std::string_view path) {
 const std::unordered_set<std::string> & tasks() {
     static const std::unordered_set<std::string> values = {
         "vad", "asr", "diar", "sep", "music", "sfx", "edit", "tts", "clone", "vc",
-        "s2s", "align", "design", "speaker", "svc", "codec", "dialogue",
+        "s2s", "align", "design", "speaker", "svc", "codec",
     };
     return values;
 }
@@ -129,9 +130,33 @@ const std::unordered_set<std::string> & runtime_tags() {
 const std::unordered_set<std::string> & ui_tags() {
     static const std::unordered_set<std::string> values = {
         "ASR", "TTS", "Clone", "VC", "Align", "VAD", "Diar", "Codec", "Sep", "Music", "SFX",
-        "Edit", "Design", "Dialogue", "GGUF", "Stream",
+        "Edit", "Design", "GGUF", "Stream",
     };
     return values;
+}
+
+const std::unordered_set<std::string> & capabilities_for_task(const std::string & task) {
+    static const std::unordered_set<std::string> empty;
+    static const std::unordered_map<std::string, std::unordered_set<std::string>> values = {
+        {"asr", {"word_timestamps", "segments", "speaker_turns", "vad_chunking", "partial_results"}},
+        {"tts", {"speaker_reference", "voice_design", "emotion_control", "style_control",
+                 "multi_speaker", "long_form", "built_in_voices"}},
+        {"clone", {"speaker_reference", "emotion_control", "style_control", "multi_speaker", "long_form"}},
+        {"vc", {"speaker_reference", "singing"}},
+        {"s2s", {"speaker_reference"}},
+        {"svc", {"speaker_reference", "singing"}},
+        {"align", {"word_timestamps"}},
+        {"vad", {"speech_segments", "chunk_planning"}},
+        {"diar", {"speaker_turns"}},
+        {"sep", {"stems"}},
+        {"music", {"lyrics", "instrumental", "continuation"}},
+        {"sfx", {"prompt_generation"}},
+        {"edit", {"prompt_editing", "inpaint"}},
+        {"design", {"voice_design"}},
+        {"codec", {"encode_decode"}},
+    };
+    const auto it = values.find(task);
+    return it == values.end() ? empty : it->second;
 }
 
 const std::unordered_set<std::string> & common_options() {
@@ -166,6 +191,26 @@ void validate_string_array(const json::Value & value,
             validate_enum(value_string, *allowed, item_path, label);
         }
     }
+}
+
+std::unordered_set<std::string> validate_nonempty_string_set(
+    const json::Value & value,
+    const std::unordered_set<std::string> * allowed,
+    std::string_view path,
+    std::string_view label) {
+    validate_string_array(value, allowed, path, label);
+    const auto & array = value.as_array();
+    if (array.empty()) {
+        fail(path, std::string(label) + " array must not be empty");
+    }
+    std::unordered_set<std::string> values;
+    for (size_t index = 0; index < array.size(); ++index) {
+        const auto item = array[index].as_string();
+        if (!values.insert(item).second) {
+            fail(std::string(path) + "[" + std::to_string(index) + "]", "duplicate " + std::string(label) + " '" + item + "'");
+        }
+    }
+    return values;
 }
 
 void validate_option_name(const std::string & name, const std::string & family, std::string_view path) {
@@ -215,12 +260,21 @@ void validate_options(const json::Value & value, const std::string & family, std
     }
 }
 
-void validate_capabilities(const json::Value & value, std::string_view path) {
-    require_spec_object(value, path);
-    for (const std::string key : {"timestamps", "speaker_reference", "style_condition", "voice_design"}) {
-        (void) require_spec_bool(require_spec_field(value, key, path), std::string(path) + "." + key);
+void validate_capabilities(const json::Value & value,
+                           const std::unordered_set<std::string> & task_ids,
+                           std::string_view path) {
+    const auto & capabilities = require_spec_object(value, path);
+    for (const auto & [task, rows] : capabilities) {
+        const auto task_path = std::string(path) + "." + task;
+        if (task_ids.find(task) == task_ids.end()) {
+            fail(task_path, "capability key must be one of this model's tasks");
+        }
+        const auto & allowed = capabilities_for_task(task);
+        if (allowed.empty()) {
+            fail(task_path, "task does not define typed capabilities");
+        }
+        validate_nonempty_string_set(rows, &allowed, task_path, "capability");
     }
-    validate_string_array(require_spec_field(value, "languages", path), nullptr, std::string(path) + ".languages", "language");
 }
 
 void validate_runtime(const json::Value & value, std::string_view path) {
@@ -481,16 +535,14 @@ void validate_v1(const json::Value & spec, std::string_view source_name) {
                   categories(), std::string(source_name) + ".category", "category");
     validate_enum(require_spec_string(require_spec_field(spec, "status", source_name), std::string(source_name) + ".status"),
                   statuses(), std::string(source_name) + ".status", "status");
-    validate_string_array(require_spec_field(spec, "tasks", source_name), &tasks(), std::string(source_name) + ".tasks", "task");
-    if (spec.require("tasks").as_array().empty()) {
-        fail(std::string(source_name) + ".tasks", "tasks must not be empty");
-    }
-    validate_string_array(require_spec_field(spec, "modes", source_name), &modes(), std::string(source_name) + ".modes", "mode");
-    if (spec.require("modes").as_array().empty()) {
-        fail(std::string(source_name) + ".modes", "modes must not be empty");
-    }
+    const auto task_ids = validate_nonempty_string_set(
+        require_spec_field(spec, "tasks", source_name), &tasks(), std::string(source_name) + ".tasks", "task");
+    validate_nonempty_string_set(
+        require_spec_field(spec, "modes", source_name), &modes(), std::string(source_name) + ".modes", "mode");
+    validate_nonempty_string_set(
+        require_spec_field(spec, "languages", source_name), nullptr, std::string(source_name) + ".languages", "language");
     validate_runtime(require_spec_field(spec, "runtime", source_name), std::string(source_name) + ".runtime");
-    validate_capabilities(require_spec_field(spec, "capabilities", source_name), std::string(source_name) + ".capabilities");
+    validate_capabilities(require_spec_field(spec, "capabilities", source_name), task_ids, std::string(source_name) + ".capabilities");
     validate_options(require_spec_field(spec, "options", source_name), family, std::string(source_name) + ".options");
 
     const auto layouts_path = std::string(source_name) + ".layouts";
@@ -528,6 +580,24 @@ void validate_v1(const json::Value & spec, std::string_view source_name) {
 
 void validate_legacy(const json::Value & spec, std::string_view source_name) {
     const auto family = require_spec_string(require_spec_field(spec, "family", source_name), std::string(source_name) + ".family");
+    std::unordered_set<std::string> task_ids;
+    if (const auto * tasks_value = spec.find("tasks")) {
+        task_ids = validate_nonempty_string_set(
+            *tasks_value, &tasks(), std::string(source_name) + ".tasks", "task");
+    }
+    if (const auto * modes_value = spec.find("modes")) {
+        validate_nonempty_string_set(
+            *modes_value, &modes(), std::string(source_name) + ".modes", "mode");
+    }
+    if (const auto * languages = spec.find("languages")) {
+        validate_nonempty_string_set(*languages, nullptr, std::string(source_name) + ".languages", "language");
+    }
+    if (const auto * capabilities = spec.find("capabilities")) {
+        if (task_ids.empty()) {
+            fail(std::string(source_name) + ".capabilities", "capabilities require tasks");
+        }
+        validate_capabilities(*capabilities, task_ids, std::string(source_name) + ".capabilities");
+    }
     if (const auto * package_defaults = spec.find("package_defaults")) {
         validate_package_defaults(*package_defaults, std::string(source_name) + ".package_defaults");
     }

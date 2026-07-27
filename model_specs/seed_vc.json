@@ -10,6 +10,18 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "language_agnostic"
+  ],
+  "capabilities": {
+    "vc": [
+      "speaker_reference"
+    ],
+    "svc": [
+      "speaker_reference",
+      "singing"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

@@ -10,6 +10,16 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "en",
+    "zh",
+    "ja"
+  ],
+  "capabilities": {
+    "clone": [
+      "speaker_reference"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

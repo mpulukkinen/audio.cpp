@@ -4,12 +4,21 @@
   "category": "tts",
   "status": "supported",
   "tasks": [
-    "tts",
-    "dialogue"
+    "tts"
   ],
   "modes": [
     "offline"
   ],
+  "languages": [
+    "en",
+    "zh"
+  ],
+  "capabilities": {
+    "tts": [
+      "multi_speaker",
+      "long_form"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

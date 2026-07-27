@@ -9,6 +9,15 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "multilingual"
+  ],
+  "capabilities": {
+    "asr": [
+      "word_timestamps",
+      "vad_chunking"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

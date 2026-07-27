@@ -12,6 +12,18 @@
     "offline",
     "streaming"
   ],
+  "languages": [
+    "zh",
+    "en"
+  ],
+  "capabilities": {
+    "clone": [
+      "speaker_reference"
+    ],
+    "design": [
+      "voice_design"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf",

@@ -9,6 +9,14 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "language_agnostic"
+  ],
+  "capabilities": {
+    "sep": [
+      "stems"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

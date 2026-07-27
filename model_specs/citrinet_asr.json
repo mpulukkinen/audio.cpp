@@ -9,6 +9,10 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "en"
+  ],
+  "capabilities": {},
   "runtime": {
     "tags": [
       "gguf"

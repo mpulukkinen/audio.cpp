@@ -9,6 +9,14 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "language_agnostic"
+  ],
+  "capabilities": {
+    "diar": [
+      "speaker_turns"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

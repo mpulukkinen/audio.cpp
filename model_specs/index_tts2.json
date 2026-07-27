@@ -10,6 +10,19 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "zh",
+    "en"
+  ],
+  "capabilities": {
+    "tts": [
+      "emotion_control"
+    ],
+    "clone": [
+      "speaker_reference",
+      "emotion_control"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

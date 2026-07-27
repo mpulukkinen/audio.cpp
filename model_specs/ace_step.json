@@ -10,6 +10,17 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "en"
+  ],
+  "capabilities": {
+    "music": [
+      "lyrics"
+    ],
+    "edit": [
+      "prompt_editing"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

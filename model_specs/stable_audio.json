@@ -11,6 +11,20 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "en"
+  ],
+  "capabilities": {
+    "music": [
+      "lyrics"
+    ],
+    "sfx": [
+      "prompt_generation"
+    ],
+    "edit": [
+      "prompt_editing"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"

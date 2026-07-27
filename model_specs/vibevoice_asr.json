@@ -9,6 +9,17 @@
   "modes": [
     "offline"
   ],
+  "languages": [
+    "en",
+    "zh"
+  ],
+  "capabilities": {
+    "asr": [
+      "segments",
+      "speaker_turns",
+      "vad_chunking"
+    ]
+  },
   "runtime": {
     "tags": [
       "gguf"
