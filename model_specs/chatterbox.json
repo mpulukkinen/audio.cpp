@@ -183,6 +183,17 @@
         "required": false
       },
       {
+        "name": "multilingual_t3",
+        "type": "enum",
+        "description": "Multilingual T3 checkpoint used for non-English TTS; default v2.",
+        "values": [
+          "v2",
+          "v3"
+        ],
+        "required": false,
+        "default": "v2"
+      },
+      {
         "name": "conditionals_cache_slots",
         "type": "int",
         "description": "Prepared voice-condition cache slots; default 1, set 0 to disable.",
