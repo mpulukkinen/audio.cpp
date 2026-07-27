@@ -1,6 +1,7 @@
 {
   "family": "nemotron_asr",
   "display_name": "Nemotron 3.5 ASR",
+  "description": "NVIDIA 600M streaming ASR model for low-latency and batch transcription across 40 language-locales, with native punctuation, capitalization, automatic language detection, and configurable chunk sizes.",
   "category": "asr",
   "status": "supported",
   "tasks": [
@@ -11,7 +12,7 @@
     "streaming"
   ],
   "languages": [
-    "en"
+    "40 language-locales"
   ],
   "capabilities": {},
   "options": {
@@ -25,14 +26,14 @@
       {
         "name": "lookahead_tokens",
         "type": "int",
-        "description": "Chunk-limited encoder right context; supported values come from processor_config.",
+        "description": "Chunk-limited encoder right context; omitted uses processor_config default lookahead tokens.",
         "required": false,
         "min": 0
       },
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum RNNT generated tokens; 0 uses the model-derived limit.",
+        "description": "Maximum RNNT generated tokens; 0 or omitted uses the model-derived limit.",
         "required": false,
         "min": 0
       },
@@ -69,23 +70,26 @@
       {
         "name": "weight_context_mb",
         "type": "int",
-        "description": "Weight context arena size.",
+        "description": "Weight context arena size in MiB; default 3072.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 3072
       },
       {
         "name": "encoder_graph_arena_mb",
         "type": "int",
-        "description": "Encoder graph arena size.",
+        "description": "Encoder graph arena size in MiB; default 1024.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1024
       },
       {
         "name": "decoder_graph_arena_mb",
         "type": "int",
-        "description": "Decoder graph arena size.",
+        "description": "Decoder graph arena size in MiB; default 256.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       },
       {
         "name": "mem_saver",

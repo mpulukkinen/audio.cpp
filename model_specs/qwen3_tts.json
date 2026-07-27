@@ -1,6 +1,7 @@
 {
   "family": "qwen3_tts",
   "display_name": "Qwen3-TTS",
+  "description": "Qwen TTS family for controllable 10-language speech synthesis, including 3-second voice cloning, CustomVoice instruction control over preset timbres, and VoiceDesign from natural-language descriptions.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -13,7 +14,15 @@
   ],
   "languages": [
     "zh",
-    "en"
+    "en",
+    "ja",
+    "ko",
+    "de",
+    "fr",
+    "ru",
+    "pt",
+    "es",
+    "it"
   ],
   "capabilities": {
     "clone": [
@@ -46,7 +55,8 @@
         "type": "int",
         "description": "Voice prompt cache slots; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       }
     ],
     "load": []

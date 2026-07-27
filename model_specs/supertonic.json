@@ -1,6 +1,7 @@
 {
   "family": "supertonic",
   "display_name": "Supertonic 3",
+  "description": "Supertone on-device TTS model designed for fast local speech synthesis across 31 languages, with preset voices and compact deployment for browser, mobile, and desktop applications.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -11,7 +12,7 @@
     "streaming"
   ],
   "languages": [
-    "multilingual"
+    "31 languages"
   ],
   "capabilities": {
     "tts": [
@@ -24,7 +25,7 @@
       {
         "name": "voice_id",
         "type": "enum",
-        "description": "Preset voice style id, default M1.",
+        "description": "Preset voice style id; default M1.",
         "values": [
           "M1",
           "M2",
@@ -37,36 +38,40 @@
           "F4",
           "F5"
         ],
-        "required": false
+        "required": false,
+        "default": "M1"
       },
       {
         "name": "num_inference_steps",
         "type": "int",
-        "description": "Flow denoising steps, default 8.",
+        "description": "Flow denoising steps; default 8.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 8
       },
       {
         "name": "speaking_rate",
         "type": "float",
-        "description": "Speech speed multiplier, default 1.05.",
+        "description": "Speech speed multiplier; default 1.05.",
         "required": false,
-        "default": 1.0,
+        "default": 1.05,
         "min": 0.0
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Noise seed, default 1234.",
+        "description": "Noise seed; default 1234.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1234
       },
       {
         "name": "text_chunk_mode",
         "type": "enum",
-        "description": "Long-form text chunking mode.",
+        "description": "Long-form text chunking mode; default word_budget.",
         "preset": "text_chunk_mode_full",
-        "required": false
+        "required": false,
+        "default": "word_budget"
       }
     ],
     "session": [
@@ -82,7 +87,8 @@
         "type": "int",
         "description": "Preset voice style cache slots; default 4.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 4
       }
     ],
     "load": []

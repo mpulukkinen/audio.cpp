@@ -1,6 +1,7 @@
 {
   "family": "voxtral_realtime",
   "display_name": "Voxtral Mini 4B Realtime",
+  "description": "Mistral 13-language realtime ASR model with a natively streaming causal audio encoder, configurable low-latency transcription delay, and accuracy competitive with offline open-source systems.",
   "category": "asr",
   "status": "supported",
   "tasks": [
@@ -11,7 +12,19 @@
     "streaming"
   ],
   "languages": [
-    "multilingual"
+    "en",
+    "zh",
+    "hi",
+    "es",
+    "ar",
+    "fr",
+    "pt",
+    "ru",
+    "de",
+    "ja",
+    "ko",
+    "it",
+    "nl"
   ],
   "capabilities": {
     "asr": [
@@ -23,45 +36,49 @@
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated transcript tokens.",
+        "description": "Maximum generated transcript tokens; omitted uses the audio-length-derived limit.",
         "required": false,
         "min": 0
       },
       {
         "name": "do_sample",
         "type": "bool",
-        "description": "Enable sampling instead of greedy decode.",
+        "description": "Enable sampling instead of greedy decode; default false.",
         "required": false,
         "default": false
       },
       {
         "name": "temperature",
         "type": "float",
-        "description": "Sampling temperature.",
+        "description": "Decoder sampling temperature; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "top_p",
         "type": "float",
-        "description": "Nucleus sampling limit.",
+        "description": "Nucleus sampling limit; default 1.0.",
         "required": false,
         "min": 0.0,
-        "max": 1.0
+        "max": 1.0,
+        "default": 1.0
       },
       {
         "name": "top_k",
         "type": "int",
-        "description": "Top-k sampling limit; 0 disables top-k.",
+        "description": "Top-k sampling limit; default 50, 0 disables top-k.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 50
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Sampling seed.",
+        "description": "Decoder sampling seed; default 1234.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1234
       }
     ],
     "session": [
@@ -89,37 +106,42 @@
       {
         "name": "audio_encoder_graph_arena_mb",
         "type": "int",
-        "description": "Audio encoder graph arena size.",
+        "description": "Audio encoder graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "audio_encoder_weight_context_mb",
         "type": "int",
-        "description": "Audio encoder weight context arena size.",
+        "description": "Audio encoder weight context arena size in MiB; default 128.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 128
       },
       {
         "name": "text_decoder_prefill_graph_arena_mb",
         "type": "int",
-        "description": "Text decoder prefill graph arena size.",
+        "description": "Text decoder prefill graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "text_decoder_decode_graph_arena_mb",
         "type": "int",
-        "description": "Text decoder cached-step graph arena size.",
+        "description": "Text decoder cached-step graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "text_decoder_weight_context_mb",
         "type": "int",
-        "description": "Text decoder weight context arena size.",
+        "description": "Text decoder weight context arena size in MiB; default 128.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 128
       }
     ],
     "load": []

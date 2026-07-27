@@ -1,6 +1,7 @@
 {
   "family": "higgs_audio_stt",
   "display_name": "Higgs Audio v3 STT",
+  "description": "Boson AI English speech-to-text model combining a Whisper Large v3 speech encoder with a Qwen decoder for robust ASR.",
   "category": "asr",
   "status": "supported",
   "tasks": [
@@ -25,7 +26,7 @@
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated transcript tokens.",
+        "description": "Maximum generated transcript tokens; omitted uses model generation config, usually 1024.",
         "required": false,
         "min": 0
       },
@@ -34,7 +35,7 @@
         "type": "bool",
         "description": "Enable the model thinking prompt; default true.",
         "required": false,
-        "default": false
+        "default": true
       },
       {
         "name": "audio_chunk_mode",
@@ -49,11 +50,12 @@
         "default": "auto"
       },
       {
-        "name": "audio_chunk_seconds",
+        "name": "audio_chunk_duration_sec",
         "type": "float",
-        "description": "Fixed audio chunk duration; default 4.",
+        "description": "Fixed audio chunk duration in seconds; default 4.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 4.0
       }
     ],
     "session": [
@@ -81,30 +83,34 @@
       {
         "name": "audio_encoder_graph_arena_mb",
         "type": "int",
-        "description": "Audio encoder graph arena size.",
+        "description": "Audio encoder graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "text_decoder_prefill_graph_arena_mb",
         "type": "int",
-        "description": "Text decoder prefill graph arena size.",
+        "description": "Text decoder prefill graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "text_decoder_decode_graph_arena_mb",
         "type": "int",
-        "description": "Text decoder cached-step graph arena size.",
+        "description": "Text decoder cached-step graph arena size in MiB; default 256.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       },
       {
         "name": "text_decoder_weight_context_mb",
         "type": "int",
-        "description": "Text decoder weight context arena size.",
+        "description": "Text decoder weight context arena size in MiB; default 4096.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 4096
       }
     ],
     "load": []

@@ -1,6 +1,7 @@
 {
   "family": "moss_tts_nano",
   "display_name": "MOSS-TTS-Nano",
+  "description": "Compact deployment-first MOSS-TTS model for real-time 20-language speech generation, lightweight integration, and zero-shot voice cloning.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -11,8 +12,7 @@
     "offline"
   ],
   "languages": [
-    "en",
-    "zh"
+    "20 languages"
   ],
   "capabilities": {
     "clone": [
@@ -24,71 +24,79 @@
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated audio frames.",
+        "description": "Maximum generated audio frames; default 300.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 300
       },
       {
         "name": "do_sample",
         "type": "bool",
-        "description": "Enable stochastic audio-token sampling.",
+        "description": "Enable stochastic audio-token sampling; default true.",
         "required": false,
-        "default": false
+        "default": true
       },
       {
         "name": "temperature",
         "type": "float",
-        "description": "Audio-token sampling temperature.",
+        "description": "Audio-token sampling temperature; default 1.7.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.7
       },
       {
         "name": "top_p",
         "type": "float",
-        "description": "Audio-token nucleus sampling limit.",
+        "description": "Audio-token nucleus sampling limit; default 0.8.",
         "required": false,
         "min": 0.0,
-        "max": 1.0
+        "max": 1.0,
+        "default": 0.8
       },
       {
         "name": "top_k",
         "type": "int",
-        "description": "Audio-token top-k sampling limit.",
+        "description": "Audio-token top-k sampling limit; default 25.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 25
       },
       {
         "name": "repetition_penalty",
         "type": "float",
-        "description": "Audio-token repetition penalty.",
+        "description": "Audio-token repetition penalty; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "text_temperature",
         "type": "float",
-        "description": "Text-gate sampling temperature.",
-        "required": false
+        "description": "Text-gate sampling temperature; default 1.5.",
+        "required": false,
+        "default": 1.5
       },
       {
         "name": "text_top_p",
         "type": "float",
-        "description": "Text-gate nucleus sampling limit.",
-        "required": false
+        "description": "Text-gate nucleus sampling limit; default 1.0.",
+        "required": false,
+        "default": 1.0
       },
       {
         "name": "text_top_k",
         "type": "int",
-        "description": "Text-gate top-k sampling limit.",
-        "required": false
+        "description": "Text-gate top-k sampling limit; default 50.",
+        "required": false,
+        "default": 50
       },
       {
         "name": "text_chunk_mode",
         "type": "enum",
-        "description": "Long-form text chunking mode; default splitter.",
+        "description": "Long-form text chunking mode; default word_budget. Text chunk size defaults to 256 characters.",
         "preset": "text_chunk_mode_full",
         "required": false,
-        "default": "default"
+        "default": "word_budget"
       }
     ],
     "session": [
@@ -116,58 +124,66 @@
       {
         "name": "global_prefill_graph_arena_mb",
         "type": "int",
-        "description": "Global transformer prefill graph arena size.",
+        "description": "Global transformer prefill graph arena size in MiB; default 256.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       },
       {
         "name": "global_decode_graph_arena_mb",
         "type": "int",
-        "description": "Global transformer decode graph arena size.",
+        "description": "Global transformer decode graph arena size in MiB; default 128.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 128
       },
       {
         "name": "global_weight_context_mb",
         "type": "int",
-        "description": "Global transformer weight context size.",
+        "description": "Global transformer weight context size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "local_frame_graph_arena_mb",
         "type": "int",
-        "description": "Local frame decoder graph arena size.",
+        "description": "Local frame decoder graph arena size in MiB; default 64.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 64
       },
       {
         "name": "local_frame_weight_context_mb",
         "type": "int",
-        "description": "Local frame decoder weight context size.",
+        "description": "Local frame decoder weight context size in MiB; default 128.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 128
       },
       {
         "name": "audio_tokenizer_encoder_graph_arena_mb",
         "type": "int",
-        "description": "Audio tokenizer encoder graph arena size.",
+        "description": "Audio tokenizer encoder graph arena size in MiB; default 64.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 64
       },
       {
         "name": "audio_tokenizer_decoder_graph_arena_mb",
         "type": "int",
-        "description": "Audio tokenizer decoder graph arena size.",
+        "description": "Audio tokenizer decoder graph arena size in MiB; default 64.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 64
       },
       {
         "name": "audio_tokenizer_weight_context_mb",
         "type": "int",
-        "description": "Audio tokenizer weight context size.",
+        "description": "Audio tokenizer weight context size in MiB; default 128.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 128
       }
     ],
     "load": []

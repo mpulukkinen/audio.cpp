@@ -1,6 +1,7 @@
 {
   "family": "mel_band_roformer",
   "display_name": "Mel-Band RoFormer",
+  "description": "Music source-separation model that uses mel-scaled overlapping frequency bands and RoFormer attention to estimate stems such as vocals, drums, and accompaniment.",
   "category": "audio_tools",
   "status": "supported",
   "tasks": [

@@ -1,6 +1,7 @@
 {
   "family": "fish_audio",
   "display_name": "Fish Audio S2 Pro",
+  "description": "Fish Audio S2 Pro text-to-speech model for expressive speech across 80+ languages, with automatic language handling, inline prosody/emotion controls, and rapid voice cloning from short reference samples.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -11,9 +12,7 @@
     "offline"
   ],
   "languages": [
-    "en",
-    "zh",
-    "ja"
+    "80+ languages"
   ],
   "capabilities": {
     "clone": [
@@ -31,14 +30,15 @@
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum Fish Audio semantic tokens to generate; default 1024, 0 uses the default.",
+        "description": "Maximum Fish Audio semantic tokens to generate; default 1024.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1024
       },
       {
         "name": "text_chunk_size",
         "type": "int",
-        "description": "Long-form text chunk size; default 200.",
+        "description": "Maximum characters per generated text chunk; default 200.",
         "required": false,
         "min": 0,
         "default": 200
@@ -46,32 +46,35 @@
       {
         "name": "text_chunk_mode",
         "type": "enum",
-        "description": "Framework text chunking mode.",
+        "description": "Framework text chunking mode; default word_budget.",
         "preset": "text_chunk_mode_full",
         "required": false,
-        "default": "default"
+        "default": "word_budget"
       },
       {
         "name": "top_p",
         "type": "float",
-        "description": "Top-p sampling value.",
+        "description": "Top-p sampling value; default 0.8.",
         "required": false,
         "min": 0.0,
-        "max": 1.0
+        "max": 1.0,
+        "default": 0.8
       },
       {
         "name": "top_k",
         "type": "int",
-        "description": "Top-k sampling value.",
+        "description": "Top-k sampling value; default 30.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 30
       },
       {
         "name": "temperature",
         "type": "float",
-        "description": "Sampling temperature.",
+        "description": "Semantic-token sampling temperature; default 0.8.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.8
       },
       {
         "name": "seed",
@@ -94,7 +97,8 @@
         "type": "int",
         "description": "Prepared reference-audio cache slots; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       },
       {
         "name": "weight_type",

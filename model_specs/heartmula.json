@@ -1,6 +1,7 @@
 {
   "family": "heartmula",
   "display_name": "HeartMuLa",
+  "description": "Open-source music foundation model for generating complete songs from text, lyric prompts, and style tags, with controllable song structure and broad multilingual lyric conditioning.",
   "category": "audio_generation",
   "status": "supported",
   "tasks": [
@@ -10,7 +11,7 @@
     "offline"
   ],
   "languages": [
-    "en"
+    "multilingual"
   ],
   "capabilities": {
     "music": [
@@ -32,53 +33,60 @@
         "required": false
       },
       {
-        "name": "duration_seconds",
+        "name": "duration_sec",
         "type": "float",
-        "description": "Maximum generated audio duration.",
+        "description": "Maximum generated audio duration in seconds; default 120.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 120.0
       },
       {
         "name": "temperature",
         "type": "float",
-        "description": "Audio token sampling temperature.",
+        "description": "Audio token sampling temperature; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "top_k",
         "type": "int",
-        "description": "Audio token top-k sampling limit.",
+        "description": "Audio token top-k sampling limit; default 10.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 10
       },
       {
         "name": "guidance_scale",
         "type": "float",
-        "description": "MuLa classifier-free guidance scale.",
+        "description": "MuLa classifier-free guidance scale; default 1.5.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.5
       },
       {
-        "name": "codec_duration",
+        "name": "codec_duration_sec",
         "type": "float",
-        "description": "Codec detokenization chunk duration.",
+        "description": "Codec detokenization chunk duration in seconds; default 29.76.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 29.76
       },
       {
         "name": "num_inference_steps",
         "type": "int",
-        "description": "Codec flow solver steps.",
+        "description": "Codec flow solver steps; default 25.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 25
       },
       {
         "name": "codec_guidance_scale",
         "type": "float",
-        "description": "Codec classifier-free guidance scale.",
+        "description": "Codec classifier-free guidance scale; default 1.25.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.25
       },
       {
         "name": "infinite_mode",
@@ -90,123 +98,137 @@
       {
         "name": "text_chunk_size",
         "type": "int",
-        "description": "Text chunk size for infinite mode.",
+        "description": "Maximum characters per text chunk in infinite mode; default 4096.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 4096
       },
       {
-        "name": "infinite_chunk_audio_length_ms",
+        "name": "infinite_chunk_audio_duration_ms",
         "type": "int",
-        "description": "Per-chunk audio cap for infinite mode.",
+        "description": "Maximum generated audio duration per infinite-mode chunk in milliseconds; default 240000.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 240000
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Torch RNG seed.",
+        "description": "Generation seed for reproducible output; default 1234.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1234
       }
     ],
     "session": [
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "MuLa and codec weight storage type.",
+        "description": "MuLa and codec weight storage type; default native.",
         "preset": "weight_type_full",
         "required": false
       },
       {
-        "name": "mula_weight_type",
+        "name": "model_weight_type",
         "type": "enum",
-        "description": "MuLa weight storage type.",
+        "description": "MuLa weight storage type; defaults to weight_type.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "codec_weight_type",
         "type": "enum",
-        "description": "Codec weight storage type.",
+        "description": "Codec weight storage type; defaults to weight_type.",
         "preset": "weight_type_full",
         "required": false
       },
       {
-        "name": "mula_weight_context_mb",
+        "name": "model_weight_context_mb",
         "type": "int",
-        "description": "MuLa weight context size.",
+        "description": "MuLa weight context size in MiB.; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "codec_weight_context_mb",
         "type": "int",
-        "description": "Codec weight context size.",
+        "description": "Codec weight context size in MiB.; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
-        "name": "mula_constant_context_mb",
+        "name": "constant_context_mb",
         "type": "int",
-        "description": "MuLa reusable constant context size.",
+        "description": "MuLa reusable constant context size in MiB.; default 256.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       },
       {
-        "name": "mula_backbone_prefill_graph_arena_mb",
+        "name": "backbone_prefill_graph_arena_mb",
         "type": "int",
-        "description": "MuLa backbone prefill graph arena size.",
+        "description": "MuLa backbone prefill graph arena size in MiB.; default 1536.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1536
       },
       {
-        "name": "mula_backbone_step_graph_arena_mb",
+        "name": "backbone_step_graph_arena_mb",
         "type": "int",
-        "description": "MuLa backbone cached-step graph arena size.",
+        "description": "MuLa backbone cached-step graph arena size in MiB.; default 1536.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1536
       },
       {
-        "name": "mula_decoder_prefill_graph_arena_mb",
+        "name": "decoder_prefill_graph_arena_mb",
         "type": "int",
-        "description": "MuLa decoder prefill graph arena size.",
+        "description": "MuLa decoder prefill graph arena size in MiB.; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
-        "name": "mula_decoder_step_graph_arena_mb",
+        "name": "decoder_step_graph_arena_mb",
         "type": "int",
-        "description": "MuLa decoder cached-step graph arena size.",
+        "description": "MuLa decoder cached-step graph arena size in MiB.; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
-        "name": "mula_frame_embedding_graph_arena_mb",
+        "name": "frame_embedding_graph_arena_mb",
         "type": "int",
-        "description": "MuLa frame-embedding graph arena size.",
+        "description": "MuLa frame-embedding graph arena size in MiB.; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "codec_flow_estimator_graph_arena_mb",
         "type": "int",
-        "description": "Codec flow-estimator graph arena size.",
+        "description": "Codec flow-estimator graph arena size in MiB.; default 2048.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 2048
       },
       {
         "name": "codec_conditioning_graph_arena_mb",
         "type": "int",
-        "description": "Codec conditioning graph arena size.",
+        "description": "Codec conditioning graph arena size in MiB.; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "codec_scalar_decoder_graph_arena_mb",
         "type": "int",
-        "description": "Codec scalar-decoder graph arena size.",
+        "description": "Codec scalar-decoder graph arena size in MiB.; default 1536.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1536
       },
       {
         "name": "mem_saver",

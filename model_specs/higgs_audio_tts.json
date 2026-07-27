@@ -1,6 +1,7 @@
 {
   "family": "higgs_audio_tts",
   "display_name": "Higgs Audio v3 TTS",
+  "description": "Boson AI conversational TTS model for expressive speech across 100+ languages, zero-shot voice cloning, and inline control over emotion, style, prosody, pauses, and sound effects.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -11,7 +12,7 @@
     "offline"
   ],
   "languages": [
-    "en"
+    "100+ languages"
   ],
   "capabilities": {
     "clone": [
@@ -23,61 +24,66 @@
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated AR tokens; default 2048, 0 uses the default.",
+        "description": "Maximum generated AR tokens; default 2048.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 2048
       },
       {
         "name": "temperature",
         "type": "float",
-        "description": "AR sampling temperature.",
+        "description": "AR sampling temperature; default 0.8.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.8
       },
       {
         "name": "top_k",
         "type": "int",
-        "description": "AR top-k sampling limit.",
+        "description": "AR top-k sampling limit; default 30.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 30
       },
       {
         "name": "top_p",
         "type": "float",
-        "description": "AR nucleus sampling probability.",
+        "description": "AR nucleus sampling probability; default 0.8.",
         "required": false,
         "min": 0.0,
-        "max": 1.0
+        "max": 1.0,
+        "default": 0.8
       },
       {
         "name": "repetition_penalty",
         "type": "float",
-        "description": "Accepted for Python API compatibility; Higgs audio sampling does not consume it.",
+        "description": "AR repetition penalty; default 1.1.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.1
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Torch RNG seed.",
+        "description": "Generation seed for reproducible output; omitted uses a random seed.",
         "required": false,
         "min": 0
       },
       {
         "name": "text_chunk_size",
         "type": "int",
-        "description": "Long-form text chunk size; default 1024.",
+        "description": "Maximum characters per generated text chunk; default 1024.",
         "required": false,
         "min": 0,
-        "default": 256
+        "default": 1024
       },
       {
         "name": "text_chunk_mode",
         "type": "enum",
-        "description": "Framework text chunking mode.",
+        "description": "Framework text chunking mode; default word_budget.",
         "preset": "text_chunk_mode_full",
         "required": false,
-        "default": "default"
+        "default": "word_budget"
       }
     ],
     "session": [
@@ -105,44 +111,50 @@
       {
         "name": "ar_weight_context_mb",
         "type": "int",
-        "description": "AR weight context size.",
+        "description": "AR weight context size in MiB; default 4096.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 4096
       },
       {
         "name": "codec_weight_context_mb",
         "type": "int",
-        "description": "Codec weight context size.",
+        "description": "Codec weight context size in MiB; default 1536.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1536
       },
       {
         "name": "ar_decode_graph_arena_mb",
         "type": "int",
-        "description": "AR decode graph arena size.",
+        "description": "AR decode graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "codec_decode_graph_arena_mb",
         "type": "int",
-        "description": "Codec decode graph arena size.",
+        "description": "Codec decode graph arena size in MiB; default 128.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 128
       },
       {
         "name": "codec_encode_graph_arena_mb",
         "type": "int",
-        "description": "Codec encode graph arena size.",
+        "description": "Codec encode graph arena size in MiB; default 256.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       },
       {
         "name": "reference_cache_slots",
         "type": "int",
         "description": "Encoded reference-audio cache slots; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       }
     ],
     "load": []

@@ -1,6 +1,7 @@
 {
   "family": "stable_audio",
   "display_name": "Stable Audio 3",
+  "description": "Stability AI generative audio model family for text-to-music, sound effects, audio-to-audio editing, inpainting, continuation, variable-length generation, and LoRA personalization.",
   "category": "audio_generation",
   "status": "supported",
   "tasks": [
@@ -28,30 +29,32 @@
   "options": {
     "request": [
       {
-        "name": "duration_seconds",
+        "name": "duration_sec",
         "type": "float_list",
-        "description": "Target duration per prompt.",
+        "description": "Target duration per prompt in seconds; default 120 seconds for each prompt when omitted.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "num_inference_steps",
         "type": "int",
-        "description": "RF diffusion steps.",
+        "description": "RF diffusion steps; default 8.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 8
       },
       {
         "name": "guidance_scale",
         "type": "float",
-        "description": "Classifier-free guidance scale.",
+        "description": "Classifier-free guidance scale; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "sampler",
         "type": "enum",
-        "description": "Diffusion sampler.",
+        "description": "Diffusion sampler used for denoising; omitted uses the model route default.",
         "values": [
           "pingpong",
           "euler",
@@ -63,8 +66,9 @@
       {
         "name": "apg_scale",
         "type": "float",
-        "description": "Adaptive projected guidance scale.",
-        "required": false
+        "description": "Adaptive projected guidance scale; default 1.0.",
+        "required": false,
+        "default": 1.0
       },
       {
         "name": "negative_prompt",
@@ -75,42 +79,45 @@
       {
         "name": "batch_size",
         "type": "int",
-        "description": "Prompt batch size.",
+        "description": "Prompt batch size; default 1.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 1
       },
       {
-        "name": "duration_padding_seconds",
+        "name": "duration_padding_sec",
         "type": "float",
-        "description": "Extra generated padding before truncation.",
+        "description": "Extra generated padding before truncation in seconds; default 6.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 6.0
       },
       {
         "name": "truncate_output_to_duration",
         "type": "bool",
-        "description": "Trim decoded audio to requested duration.",
+        "description": "Trim decoded audio to requested duration; default true.",
         "required": false,
-        "default": false
+        "default": true
       },
       {
         "name": "chunked_decode",
         "type": "bool",
-        "description": "Decode the vocoder in chunks.",
+        "description": "Decode the vocoder in chunks; default true.",
         "required": false,
-        "default": false
+        "default": true
       },
       {
         "name": "init_noise_level",
         "type": "float",
-        "description": "Strength for audio-conditioned generation.",
+        "description": "Strength for audio-conditioned generation; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "audio_input_kind",
         "type": "enum",
-        "description": "How to use request audio input.",
+        "description": "How to use request audio input; default init_audio when audio is supplied.",
         "values": [
           "init_audio",
           "inpaint_audio"
@@ -118,21 +125,21 @@
         "required": false
       },
       {
-        "name": "inpaint_mask_start_seconds",
+        "name": "inpaint_mask_start_sec",
         "type": "float_list",
-        "description": "Inpaint region start times.",
+        "description": "Inpaint region start times, in seconds.",
         "required": false
       },
       {
-        "name": "inpaint_mask_end_seconds",
+        "name": "inpaint_mask_end_sec",
         "type": "float_list",
-        "description": "Inpaint region end times.",
+        "description": "Inpaint region end times, in seconds.",
         "required": false
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Torch RNG seed.",
+        "description": "Generation seed for reproducible output; omitted uses a random seed.",
         "required": false,
         "min": 0
       }
@@ -142,7 +149,8 @@
         "name": "max_batch",
         "type": "int",
         "description": "Maximum prompt batch size; default 1.",
-        "required": false
+        "required": false,
+        "default": 1
       },
       {
         "name": "weight_type",

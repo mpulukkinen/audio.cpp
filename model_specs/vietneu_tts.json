@@ -1,6 +1,7 @@
 {
   "family": "vietneu_tts",
   "display_name": "VieNeu-TTS v3 Turbo",
+  "description": "On-device Vietnamese TTS model with instant voice cloning from 3-5 seconds of reference audio, English-Vietnamese code-switching, streaming playback, batched generation, and conversation mode.",
   "category": "tts",
   "status": "community",
   "tasks": [
@@ -11,7 +12,8 @@
     "offline"
   ],
   "languages": [
-    "vi"
+    "vi",
+    "en"
   ],
   "capabilities": {
     "clone": [
@@ -41,34 +43,37 @@
       {
         "name": "subtalker_temperature",
         "type": "float",
-        "description": "Acoustic decoder sampling temperature (default 0.8).",
+        "description": "Acoustic decoder sampling temperature; default 0.9.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.9
       },
       {
         "name": "subtalker_do_sample",
         "type": "bool",
-        "description": "Enable sampling in the acoustic decoder (default true).",
+        "description": "Enable sampling in the acoustic decoder; default true.",
         "required": false,
-        "default": false
+        "default": true
       },
       {
         "name": "text_chunk_size",
         "type": "int",
-        "description": "Maximum character budget per chunk (default 200).",
+        "description": "Maximum characters per generated text chunk; default 200.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 200
       },
       {
         "name": "text_chunk_mode",
         "type": "enum",
-        "description": "Text chunking mode (default 'default').",
+        "description": "Framework text chunking mode; default word_budget.",
         "values": [
-          "default",
+          "word_budget",
           "endline",
           "tag_aware"
         ],
-        "required": false
+        "required": false,
+        "default": "word_budget"
       }
     ],
     "session": [
@@ -84,7 +89,8 @@
         "type": "int",
         "description": "Voice prompt cache slots; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       }
     ],
     "load": []

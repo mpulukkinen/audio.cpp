@@ -1,6 +1,7 @@
 {
   "family": "vibevoice_asr",
   "display_name": "VibeVoice ASR",
+  "description": "Microsoft long-form speech-to-text model that processes up to 60 minutes of audio in one pass and produces structured transcripts with speakers, timestamps, content, hotwords, and 50+ language support.",
   "category": "asr",
   "status": "supported",
   "tasks": [
@@ -10,8 +11,7 @@
     "offline"
   ],
   "languages": [
-    "en",
-    "zh"
+    "50+ languages"
   ],
   "capabilities": {
     "asr": [
@@ -31,52 +31,59 @@
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated text tokens.",
+        "description": "Maximum generated text tokens; default 32768.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 32768
       },
       {
         "name": "temperature",
         "type": "float",
-        "description": "Sampling temperature; 0 uses deterministic decoding.",
+        "description": "Sampling temperature; default 0 uses deterministic decoding.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.0
       },
       {
         "name": "top_p",
         "type": "float",
-        "description": "Nucleus sampling probability.",
+        "description": "Nucleus sampling probability; default 1.0.",
         "required": false,
         "min": 0.0,
-        "max": 1.0
+        "max": 1.0,
+        "default": 1.0
       },
       {
         "name": "top_k",
         "type": "int",
-        "description": "Top-k sampling limit; 0 disables top-k filtering.",
+        "description": "Top-k sampling limit; default 50, 0 disables top-k filtering.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 50
       },
       {
         "name": "num_beams",
         "type": "int",
-        "description": "Beam count for deterministic beam search.",
+        "description": "Beam count for deterministic beam search; default 1.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 1
       },
       {
         "name": "repetition_penalty",
         "type": "float",
-        "description": "Generation repetition penalty.",
+        "description": "Generation repetition penalty; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Acoustic latent sampling seed.",
+        "description": "Acoustic latent sampling seed for reproducible output; default 1234.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1234
       },
       {
         "name": "audio_chunk_mode",
@@ -92,11 +99,12 @@
         "default": "auto"
       },
       {
-        "name": "audio_chunk_seconds",
+        "name": "audio_chunk_duration_sec",
         "type": "float",
-        "description": "Audio chunk duration; default 1200.",
+        "description": "Audio chunk duration in seconds; default 1200.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1200.0
       }
     ],
     "session": [
@@ -131,23 +139,26 @@
       {
         "name": "tokenizer_weight_context_mb",
         "type": "int",
-        "description": "Speech tokenizer weight context arena size.",
+        "description": "Speech tokenizer weight context arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "connector_weight_context_mb",
         "type": "int",
-        "description": "Acoustic and semantic connector weight context arena size.",
+        "description": "Acoustic and semantic connector weight context arena size in MiB; default 128.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 128
       },
       {
         "name": "decoder_weight_context_mb",
         "type": "int",
-        "description": "Text decoder weight context arena size.",
+        "description": "Text decoder weight context arena size in MiB; default 4096.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 4096
       },
       {
         "name": "vad_path",

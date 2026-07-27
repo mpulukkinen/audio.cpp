@@ -734,7 +734,7 @@ void test_options_schema() {
         "type": "enum",
         "preset": "text_chunk_mode_full",
         "required": false,
-        "default": "default",
+        "default": "word_budget",
         "description": "Text chunking mode."
       },
       {
@@ -964,7 +964,7 @@ void test_options_schema() {
               "name": "text_chunk_mode",
               "type": "enum",
               "preset": "text_chunk_mode_full",
-              "values": ["default"],
+              "values": ["word_budget"],
               "required": false,
               "description": "Text chunking mode."
             }

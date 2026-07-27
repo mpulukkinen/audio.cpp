@@ -1,6 +1,7 @@
 {
   "family": "htdemucs",
   "display_name": "HTDemucs",
+  "description": "Hybrid Transformer Demucs music source-separation model that combines waveform and spectrogram processing with Transformer layers to split mixtures into vocals, drums, bass, and accompaniment.",
   "category": "audio_tools",
   "status": "supported",
   "tasks": [

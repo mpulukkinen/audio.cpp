@@ -1,6 +1,7 @@
 {
   "family": "ace_step",
   "display_name": "ACE-Step",
+  "description": "Open-source ACE-Step 1.5 music generation model for text-to-music and lyrics-to-song workflows across 50+ languages, with editing routes such as cover generation, repainting, continuation, stem extraction, and vocal-to-BGM conversion.",
   "category": "audio_generation",
   "status": "supported",
   "tasks": [
@@ -11,7 +12,7 @@
     "offline"
   ],
   "languages": [
-    "en"
+    "50+ languages"
   ],
   "capabilities": {
     "music": [
@@ -26,7 +27,7 @@
       {
         "name": "route",
         "type": "enum",
-        "description": "ACE-Step route.",
+        "description": "ACE-Step operation to run; default text2music.",
         "values": [
           "text2music",
           "complete",
@@ -36,7 +37,8 @@
           "cover-nofsq",
           "repaint"
         ],
-        "required": false
+        "required": false,
+        "default": "text2music"
       },
       {
         "name": "lyrics",
@@ -45,9 +47,9 @@
         "required": false
       },
       {
-        "name": "duration_seconds",
+        "name": "duration_sec",
         "type": "float",
-        "description": "Target duration in seconds.",
+        "description": "Target generated audio duration in seconds; when omitted, ACE-Step falls back to planner/config duration, then 30 seconds.",
         "required": false,
         "min": 0.0
       },
@@ -72,21 +74,21 @@
       {
         "name": "repaint_start",
         "type": "float",
-        "description": "Start time for repaint route.",
+        "description": "Repaint start time in seconds; omitted means the start of the input region.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "repaint_end",
         "type": "float",
-        "description": "End time for repaint route.",
+        "description": "Repaint end time in seconds; omitted means the end of the input region.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "repaint_mode",
         "type": "enum",
-        "description": "Preset repaint blending policy.",
+        "description": "Preset repaint blending policy; default balanced.",
         "values": [
           "balanced",
           "conservative",
@@ -98,28 +100,31 @@
       {
         "name": "repaint_strength",
         "type": "float",
-        "description": "Repaint strength.",
+        "description": "Repaint strength; default 0.5 when repainting is active.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.5
       },
       {
         "name": "num_inference_steps",
         "type": "int",
-        "description": "Diffusion denoising steps.",
+        "description": "Diffusion denoising steps; default 8.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 8
       },
       {
         "name": "guidance_scale",
         "type": "float",
-        "description": "Diffusion guidance scale.",
+        "description": "Diffusion classifier-free guidance scale; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Generation seed.",
+        "description": "Generation seed for reproducible output; omitted uses a random seed.",
         "required": false,
         "min": 0
       },
@@ -137,7 +142,7 @@
         "required": false
       },
       {
-        "name": "timesignature",
+        "name": "time_signature",
         "type": "string",
         "description": "Force time signature metadata.",
         "required": false
@@ -157,76 +162,85 @@
       {
         "name": "audio_cover_strength",
         "type": "float",
-        "description": "Cover strength for cover/edit-style conditioning.",
+        "description": "Cover strength for cover/edit-style conditioning; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "cover_noise_strength",
         "type": "float",
-        "description": "Noise strength for cover conditioning.",
+        "description": "Noise strength for cover conditioning; default 0.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.0
       },
       {
         "name": "lm_temperature",
         "type": "float",
-        "description": "Planner sampling temperature.",
+        "description": "Planner sampling temperature; default 0.85.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.85
       },
       {
-        "name": "lm_cfg_scale",
+        "name": "lm_guidance_scale",
         "type": "float",
-        "description": "Planner CFG scale.",
+        "description": "Planner classifier-free guidance scale; default 2.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 2.0
       },
       {
         "name": "lm_top_k",
         "type": "int",
-        "description": "Planner top-k; 0 disables top-k.",
+        "description": "Planner top-k sampling limit; default 0 disables top-k.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 0
       },
       {
         "name": "lm_top_p",
         "type": "float",
-        "description": "Planner top-p.",
+        "description": "Planner nucleus sampling probability; default 0.9.",
         "required": false,
         "min": 0.0,
-        "max": 1.0
+        "max": 1.0,
+        "default": 0.9
       },
       {
         "name": "lm_repetition_penalty",
         "type": "float",
-        "description": "Planner repetition penalty.",
+        "description": "Planner repetition penalty; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
-        "name": "sampler_mode",
+        "name": "sampler",
         "type": "enum",
-        "description": "Diffusion sampler mode.",
+        "description": "Diffusion sampler used for denoising; default euler.",
         "values": [
           "euler",
           "heun"
         ],
-        "required": false
+        "required": false,
+        "default": "euler"
       },
       {
         "name": "retake_seed",
         "type": "int",
-        "description": "Optional retake noise seed; -1 clears it.",
+        "description": "Optional retake noise seed; -1 clears it. Omitted leaves retake noise unset.",
         "required": false,
         "min": 0
       },
       {
         "name": "retake_variance",
         "type": "float",
-        "description": "Retake noise mixing strength.",
+        "description": "Retake noise mixing strength; default 0.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.0
       },
       {
         "name": "flow_edit_morph",
@@ -247,35 +261,35 @@
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Shared ACE-Step weight storage type.",
+        "description": "Shared ACE-Step weight storage type; default native.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "dit_weight_type",
         "type": "enum",
-        "description": "DiT weight storage type; f16 is promoted to bf16.",
+        "description": "DiT weight storage type; defaults to weight_type, with f16 promoted to bf16.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "planner_weight_type",
         "type": "enum",
-        "description": "Planner LM weight storage type.",
+        "description": "Planner LM weight storage type; defaults to weight_type.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "text_encoder_weight_type",
         "type": "enum",
-        "description": "Text encoder weight storage type.",
+        "description": "Text encoder weight storage type; defaults to weight_type.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "vae_weight_type",
         "type": "enum",
-        "description": "VAE weight storage type.",
+        "description": "VAE weight storage type; defaults to weight_type.",
         "preset": "weight_type_full",
         "required": false
       },
@@ -289,9 +303,9 @@
     ],
     "load": [
       {
-        "name": "dit_path",
+        "name": "dit_variant",
         "type": "enum",
-        "description": "DiT variant inside the model package.",
+        "description": "DiT variant inside the model package; default acestep-v15-turbo.",
         "values": [
           "acestep-v15-turbo",
           "acestep-v15-base"

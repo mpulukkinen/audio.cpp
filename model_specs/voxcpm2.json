@@ -1,6 +1,7 @@
 {
   "family": "voxcpm2",
   "display_name": "VoxCPM2",
+  "description": "OpenBMB tokenizer-free TTS model supporting 30 languages and 9 Chinese dialects, with 48 kHz output, natural-language voice design, controllable short-reference voice cloning, and expressive style guidance.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -13,8 +14,8 @@
     "streaming"
   ],
   "languages": [
-    "zh",
-    "en"
+    "30 languages",
+    "9 Chinese dialects"
   ],
   "capabilities": {
     "clone": [
@@ -32,7 +33,7 @@
         "description": "Text chunking mode; default tag_aware.",
         "preset": "text_chunk_mode_full",
         "required": false,
-        "default": "default"
+        "default": "tag_aware"
       }
     ],
     "session": [
@@ -48,7 +49,8 @@
         "type": "int",
         "description": "Prompt and prompt-audio embedding cache slots; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       }
     ],
     "load": []

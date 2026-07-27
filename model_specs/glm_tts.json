@@ -1,6 +1,7 @@
 {
   "family": "glm_tts",
   "display_name": "GLM-TTS",
+  "description": "Bilingual Chinese-English LLM-based TTS system with zero-shot voice cloning, streaming inference, reinforcement-learning-enhanced emotion and prosody control, and phoneme-level pronunciation control.",
   "category": "tts",
   "status": "community",
   "tasks": [
@@ -11,7 +12,8 @@
     "offline"
   ],
   "languages": [
-    "zh"
+    "zh",
+    "en"
   ],
   "capabilities": {
     "clone": [
@@ -70,14 +72,14 @@
       {
         "name": "num_inference_steps",
         "type": "int",
-        "description": "Flow Euler steps; official default 10.",
+        "description": "Flow Euler steps; defaults to model config, usually official default 10.",
         "required": false,
         "min": 1
       },
       {
-        "name": "cfg_rate",
+        "name": "flow_guidance_scale",
         "type": "float",
-        "description": "Flow classifier-free guidance rate; official default 0.7.",
+        "description": "Flow classifier-free guidance rate; defaults to model config, usually official default 0.7.",
         "required": false,
         "min": 0.0
       },
@@ -94,18 +96,19 @@
         "required": false
       },
       {
-        "name": "hift_prior_noise_values",
+        "name": "hift_prior_noise_count",
         "type": "int",
-        "description": "Torch RNG value offset used before HiFT source generation.",
+        "description": "Torch RNG value offset used before HiFT source generation; default 0.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 0
       }
     ],
     "session": [
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Requested component weight storage type.",
+        "description": "Requested component weight storage type; default native.",
         "preset": "weight_type_full",
         "required": false
       },
@@ -120,28 +123,32 @@
         "name": "aggressive_mem_saver",
         "type": "bool",
         "description": "Also release Llama, Flow, and HiFT after every stage. Minimizes VRAM but reloads the generation path on every request; default false.",
-        "required": false
+        "required": false,
+        "default": false
       },
       {
         "name": "reference_cache_slots",
         "type": "int",
         "description": "Prepared reference-audio cache slots; default 1. Use 0 to disable.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       },
       {
         "name": "llama_weight_context_mb",
         "type": "int",
-        "description": "Llama weight metadata context in MiB.",
+        "description": "Llama weight metadata context in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "constant_context_mb",
         "type": "int",
-        "description": "Llama constant tensor context in MiB.",
+        "description": "Llama constant tensor context in MiB; default 256.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       }
     ],
     "load": []

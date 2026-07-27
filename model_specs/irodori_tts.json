@@ -1,6 +1,7 @@
 {
   "family": "irodori_tts",
   "display_name": "Irodori-TTS",
+  "description": "Japanese TTS model based on RF-DiT continuous audio latents, supporting zero-shot voice cloning, automatic duration prediction, multimodal voice design, and emoji-style control.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -27,23 +28,25 @@
       {
         "name": "num_inference_steps",
         "type": "int",
-        "description": "RF diffusion steps.",
+        "description": "RF diffusion steps; default 40.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 40
       },
       {
-        "name": "duration_seconds",
+        "name": "duration_sec",
         "type": "float",
-        "description": "Explicit output duration.",
+        "description": "Explicit output duration in seconds; omitted uses predicted duration.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "duration_scale",
         "type": "float",
-        "description": "Predicted-duration multiplier.",
+        "description": "Predicted-duration multiplier; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "text_chunk_mode",
@@ -53,47 +56,53 @@
           "japanese",
           "endline"
         ],
-        "required": false
+        "required": false,
+        "default": "endline"
       },
       {
-        "name": "min_seconds",
+        "name": "min_duration_sec",
         "type": "float",
-        "description": "Minimum generated duration.",
+        "description": "Minimum generated duration in seconds; default 0.5.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.5
       },
       {
-        "name": "max_seconds",
+        "name": "max_duration_sec",
         "type": "float",
-        "description": "Maximum generated duration.",
+        "description": "Maximum generated duration in seconds; default 30.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 30.0
       },
       {
         "name": "text_guidance_scale",
         "type": "float",
-        "description": "Text classifier-free guidance scale.",
+        "description": "Text classifier-free guidance scale; default 3.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 3.0
       },
       {
         "name": "speaker_guidance_scale",
         "type": "float",
-        "description": "Speaker classifier-free guidance scale.",
+        "description": "Speaker classifier-free guidance scale; default 5.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 5.0
       },
       {
         "name": "caption_guidance_scale",
         "type": "float",
-        "description": "Caption classifier-free guidance scale.",
+        "description": "Caption classifier-free guidance scale; default 3.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 3.0
       },
       {
         "name": "guidance_mode",
         "type": "enum",
-        "description": "Classifier-free guidance combination mode.",
+        "description": "Classifier-free guidance combination mode; default independent.",
         "values": [
           "independent"
         ],
@@ -103,28 +112,30 @@
       {
         "name": "guidance_min_t",
         "type": "float",
-        "description": "Minimum diffusion time for guidance.",
+        "description": "Minimum diffusion timestep value where guidance is active; default 0.5.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.5
       },
       {
         "name": "guidance_max_t",
         "type": "float",
-        "description": "Maximum diffusion time for guidance.",
+        "description": "Maximum diffusion timestep value where guidance is active; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Torch RNG seed.",
+        "description": "Generation seed for reproducible output; omitted uses a random seed.",
         "required": false,
         "min": 0
       },
       {
         "name": "trim_tail",
         "type": "bool",
-        "description": "Trim trailing silence-like samples.",
+        "description": "Trim trailing silence-like samples; default true.",
         "required": false,
         "default": true
       }
@@ -147,58 +158,65 @@
       {
         "name": "condition_graph_arena_mb",
         "type": "int",
-        "description": "Condition encoder graph arena size.",
+        "description": "Condition encoder graph arena size in MiB; default 256.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       },
       {
         "name": "rf_graph_arena_mb",
         "type": "int",
-        "description": "RF sampler graph arena size.",
+        "description": "RF sampler graph arena size in MiB; default 768.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 768
       },
       {
         "name": "codec_graph_arena_mb",
         "type": "int",
-        "description": "DACVAE codec graph arena size.",
+        "description": "DACVAE codec graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "condition_weight_context_mb",
         "type": "int",
-        "description": "Condition encoder weight context size.",
+        "description": "Condition encoder weight context size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "rf_weight_context_mb",
         "type": "int",
-        "description": "RF sampler weight context size.",
+        "description": "RF sampler weight context size in MiB; default 768.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 768
       },
       {
         "name": "codec_weight_context_mb",
         "type": "int",
-        "description": "DACVAE codec weight context size.",
+        "description": "DACVAE codec weight context size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "mem_saver",
         "type": "bool",
         "description": "Release staged runtime graphs after request phases; default true.",
         "required": false,
-        "default": false
+        "default": true
       },
       {
         "name": "reference_cache_slots",
         "type": "int",
-        "description": "Prepared reference-speaker cache slots; default 1.",
+        "description": "Prepared reference-speaker cache slots; default 1; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       }
     ],
     "load": []

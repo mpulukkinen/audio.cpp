@@ -1,6 +1,7 @@
 {
   "family": "index_tts2",
   "display_name": "IndexTTS2",
+  "description": "Zero-shot TTS system for Chinese and English speech synthesis with voice cloning, emotion-speaker decoupling, text or audio emotion control, and explicit duration control.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -28,9 +29,10 @@
       {
         "name": "emotion_alpha",
         "type": "float",
-        "description": "Blend strength for explicit emotion conditioning.",
+        "description": "Blend strength for explicit emotion conditioning; default 1.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "emotion_vector",
@@ -61,31 +63,34 @@
       {
         "name": "interval_silence_ms",
         "type": "int",
-        "description": "Silence inserted between generated text chunks.",
+        "description": "Silence inserted between generated text chunks in milliseconds; default 200.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 200
       },
       {
         "name": "text_chunk_mode",
         "type": "enum",
-        "description": "Framework text chunking mode used when text_chunk_size is set.",
+        "description": "Framework text chunking mode used for long-form text; default word_budget.",
         "preset": "text_chunk_mode_full",
         "required": false,
-        "default": "default"
+        "default": "word_budget"
       },
       {
         "name": "length_penalty",
         "type": "float",
-        "description": "GPT beam-search length penalty.",
+        "description": "GPT beam-search length penalty; default 0.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 0.0
       },
       {
         "name": "num_beams",
         "type": "int",
-        "description": "GPT beam count.",
+        "description": "GPT beam count; default 3.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 3
       }
     ],
     "session": [
@@ -106,50 +111,57 @@
       {
         "name": "gpt_graph_arena_mb",
         "type": "int",
-        "description": "GPT graph arena size.",
+        "description": "GPT graph arena size in MiB; default 2048.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 2048
       },
       {
         "name": "s2mel_graph_arena_mb",
         "type": "int",
-        "description": "S2Mel graph arena size.",
+        "description": "S2Mel graph arena size in MiB; default 2048.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 2048
       },
       {
         "name": "reference_graph_arena_mb",
         "type": "int",
-        "description": "Reference encoder and codec graph arena size.",
+        "description": "Reference encoder and codec graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "emotion_text_prefill_graph_arena_mb",
         "type": "int",
-        "description": "Emotion-text prefill graph arena size.",
+        "description": "Emotion-text prefill graph arena size in MiB; default 2048.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 2048
       },
       {
         "name": "emotion_text_decode_graph_arena_mb",
         "type": "int",
-        "description": "Emotion-text cached-step graph arena size.",
+        "description": "Emotion-text cached-step graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "emotion_text_max_tokens",
         "type": "int",
         "description": "Maximum generated tokens for emotion-text classification; default 256.",
-        "required": false
+        "required": false,
+        "default": 256
       },
       {
         "name": "weight_context_mb",
         "type": "int",
-        "description": "Shared weight context size.",
+        "description": "Shared weight context size in MiB; default 4096.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 4096
       },
       {
         "name": "mem_saver",
@@ -163,21 +175,24 @@
         "type": "int",
         "description": "Prepared speaker-reference cache slots; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       },
       {
         "name": "emotion_cache_slots",
         "type": "int",
         "description": "Prepared emotion-reference cache slots; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       },
       {
         "name": "emotion_text_cache_slots",
         "type": "int",
         "description": "Emotion-text weight cache slots; default 1.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       }
     ],
     "load": []

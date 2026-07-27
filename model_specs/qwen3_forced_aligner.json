@@ -1,6 +1,7 @@
 {
   "family": "qwen3_forced_aligner",
   "display_name": "Qwen3 Forced Aligner",
+  "description": "Qwen3 non-autoregressive forced aligner that aligns transcript text to speech and returns word- or character-level timestamps across 11 supported languages.",
   "category": "speech_analysis",
   "status": "supported",
   "tasks": [
@@ -10,7 +11,17 @@
     "offline"
   ],
   "languages": [
-    "multilingual"
+    "zh",
+    "en",
+    "yue",
+    "fr",
+    "de",
+    "it",
+    "ja",
+    "ko",
+    "pt",
+    "ru",
+    "es"
   ],
   "capabilities": {
     "align": [

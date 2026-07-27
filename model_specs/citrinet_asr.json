@@ -1,6 +1,7 @@
 {
   "family": "citrinet_asr",
   "display_name": "Citrinet ASR",
+  "description": "NVIDIA CitriNet-family end-to-end English ASR model using a convolutional CTC architecture optimized for transcribing speech segments to text.",
   "category": "asr",
   "status": "supported",
   "tasks": [

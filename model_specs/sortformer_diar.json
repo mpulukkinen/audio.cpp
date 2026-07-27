@@ -1,6 +1,7 @@
 {
   "family": "sortformer_diar",
   "display_name": "Sortformer Diarization",
+  "description": "NVIDIA Transformer-based end-to-end speaker diarization model trained primarily on English speech, predicting speaker labels directly from audio and resolving speaker ordering by arrival time for up to four speakers.",
   "category": "speech_analysis",
   "status": "supported",
   "tasks": [
@@ -10,7 +11,7 @@
     "offline"
   ],
   "languages": [
-    "language_agnostic"
+    "en"
   ],
   "capabilities": {
     "diar": [
@@ -23,16 +24,18 @@
       {
         "name": "graph_arena_mb",
         "type": "int",
-        "description": "Inference graph arena size.",
+        "description": "Inference graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "weight_context_mb",
         "type": "int",
-        "description": "Weight context size.",
+        "description": "Weight context size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "weight_type",

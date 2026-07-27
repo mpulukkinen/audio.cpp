@@ -1,6 +1,7 @@
 {
   "family": "outetts",
   "display_name": "Llama-OuteTTS 1.0",
+  "description": "Llama-based open-weight TTS model for 23-language speech synthesis with one-shot voice cloning from short reference audio and automatic word-alignment support.",
   "category": "tts",
   "status": "community",
   "tasks": [
@@ -11,7 +12,7 @@
     "offline"
   ],
   "languages": [
-    "en"
+    "23 languages"
   ],
   "capabilities": {
     "clone": [
@@ -30,21 +31,21 @@
       {
         "name": "temperature",
         "type": "float",
-        "description": "Sampling temperature; official cloning default 0.4.",
+        "description": "Sampling temperature; default 0.4 for cloning, otherwise model config default.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "top_k",
         "type": "int",
-        "description": "Top-k sampling; official default 40.",
+        "description": "Top-k sampling; default 40 for cloning, otherwise model config default.",
         "required": false,
         "min": 0
       },
       {
         "name": "top_p",
         "type": "float",
-        "description": "Nucleus sampling; official default 0.9.",
+        "description": "Nucleus sampling; default 0.9 for cloning, otherwise model config default.",
         "required": false,
         "min": 0.0,
         "max": 1.0
@@ -52,7 +53,7 @@
       {
         "name": "min_p",
         "type": "float",
-        "description": "Minimum probability relative to the best token; official default 0.05.",
+        "description": "Minimum probability relative to the best token; default 0.05 for cloning, otherwise model config default.",
         "required": false,
         "min": 0.0,
         "max": 1.0
@@ -60,16 +61,18 @@
       {
         "name": "repetition_penalty",
         "type": "float",
-        "description": "Windowed repetition penalty; official default 1.1.",
+        "description": "Windowed repetition penalty; default 1.1.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.1
       },
       {
         "name": "repetition_window",
         "type": "int",
-        "description": "Recent-token penalty window; official value 64.",
+        "description": "Recent-token penalty window; default 64.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 64
       },
       {
         "name": "seed",
@@ -88,21 +91,24 @@
         "name": "reference_language",
         "type": "string",
         "description": "Language code used to align the reference transcript; default en.",
-        "required": false
+        "required": false,
+        "default": "en"
       },
       {
         "name": "text_chunk_size",
         "type": "int",
-        "description": "Framework long-form text chunk size; default 256 characters. Chunks are split further when required by max_tokens.",
+        "description": "Maximum characters per long-form text chunk; default 256. Chunks are split further when required by max_tokens.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       },
       {
         "name": "text_chunk_mode",
         "type": "enum",
-        "description": "Framework long-form text chunking mode.",
+        "description": "Framework long-form text chunking mode; default word_budget.",
         "preset": "text_chunk_mode_full",
-        "required": false
+        "required": false,
+        "default": "word_budget"
       }
     ],
     "session": [
@@ -152,7 +158,8 @@
         "type": "int",
         "description": "Prepared reference-profile cache slots; default 1, set 0 to disable.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       },
       {
         "name": "mem_saver",

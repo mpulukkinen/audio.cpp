@@ -1,6 +1,7 @@
 {
   "family": "miotts",
   "display_name": "MioTTS",
+  "description": "Lightweight LLM-based English and Japanese TTS family built on MioCodec, supporting low-latency speech generation and zero-shot voice cloning from short reference audio.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -24,21 +25,21 @@
       {
         "name": "best_of_n",
         "type": "int",
-        "description": "Generate n candidates for this request and select by ASR scoring.",
+        "description": "Generate n candidates for this request; overrides session best_of_n_default and is capped by session best_of_n_max.",
         "required": false,
         "min": 1
       },
       {
         "name": "best_of_n_enabled",
         "type": "bool",
-        "description": "Enable best-of-N candidate selection for this request.",
+        "description": "Enable or disable best-of-N candidate selection for this request; overrides session best_of_n_enabled.",
         "required": false,
         "default": false
       },
       {
         "name": "best_of_n_language",
         "type": "enum",
-        "description": "Language used when scoring best-of-N candidates.",
+        "description": "Language used when scoring best-of-N candidates for this request; overrides session best_of_n_language.",
         "preset": "best_of_n_language",
         "required": false,
         "default": "auto"
@@ -48,7 +49,7 @@
       {
         "name": "codec_path",
         "type": "path",
-        "description": "MioCodec model directory used by MioTTS acoustic decoding.",
+        "description": "MioCodec model directory used by MioTTS acoustic decoding; default is the sibling MioCodec package path when present.",
         "required": false
       },
       {
@@ -61,16 +62,18 @@
       {
         "name": "best_of_n_default",
         "type": "int",
-        "description": "Default best-of-N candidate count.",
+        "description": "Default best-of-N candidate count; default 1.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 1
       },
       {
         "name": "best_of_n_max",
         "type": "int",
-        "description": "Maximum best-of-N candidate count.",
+        "description": "Maximum best-of-N candidate count; default 8.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 8
       },
       {
         "name": "best_of_n_language",
@@ -83,7 +86,7 @@
       {
         "name": "best_of_n_asr_path",
         "type": "path",
-        "description": "Qwen3-ASR model directory used by best-of-N scoring.",
+        "description": "Qwen3-ASR model directory used by best-of-N scoring; default is sibling Qwen3-ASR-0.6B when present.",
         "required": false
       },
       {

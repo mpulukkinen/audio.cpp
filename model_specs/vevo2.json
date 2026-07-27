@@ -1,6 +1,7 @@
 {
   "family": "vevo2",
   "display_name": "Vevo2",
+  "description": "Unified controllable framework for English and Chinese speech and singing voice generation, voice conversion, and editing, with tokenizers that disentangle content, prosody, melody, style, and timbre.",
   "category": "voice_conversion",
   "status": "supported",
   "tasks": [
@@ -15,7 +16,8 @@
     "offline"
   ],
   "languages": [
-    "language_agnostic"
+    "en",
+    "zh"
   ],
   "capabilities": {
     "music": [
@@ -40,7 +42,7 @@
       {
         "name": "route",
         "type": "enum",
-        "description": "VeVo2 route.",
+        "description": "Select the VeVo2 generation or conversion operation.",
         "values": [
           "zero_shot_tts",
           "text_to_singing",
@@ -95,19 +97,19 @@
       {
         "name": "use_prosody_code",
         "type": "bool",
-        "description": "Enable explicit prosody-code conditioning.",
+        "description": "Enable explicit prosody-code conditioning; default is route-specific.",
         "required": false
       },
       {
         "name": "predict_target_prosody",
         "type": "bool",
-        "description": "Predict target prosody during AR generation.",
+        "description": "Predict target prosody during AR generation; default is route-specific.",
         "required": false
       },
       {
         "name": "use_pitch_shift",
         "type": "bool",
-        "description": "Pitch-align source/prosody/style references to the target voice.",
+        "description": "Pitch-align source/prosody/style references to the target voice; default is route-specific.",
         "required": false
       },
       {
@@ -129,37 +131,37 @@
         "required": false
       },
       {
-        "name": "target_duration_seconds",
+        "name": "target_duration_sec",
         "type": "float",
-        "description": "Target output duration hint for flow matching.",
+        "description": "Target output duration hint for flow matching, in seconds.",
         "required": false,
         "min": 0.0
       },
       {
-        "name": "reference_duration_seconds",
+        "name": "reference_duration_sec",
         "type": "float",
-        "description": "Trim target voice reference duration before conditioning.",
+        "description": "Trim target voice reference duration before conditioning, in seconds.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "temperature",
         "type": "float",
-        "description": "AR sampling temperature.",
+        "description": "AR sampling temperature; defaults to model config.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "top_k",
         "type": "int",
-        "description": "AR top-k sampling limit.",
+        "description": "AR top-k sampling limit; defaults to model config.",
         "required": false,
         "min": 0
       },
       {
         "name": "top_p",
         "type": "float",
-        "description": "AR nucleus sampling threshold.",
+        "description": "AR nucleus sampling threshold; defaults to model config.",
         "required": false,
         "min": 0.0,
         "max": 1.0
@@ -167,28 +169,30 @@
       {
         "name": "repetition_penalty",
         "type": "float",
-        "description": "AR repetition penalty.",
+        "description": "AR repetition penalty; defaults to model config.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated AR content/style tokens.",
+        "description": "Maximum generated AR content/style tokens; default 500.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 500
       },
       {
         "name": "num_inference_steps",
         "type": "int",
-        "description": "Flow-matching denoising steps.",
+        "description": "Flow-matching denoising steps; default 32.",
         "required": false,
-        "min": 1
+        "min": 1,
+        "default": 32
       },
       {
         "name": "seed",
         "type": "int",
-        "description": "Request seed; omitted means random.",
+        "description": "Request seed for reproducible output; omitted uses a random seed.",
         "required": false,
         "min": 0
       },
@@ -224,23 +228,26 @@
       {
         "name": "ar_weight_context_mb",
         "type": "int",
-        "description": "AR weight context size.",
+        "description": "AR weight context size in MiB; default 2048.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 2048
       },
       {
         "name": "ar_prefill_graph_arena_mb",
         "type": "int",
-        "description": "AR prefill graph context size.",
+        "description": "AR prefill graph context size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "ar_decode_graph_arena_mb",
         "type": "int",
-        "description": "AR decode graph context size.",
+        "description": "AR decode graph context size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "whisper_weight_type",
@@ -259,16 +266,18 @@
       {
         "name": "whisper_weight_context_mb",
         "type": "int",
-        "description": "Whisper weight context size.",
+        "description": "Whisper weight context size in MiB; default 256.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 256
       },
       {
         "name": "whisper_graph_arena_mb",
         "type": "int",
-        "description": "Whisper graph context size.",
+        "description": "Whisper graph context size in MiB; default 512.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 512
       },
       {
         "name": "tokenizer_weight_type",
@@ -287,16 +296,18 @@
       {
         "name": "tokenizer_weight_context_mb",
         "type": "int",
-        "description": "Tokenizer weight context size.",
+        "description": "Tokenizer weight context size in MiB; default 768.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 768
       },
       {
         "name": "tokenizer_graph_arena_mb",
         "type": "int",
-        "description": "Tokenizer graph context size.",
+        "description": "Tokenizer graph context size in MiB; default 768.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 768
       },
       {
         "name": "fm_weight_type",
@@ -315,16 +326,18 @@
       {
         "name": "fm_weight_context_mb",
         "type": "int",
-        "description": "Flow-matching weight context size.",
+        "description": "Flow-matching weight context size in MiB; default 2048.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 2048
       },
       {
         "name": "fm_graph_arena_mb",
         "type": "int",
-        "description": "Flow-matching graph context size.",
+        "description": "Flow-matching graph context size in MiB; default 1024.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1024
       },
       {
         "name": "vocoder_weight_type",
@@ -343,16 +356,18 @@
       {
         "name": "vocoder_weight_context_mb",
         "type": "int",
-        "description": "Vocoder weight context size.",
+        "description": "Vocoder weight context size in MiB; default 1024.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1024
       },
       {
         "name": "vocoder_graph_arena_mb",
         "type": "int",
-        "description": "Vocoder graph context size.",
+        "description": "Vocoder graph context size in MiB; default 768.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 768
       }
     ],
     "load": [

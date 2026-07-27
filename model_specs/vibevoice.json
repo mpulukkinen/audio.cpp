@@ -1,6 +1,7 @@
 {
   "family": "vibevoice",
   "display_name": "VibeVoice",
+  "description": "Microsoft long-form multi-speaker TTS model for expressive conversational audio such as podcasts, supporting up to 90 minutes of speech with as many as four speakers.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -30,23 +31,25 @@
       {
         "name": "num_inference_steps",
         "type": "int",
-        "description": "Diffusion inference steps.",
+        "description": "Diffusion inference steps; defaults to model config, usually 10.",
         "required": false,
         "min": 1
       },
       {
         "name": "guidance_scale",
         "type": "float",
-        "description": "Classifier-free guidance scale.",
+        "description": "Classifier-free guidance scale; default 1.3.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 1.3
       },
       {
         "name": "max_length_times",
         "type": "float",
-        "description": "Generation length multiplier.",
+        "description": "Maximum decoder generation steps as a multiplier of prompt token steps; default 2.0.",
         "required": false,
-        "min": 0.0
+        "min": 0.0,
+        "default": 2.0
       },
       {
         "name": "prompt_noise_path",

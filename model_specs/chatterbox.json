@@ -1,6 +1,7 @@
 {
   "family": "chatterbox",
   "display_name": "Chatterbox",
+  "description": "Open-source Chatterbox family for expressive TTS and voice conversion, with emotion exaggeration control, fast generation, zero-shot voice cloning, and an integrated multilingual TTS path.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -12,7 +13,25 @@
     "offline"
   ],
   "languages": [
-    "en"
+    "ar",
+    "da",
+    "de",
+    "el",
+    "en",
+    "es",
+    "fi",
+    "fr",
+    "hi",
+    "it",
+    "ko",
+    "ms",
+    "nl",
+    "no",
+    "pl",
+    "pt",
+    "sv",
+    "sw",
+    "tr"
   ],
   "capabilities": {
     "clone": [
@@ -30,7 +49,8 @@
         "type": "int",
         "description": "Prepared voice-condition cache slots; default 1, set 0 to disable.",
         "required": false,
-        "min": 0
+        "min": 0,
+        "default": 1
       },
       {
         "name": "mem_saver",

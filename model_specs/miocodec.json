@@ -1,6 +1,7 @@
 {
   "family": "miocodec",
   "display_name": "MioCodec",
+  "description": "Lightweight neural audio codec that encodes 44.1 kHz audio into a low-rate 25 Hz discrete token stream and decodes tokens with speaker conditioning for efficient speech modeling.",
   "category": "audio_tools",
   "status": "supported",
   "tasks": [
