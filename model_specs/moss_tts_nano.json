@@ -1,7 +1,7 @@
 {
   "family": "moss_tts_nano",
   "display_name": "MOSS-TTS-Nano",
-  "description": "Compact deployment-first MOSS-TTS model for real-time 20-language speech generation, lightweight integration, and zero-shot voice cloning.",
+  "description": "Compact deployment-first MOSS-TTS model for real-time multilingual speech generation, lightweight integration, and zero-shot voice cloning.",
   "category": "tts",
   "status": "supported",
   "tasks": [
@@ -12,7 +12,25 @@
     "offline"
   ],
   "languages": [
-    "20 languages"
+    "ar",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "en",
+    "es",
+    "fa",
+    "fr",
+    "hu",
+    "it",
+    "ja",
+    "ko",
+    "pl",
+    "pt",
+    "ru",
+    "sv",
+    "tr",
+    "zh"
   ],
   "capabilities": {
     "clone": [
@@ -62,15 +80,44 @@
         "default": 25
       },
       {
-        "name": "repetition_penalty",
-        "type": "float",
-        "description": "Audio-token repetition penalty; default 1.0.",
-        "required": false,
-        "min": 0.0,
-        "default": 1.0
-      },
-      {
-        "name": "text_temperature",
+      "name": "repetition_penalty",
+      "type": "float",
+      "description": "Audio-token repetition penalty; default 1.0.",
+      "required": false,
+      "min": 0.0,
+      "default": 1.0
+    },
+    {
+      "name": "seed",
+      "type": "int",
+      "description": "Sampling seed; omitted value uses a random seed.",
+      "required": false,
+      "min": 0
+    },
+    {
+      "name": "active_codebooks",
+      "type": "int",
+      "description": "Number of audio tokenizer RVQ codebooks to generate/decode; default is the model-configured codebook count, normally 16.",
+      "required": false,
+      "min": 1,
+      "default": 16
+    },
+    {
+      "name": "reference_text",
+      "type": "string",
+      "description": "Transcript for reference audio used in voice cloning; requires speaker reference audio.",
+      "required": false
+    },
+    {
+      "name": "text_chunk_size",
+      "type": "int",
+      "description": "Long-form text chunk size in Unicode codepoints; default 256.",
+      "required": false,
+      "min": 1,
+      "default": 256
+    },
+    {
+      "name": "text_temperature",
         "type": "float",
         "description": "Text-gate sampling temperature; default 1.5.",
         "required": false,
@@ -91,35 +138,36 @@
         "default": 50
       },
       {
-        "name": "text_chunk_mode",
-        "type": "enum",
-        "description": "Long-form text chunking mode; default word_budget. Text chunk size defaults to 256 characters.",
-        "preset": "text_chunk_mode_full",
-        "required": false,
+      "name": "text_chunk_mode",
+      "type": "enum",
+      "description": "Long-form text chunking mode; default word_budget. Text chunk size defaults to 256 Unicode codepoints.",
+      "preset": "text_chunk_mode_full",
+      "required": false,
         "default": "word_budget"
       }
     ],
     "session": [
       {
-        "name": "weight_type",
-        "type": "enum",
-        "description": "Global and local-frame weight storage type.",
-        "preset": "weight_type_full",
-        "required": false
-      },
-      {
-        "name": "global_weight_type",
-        "type": "enum",
-        "description": "Global transformer weight storage type.",
-        "preset": "weight_type_full",
-        "required": false
-      },
-      {
-        "name": "local_frame_weight_type",
-        "type": "enum",
-        "description": "Local frame decoder weight storage type.",
-        "preset": "weight_type_full",
-        "required": false
+      "name": "weight_type",
+      "type": "enum",
+      "description": "Global and local-frame weight storage type; default native.",
+      "preset": "weight_type_full",
+      "required": false,
+      "default": "native"
+    },
+    {
+      "name": "global_weight_type",
+      "type": "enum",
+      "description": "Global transformer weight storage type; defaults to weight_type, which defaults to native.",
+      "preset": "weight_type_full",
+      "required": false
+    },
+    {
+      "name": "local_frame_weight_type",
+      "type": "enum",
+      "description": "Local frame decoder weight storage type; defaults to weight_type, which defaults to native.",
+      "preset": "weight_type_full",
+      "required": false
       },
       {
         "name": "global_prefill_graph_arena_mb",

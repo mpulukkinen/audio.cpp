@@ -122,6 +122,29 @@
         "default": 1.0
       },
       {
+        "name": "use_adg",
+        "type": "bool",
+        "description": "Use adaptive diffusion guidance instead of the default projected guidance path when diffusion CFG is active; default false.",
+        "required": false,
+        "default": false
+      },
+      {
+        "name": "cfg_interval_start",
+        "type": "float",
+        "description": "Start of the normalized diffusion timestep interval where guidance_scale is applied; default 0.0.",
+        "required": false,
+        "min": 0.0,
+        "default": 0.0
+      },
+      {
+        "name": "cfg_interval_end",
+        "type": "float",
+        "description": "End of the normalized diffusion timestep interval where guidance_scale is applied; default 1.0.",
+        "required": false,
+        "min": 0.0,
+        "default": 1.0
+      },
+      {
         "name": "seed",
         "type": "int",
         "description": "Generation seed for reproducible output; omitted uses a random seed.",
@@ -154,10 +177,44 @@
         "required": false
       },
       {
+        "name": "instruction",
+        "type": "string",
+        "description": "Route-specific DiT instruction override; omitted uses the route default instruction.",
+        "required": false
+      },
+      {
         "name": "audio_codes",
         "type": "string",
         "description": "Use supplied ACE semantic code text instead of planner generation.",
         "required": false
+      },
+      {
+        "name": "thinking",
+        "type": "bool",
+        "description": "Enable planner thinking to generate music codes and optional metadata; default true, but extract route forces false.",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "use_cot_metas",
+        "type": "bool",
+        "description": "Let the planner fill missing metadata such as duration, BPM, key, and time signature; default true, but extract route forces false.",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "use_cot_caption",
+        "type": "bool",
+        "description": "Use the planner caption when building DiT conditioning; default true, but extract route forces false.",
+        "required": false,
+        "default": true
+      },
+      {
+        "name": "use_cot_language",
+        "type": "bool",
+        "description": "Use the planner language metadata when building lyric conditioning; default true, but extract route forces false.",
+        "required": false,
+        "default": true
       },
       {
         "name": "audio_cover_strength",
@@ -174,6 +231,20 @@
         "required": false,
         "min": 0.0,
         "default": 0.0
+      },
+      {
+        "name": "shift",
+        "type": "float",
+        "description": "Diffusion timestep schedule shift; default 1.0, but extract route uses 3.0 unless overridden.",
+        "required": false,
+        "min": 0.0,
+        "default": 1.0
+      },
+      {
+        "name": "timesteps",
+        "type": "float_list",
+        "description": "Explicit normalized diffusion timestep schedule; omitted derives the schedule from num_inference_steps and shift.",
+        "required": false
       },
       {
         "name": "lm_temperature",
@@ -232,7 +303,7 @@
         "type": "int",
         "description": "Optional retake noise seed; -1 clears it. Omitted leaves retake noise unset.",
         "required": false,
-        "min": 0
+        "min": -1
       },
       {
         "name": "retake_variance",
@@ -241,6 +312,44 @@
         "required": false,
         "min": 0.0,
         "default": 0.0
+      },
+      {
+        "name": "velocity_norm_threshold",
+        "type": "float",
+        "description": "Clamp diffusion velocity updates by norm; default 0.0 disables clamping.",
+        "required": false,
+        "min": 0.0,
+        "default": 0.0
+      },
+      {
+        "name": "velocity_ema_factor",
+        "type": "float",
+        "description": "Exponential moving average factor for diffusion velocity updates; default 0.0 disables smoothing.",
+        "required": false,
+        "min": 0.0,
+        "default": 0.0
+      },
+      {
+        "name": "repaint_crossfade_frames",
+        "type": "int",
+        "description": "Direct repaint latent-boundary crossfade length in latent frames; default 10, or derived from repaint_mode and repaint_strength when those presets are used.",
+        "required": false,
+        "min": 0,
+        "default": 10
+      },
+      {
+        "name": "repaint_injection_ratio",
+        "type": "float",
+        "description": "Direct fraction of diffusion steps that inject source latents for repainting; default 0.5, or derived from repaint_mode and repaint_strength when those presets are used.",
+        "required": false,
+        "min": 0.0,
+        "default": 0.5
+      },
+      {
+        "name": "noise_path",
+        "type": "path",
+        "description": "F32 noise override file for deterministic source encoding, initial diffusion noise, and SDE or retake noise schedules.",
+        "required": false
       },
       {
         "name": "flow_edit_morph",
@@ -255,6 +364,48 @@
         "description": "Status: experimental dynamic-cfg wavelet path; keep disabled unless validating that path.",
         "required": false,
         "default": false
+      },
+      {
+        "name": "dcw_mode",
+        "type": "enum",
+        "description": "Dynamic-cfg wavelet correction band mode; default double.",
+        "values": [
+          "low",
+          "high",
+          "double",
+          "pix"
+        ],
+        "required": false,
+        "default": "double"
+      },
+      {
+        "name": "dcw_scaler",
+        "type": "float",
+        "description": "Dynamic-cfg wavelet low-band or pixel correction scale; default 0.05.",
+        "required": false,
+        "default": 0.05
+      },
+      {
+        "name": "dcw_high_scaler",
+        "type": "float",
+        "description": "Dynamic-cfg wavelet high-band correction scale used by double mode; default 0.02.",
+        "required": false,
+        "default": 0.02
+      },
+      {
+        "name": "dcw_wavelet",
+        "type": "enum",
+        "description": "Wavelet basis used by dynamic-cfg wavelet correction; default haar.",
+        "values": [
+          "haar",
+          "db2",
+          "db4",
+          "sym4",
+          "sym8",
+          "coif2"
+        ],
+        "required": false,
+        "default": "haar"
       }
     ],
     "session": [

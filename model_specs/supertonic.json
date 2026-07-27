@@ -12,7 +12,37 @@
     "streaming"
   ],
   "languages": [
-    "31 languages"
+    "en",
+    "ko",
+    "ja",
+    "ar",
+    "bg",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "et",
+    "fi",
+    "fr",
+    "hi",
+    "hr",
+    "hu",
+    "id",
+    "it",
+    "lt",
+    "lv",
+    "nl",
+    "pl",
+    "pt",
+    "ro",
+    "ru",
+    "sk",
+    "sl",
+    "sv",
+    "tr",
+    "uk",
+    "vi"
   ],
   "capabilities": {
     "tts": [
@@ -42,6 +72,13 @@
         "default": "M1"
       },
       {
+        "name": "language",
+        "type": "string",
+        "description": "Text language code; default en. The runtime also accepts language metadata from the TTS transcript or voice style.",
+        "required": false,
+        "default": "en"
+      },
+      {
         "name": "num_inference_steps",
         "type": "int",
         "description": "Flow denoising steps; default 8.",
@@ -52,7 +89,7 @@
       {
         "name": "speaking_rate",
         "type": "float",
-        "description": "Speech speed multiplier; default 1.05.",
+        "description": "Speech speed multiplier; must be positive, default 1.05.",
         "required": false,
         "default": 1.05,
         "min": 0.0
@@ -72,15 +109,23 @@
         "preset": "text_chunk_mode_full",
         "required": false,
         "default": "word_budget"
+      },
+      {
+        "name": "text_chunk_size",
+        "type": "int",
+        "description": "Maximum UTF-8 codepoints per long-form text chunk; default is 120 for Japanese/Korean and 300 for other languages.",
+        "required": false,
+        "min": 1
       }
     ],
     "session": [
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Supertonic weight storage type.",
+        "description": "Supertonic weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "style_cache_slots",

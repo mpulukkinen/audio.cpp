@@ -12,31 +12,73 @@
     "streaming"
   ],
   "languages": [
-    "40 language-locales"
+    "ar-AR",
+    "bg-BG",
+    "cs-CZ",
+    "da-DK",
+    "de-DE",
+    "el-GR",
+    "en-GB",
+    "en-US",
+    "es-ES",
+    "es-US",
+    "et-EE",
+    "fi-FI",
+    "fr-CA",
+    "fr-FR",
+    "he-IL",
+    "hi-IN",
+    "hr-HR",
+    "hu-HU",
+    "it-IT",
+    "ja-JP",
+    "ko-KR",
+    "lt-LT",
+    "lv-LV",
+    "mt-MT",
+    "nb-NO",
+    "nl-NL",
+    "nn-NO",
+    "pl-PL",
+    "pt-BR",
+    "pt-PT",
+    "ro-RO",
+    "ru-RU",
+    "sk-SK",
+    "sl-SI",
+    "sv-SE",
+    "th-TH",
+    "tr-TR",
+    "uk-UA",
+    "vi-VN",
+    "zh-CN"
   ],
   "capabilities": {},
   "options": {
     "request": [
       {
-        "name": "language",
-        "type": "string",
-        "description": "ASR prompt language such as en-US, da-DK, or auto.",
-        "required": false
-      },
+      "name": "language",
+      "type": "string",
+      "description": "ASR prompt language locale such as en-US or da-DK, or auto for automatic language detection; default en-US.",
+      "required": false,
+      "default": "en-US"
+    },
       {
-        "name": "lookahead_tokens",
-        "type": "int",
-        "description": "Chunk-limited encoder right context; omitted uses processor_config default lookahead tokens.",
-        "required": false,
-        "min": 0
-      },
+      "name": "lookahead_tokens",
+      "type": "int",
+      "description": "Chunk-limited encoder right context; default 3. Supported values come from processor_config.",
+      "required": false,
+      "min": 0,
+      "default": 3
+    },
       {
-        "name": "max_tokens",
-        "type": "int",
-        "description": "Maximum RNNT generated tokens; 0 or omitted uses the model-derived limit.",
-        "required": false,
-        "min": 0
-      },
+      "name": "max_tokens",
+      "type": "int",
+      "description": "Maximum RNNT generated tokens; 0 or omitted uses the model-derived limit.",
+      "required": false,
+      "min": 0,
+      "default": 0
+    },
       {
         "name": "keep_language_tags",
         "type": "bool",
@@ -47,25 +89,27 @@
     ],
     "session": [
       {
-        "name": "weight_type",
-        "type": "enum",
-        "description": "Shared matmul weight storage type.",
-        "preset": "weight_type_full",
-        "required": false
-      },
-      {
-        "name": "matmul_weight_type",
-        "type": "enum",
-        "description": "Encoder and decoder matmul weight storage type.",
-        "preset": "weight_type_full",
-        "required": false
-      },
-      {
-        "name": "conv_weight_type",
-        "type": "enum",
-        "description": "Convolution weight storage type.",
-        "preset": "weight_type_conv",
-        "required": false
+      "name": "weight_type",
+      "type": "enum",
+      "description": "Shared matmul weight storage type; default native.",
+      "preset": "weight_type_full",
+      "required": false,
+      "default": "native"
+    },
+    {
+      "name": "matmul_weight_type",
+      "type": "enum",
+      "description": "Encoder and decoder matmul weight storage type; defaults to weight_type, which defaults to native.",
+      "preset": "weight_type_full",
+      "required": false
+    },
+    {
+      "name": "conv_weight_type",
+      "type": "enum",
+      "description": "Convolution weight storage type; default native.",
+      "preset": "weight_type_conv",
+      "required": false,
+      "default": "native"
       },
       {
         "name": "weight_context_mb",

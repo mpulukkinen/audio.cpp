@@ -12,7 +12,37 @@
     "offline"
   ],
   "languages": [
-    "31 languages"
+    "ar",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "en",
+    "es",
+    "fa",
+    "fi",
+    "fr",
+    "he",
+    "hi",
+    "hu",
+    "it",
+    "ja",
+    "ko",
+    "mk",
+    "ms",
+    "nl",
+    "pl",
+    "pt",
+    "ro",
+    "ru",
+    "sv",
+    "sw",
+    "th",
+    "tl",
+    "tr",
+    "vi",
+    "yue",
+    "zh"
   ],
   "capabilities": {
     "clone": [
@@ -70,6 +100,21 @@
         "default": 1.0
       },
       {
+        "name": "seed",
+        "type": "int",
+        "description": "Sampling seed; omitted value uses a random seed.",
+        "required": false,
+        "min": 0
+      },
+      {
+        "name": "text_chunk_size",
+        "type": "int",
+        "description": "Long-form text chunk size in Unicode codepoints; default 2048.",
+        "required": false,
+        "min": 1,
+        "default": 2048
+      },
+      {
         "name": "text_temperature",
         "type": "float",
         "description": "Text-gate sampling temperature; default 1.0 for Local and 1.5 for Nano.",
@@ -93,7 +138,7 @@
       {
         "name": "text_chunk_mode",
         "type": "enum",
-        "description": "Long-form text chunking mode; default word_budget. Text chunk size defaults to 2048 characters.",
+        "description": "Long-form text chunking mode; default word_budget. Text chunk size defaults to 2048 Unicode codepoints.",
         "preset": "text_chunk_mode_full",
         "required": false,
         "default": "word_budget"
@@ -112,7 +157,8 @@
           "bf16",
           "q8_0"
         ],
-        "required": false
+        "required": false,
+        "default": "auto"
       },
       {
         "name": "reference_cache_slots",

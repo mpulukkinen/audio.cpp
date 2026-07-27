@@ -38,7 +38,7 @@
         "type": "int",
         "description": "Maximum generated transcript tokens; omitted uses the audio-length-derived limit.",
         "required": false,
-        "min": 0
+        "min": 1
       },
       {
         "name": "do_sample",
@@ -50,15 +50,14 @@
       {
         "name": "temperature",
         "type": "float",
-        "description": "Decoder sampling temperature; default 1.0.",
+        "description": "Positive decoder sampling temperature; default 1.0.",
         "required": false,
-        "min": 0.0,
         "default": 1.0
       },
       {
         "name": "top_p",
         "type": "float",
-        "description": "Nucleus sampling limit; default 1.0.",
+        "description": "Nucleus sampling probability in (0, 1]; default 1.0.",
         "required": false,
         "min": 0.0,
         "max": 1.0,
@@ -85,21 +84,22 @@
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Shared matmul weight storage type.",
+        "description": "Shared matmul weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "audio_encoder_weight_type",
         "type": "enum",
-        "description": "Audio encoder matmul weight storage type.",
+        "description": "Audio encoder matmul weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "text_decoder_weight_type",
         "type": "enum",
-        "description": "Text decoder matmul weight storage type.",
+        "description": "Text decoder matmul weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       },
@@ -108,7 +108,7 @@
         "type": "int",
         "description": "Audio encoder graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 512
       },
       {
@@ -116,7 +116,7 @@
         "type": "int",
         "description": "Audio encoder weight context arena size in MiB; default 128.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 128
       },
       {
@@ -124,7 +124,7 @@
         "type": "int",
         "description": "Text decoder prefill graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 512
       },
       {
@@ -132,7 +132,7 @@
         "type": "int",
         "description": "Text decoder cached-step graph arena size in MiB; default 512.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 512
       },
       {
@@ -140,8 +140,24 @@
         "type": "int",
         "description": "Text decoder weight context arena size in MiB; default 128.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 128
+      },
+      {
+        "name": "stream_decode_cache_steps",
+        "type": "int",
+        "description": "Streaming decoder KV cache size in 80 ms audio steps; default 1024.",
+        "required": false,
+        "min": 1,
+        "default": 1024
+      },
+      {
+        "name": "stream_batch_tokens",
+        "type": "int",
+        "description": "Audio tokens per steady streaming encoder forward; default 1. Higher values reduce encoder dispatch overhead but add about 80 ms of partial-result delay per token.",
+        "required": false,
+        "min": 1,
+        "default": 1
       }
     ],
     "load": []

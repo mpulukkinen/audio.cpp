@@ -26,6 +26,12 @@
   "options": {
     "request": [
       {
+        "name": "caption",
+        "type": "string",
+        "description": "VoiceDesign caption describing target voice identity, style, or emotion; supported only by caption-conditioned checkpoints.",
+        "required": false
+      },
+      {
         "name": "num_inference_steps",
         "type": "int",
         "description": "RF diffusion steps; default 40.",
@@ -36,14 +42,14 @@
       {
         "name": "duration_sec",
         "type": "float",
-        "description": "Explicit output duration in seconds; omitted uses predicted duration.",
+        "description": "Explicit output duration in seconds; must be positive when set, otherwise predicted duration is used.",
         "required": false,
         "min": 0.0
       },
       {
         "name": "duration_scale",
         "type": "float",
-        "description": "Predicted-duration multiplier; default 1.0.",
+        "description": "Predicted-duration multiplier; must be positive when set; default 1.0.",
         "required": false,
         "min": 0.0,
         "default": 1.0
@@ -60,9 +66,17 @@
         "default": "endline"
       },
       {
+        "name": "text_chunk_size",
+        "type": "int",
+        "description": "Maximum characters per text chunk; default uses the model text-token window, usually 256.",
+        "required": false,
+        "min": 1,
+        "default": 256
+      },
+      {
         "name": "min_duration_sec",
         "type": "float",
-        "description": "Minimum generated duration in seconds; default 0.5.",
+        "description": "Minimum generated duration in seconds; must be positive and no greater than max_duration_sec; default 0.5.",
         "required": false,
         "min": 0.0,
         "default": 0.5
@@ -70,7 +84,7 @@
       {
         "name": "max_duration_sec",
         "type": "float",
-        "description": "Maximum generated duration in seconds; default 30.",
+        "description": "Maximum generated duration in seconds; must be at least min_duration_sec; default 30.",
         "required": false,
         "min": 0.0,
         "default": 30.0
@@ -144,16 +158,18 @@
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Model weight storage type.",
+        "description": "Model weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "codec_weight_type",
         "type": "enum",
-        "description": "DACVAE codec weight storage type.",
+        "description": "DACVAE codec weight storage type; default native.",
         "preset": "weight_type_codec_q8",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "condition_graph_arena_mb",
@@ -213,7 +229,7 @@
       {
         "name": "reference_cache_slots",
         "type": "int",
-        "description": "Prepared reference-speaker cache slots; default 1; default 1.",
+        "description": "Prepared reference-speaker cache slots; default 1.",
         "required": false,
         "min": 0,
         "default": 1

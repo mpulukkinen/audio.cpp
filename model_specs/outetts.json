@@ -12,7 +12,29 @@
     "offline"
   ],
   "languages": [
-    "23 languages"
+    "ar",
+    "be",
+    "bn",
+    "de",
+    "en",
+    "es",
+    "fa",
+    "fr",
+    "hu",
+    "it",
+    "ja",
+    "ka",
+    "ko",
+    "lt",
+    "lv",
+    "nl",
+    "pl",
+    "pt",
+    "ru",
+    "sw",
+    "ta",
+    "uk",
+    "zh"
   ],
   "capabilities": {
     "clone": [
@@ -26,7 +48,7 @@
         "type": "int",
         "description": "Maximum generated audio tokens per chunk. When omitted, OuteTTS estimates a safe value from each chunk.",
         "required": false,
-        "min": 0
+        "min": 1
       },
       {
         "name": "temperature",
@@ -45,7 +67,7 @@
       {
         "name": "top_p",
         "type": "float",
-        "description": "Nucleus sampling; default 0.9 for cloning, otherwise model config default.",
+        "description": "Nucleus sampling in (0, 1]; default 0.9 for cloning, otherwise model config default.",
         "required": false,
         "min": 0.0,
         "max": 1.0
@@ -61,7 +83,7 @@
       {
         "name": "repetition_penalty",
         "type": "float",
-        "description": "Windowed repetition penalty; default 1.1.",
+        "description": "Positive windowed repetition penalty; default 1.1.",
         "required": false,
         "min": 0.0,
         "default": 1.1
@@ -97,9 +119,9 @@
       {
         "name": "text_chunk_size",
         "type": "int",
-        "description": "Maximum characters per long-form text chunk; default 256. Chunks are split further when required by max_tokens.",
+        "description": "Maximum UTF-8 codepoints per long-form text chunk; default 256. Chunks are split further when required by max_tokens or context budget.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 256
       },
       {
@@ -117,35 +139,40 @@
         "type": "enum",
         "description": "Language-model weight storage type. Quantized CUDA voice cloning is expanded to F32 in memory for generation correctness.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "llama_weight_context_mb",
         "type": "int",
-        "description": "Language-model weight context size in MiB.",
+        "description": "Language-model weight context size in MiB; default 4096.",
         "required": false,
-        "min": 0
+        "min": 1,
+        "default": 4096
       },
       {
         "name": "constant_context_mb",
         "type": "int",
-        "description": "Language-model constant tensor context size in MiB.",
+        "description": "Language-model constant tensor context size in MiB; default 256.",
         "required": false,
-        "min": 0
+        "min": 1,
+        "default": 256
       },
       {
         "name": "dac_weight_context_mb",
         "type": "int",
-        "description": "DAC decoder weight context size in MiB.",
+        "description": "DAC decoder weight context size in MiB; default 1024.",
         "required": false,
-        "min": 0
+        "min": 1,
+        "default": 1024
       },
       {
         "name": "dac_graph_arena_mb",
         "type": "int",
-        "description": "DAC decoder graph context size in MiB.",
+        "description": "DAC decoder graph arena size in MiB; default 1536.",
         "required": false,
-        "min": 0
+        "min": 1,
+        "default": 1536
       },
       {
         "name": "aligner_path",

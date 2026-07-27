@@ -24,7 +24,7 @@
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated AR tokens; default 2048.",
+        "description": "Maximum generated AR tokens; default 2048, and 0 also uses the default.",
         "required": false,
         "min": 0,
         "default": 2048
@@ -32,7 +32,7 @@
       {
         "name": "temperature",
         "type": "float",
-        "description": "AR sampling temperature; default 0.8.",
+        "description": "AR sampling temperature; must be positive when set; default 0.8.",
         "required": false,
         "min": 0.0,
         "default": 0.8
@@ -48,7 +48,7 @@
       {
         "name": "top_p",
         "type": "float",
-        "description": "AR nucleus sampling probability; default 0.8.",
+        "description": "AR nucleus sampling probability in (0, 1]; default 0.8.",
         "required": false,
         "min": 0.0,
         "max": 1.0,
@@ -57,7 +57,7 @@
       {
         "name": "repetition_penalty",
         "type": "float",
-        "description": "AR repetition penalty; default 1.1.",
+        "description": "Accepted for API compatibility and validated as positive; current Higgs audio sampling does not consume it; default 1.1.",
         "required": false,
         "min": 0.0,
         "default": 1.1
@@ -70,11 +70,17 @@
         "min": 0
       },
       {
+        "name": "reference_text",
+        "type": "string",
+        "description": "Transcript or prompt text paired with reference audio for zero-shot voice cloning.",
+        "required": false
+      },
+      {
         "name": "text_chunk_size",
         "type": "int",
         "description": "Maximum characters per generated text chunk; default 1024.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 1024
       },
       {
@@ -90,21 +96,22 @@
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "AR and codec weight storage type.",
+        "description": "AR and codec weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "ar_weight_type",
         "type": "enum",
-        "description": "Autoregressive decoder weight storage type.",
+        "description": "Autoregressive decoder weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "codec_weight_type",
         "type": "enum",
-        "description": "Codec weight storage type.",
+        "description": "Codec weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       },

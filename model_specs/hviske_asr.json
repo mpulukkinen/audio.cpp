@@ -1,7 +1,7 @@
 {
   "family": "hviske_asr",
   "display_name": "Hviske ASR",
-  "description": "Danish Conformer encoder-decoder ASR model optimized for read-aloud and conversational speech, fine-tuned from the Hviske v5 family.",
+  "description": "Danish-optimized Conformer encoder-decoder ASR model fine-tuned from the Hviske v5 family, with selectable Cohere ASR language prompts.",
   "category": "asr",
   "status": "supported",
   "tasks": [
@@ -11,7 +11,21 @@
     "offline"
   ],
   "languages": [
-    "da"
+    "ar",
+    "da",
+    "de",
+    "el",
+    "en",
+    "es",
+    "fr",
+    "it",
+    "ja",
+    "ko",
+    "nl",
+    "pl",
+    "pt",
+    "vi",
+    "zh"
   ],
   "capabilities": {},
   "options": {
@@ -32,9 +46,10 @@
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated transcript tokens; omitted uses model config.",
+        "description": "Maximum generated transcript tokens; default 256.",
         "required": false,
-        "min": 0
+        "min": 1,
+        "default": 256
       },
       {
         "name": "num_beams",
@@ -47,7 +62,7 @@
       {
         "name": "length_penalty",
         "type": "float",
-        "description": "Beam-search length penalty; default 1.0.",
+        "description": "Beam-search length penalty; must be positive when set; default 1.0.",
         "required": false,
         "min": 0.0,
         "default": 1.0
@@ -62,7 +77,7 @@
       {
         "name": "temperature",
         "type": "float",
-        "description": "Decoder sampling temperature; default 1.0.",
+        "description": "Decoder sampling temperature; must be positive when set; default 1.0.",
         "required": false,
         "min": 0.0,
         "default": 1.0
@@ -78,7 +93,7 @@
       {
         "name": "top_p",
         "type": "float",
-        "description": "Nucleus sampling limit; default 1.0.",
+        "description": "Nucleus sampling limit in (0, 1]; default 1.0.",
         "required": false,
         "min": 0.0,
         "max": 1.0,
@@ -91,20 +106,42 @@
         "required": false,
         "min": 0,
         "default": 0
+      },
+      {
+        "name": "audio_chunk_mode",
+        "type": "enum",
+        "description": "Audio chunking mode; default auto uses quiet-energy splitting only when audio exceeds the model clip window.",
+        "values": [
+          "auto",
+          "fixed",
+          "quiet_energy",
+          "none"
+        ],
+        "required": false,
+        "default": "auto"
+      },
+      {
+        "name": "audio_chunk_duration_sec",
+        "type": "float",
+        "description": "Maximum audio chunk duration in seconds; must be positive when set; default 35.",
+        "required": false,
+        "min": 0.0,
+        "default": 35.0
       }
     ],
     "session": [
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Matmul weight storage type.",
+        "description": "Matmul weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "conv_weight_type",
         "type": "enum",
-        "description": "Convolution weight storage type.",
+        "description": "Convolution weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_conv",
         "required": false
       },

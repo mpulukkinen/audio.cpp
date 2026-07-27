@@ -24,7 +24,7 @@
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "RoFormer weight storage type.",
+        "description": "RoFormer weight storage type. Defaults to f32 when the backend requires a host graph plan, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       }

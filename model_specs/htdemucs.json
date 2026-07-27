@@ -24,7 +24,7 @@
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "HTDemucs weight storage type.",
+        "description": "HTDemucs weight storage type; default is f32 for host graph planning, f16 on CUDA, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       }

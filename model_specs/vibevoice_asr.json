@@ -11,7 +11,8 @@
     "offline"
   ],
   "languages": [
-    "50+ languages"
+    "auto",
+    "51 languages"
   ],
   "capabilities": {
     "asr": [
@@ -25,7 +26,7 @@
       {
         "name": "language",
         "type": "string",
-        "description": "ASR language label.",
+        "description": "Optional transcript language label; VibeVoice-ASR can auto-detect language and handle code-switching without an explicit language setting.",
         "required": false
       },
       {
@@ -33,7 +34,7 @@
         "type": "int",
         "description": "Maximum generated text tokens; default 32768.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 32768
       },
       {
@@ -72,9 +73,8 @@
       {
         "name": "repetition_penalty",
         "type": "float",
-        "description": "Generation repetition penalty; default 1.0.",
+        "description": "Generation repetition penalty; must be positive, default 1.0.",
         "required": false,
-        "min": 0.0,
         "default": 1.0
       },
       {
@@ -101,9 +101,8 @@
       {
         "name": "audio_chunk_duration_sec",
         "type": "float",
-        "description": "Audio chunk duration in seconds; default 1200.",
+        "description": "Audio chunk duration in seconds for fixed and VAD chunking; must be positive, default 1200.",
         "required": false,
-        "min": 0.0,
         "default": 1200.0
       }
     ],
@@ -111,28 +110,29 @@
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Tokenizer, connector, and decoder weight storage type.",
+        "description": "Tokenizer, connector, and decoder weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "tokenizer_weight_type",
         "type": "enum",
-        "description": "Speech tokenizer weight storage type.",
+        "description": "Speech tokenizer weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "connector_weight_type",
         "type": "enum",
-        "description": "Acoustic and semantic connector weight storage type.",
+        "description": "Acoustic and semantic connector weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       },
       {
         "name": "decoder_weight_type",
         "type": "enum",
-        "description": "Text decoder weight storage type.",
+        "description": "Text decoder weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       },
@@ -141,7 +141,7 @@
         "type": "int",
         "description": "Speech tokenizer weight context arena size in MiB; default 512.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 512
       },
       {
@@ -149,7 +149,7 @@
         "type": "int",
         "description": "Acoustic and semantic connector weight context arena size in MiB; default 128.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 128
       },
       {
@@ -157,7 +157,7 @@
         "type": "int",
         "description": "Text decoder weight context arena size in MiB; default 4096.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 4096
       },
       {

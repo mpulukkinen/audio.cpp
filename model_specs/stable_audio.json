@@ -31,7 +31,7 @@
       {
         "name": "duration_sec",
         "type": "float_list",
-        "description": "Target duration per prompt in seconds; default 120 seconds for each prompt when omitted.",
+        "description": "Target duration per prompt in seconds; must be positive, default 120 seconds for each prompt when omitted and capped by model length.",
         "required": false,
         "min": 0.0
       },
@@ -54,7 +54,7 @@
       {
         "name": "sampler",
         "type": "enum",
-        "description": "Diffusion sampler used for denoising; omitted uses the model route default.",
+        "description": "Diffusion sampler used for denoising; Stable Audio 3 supports pingpong/euler, Foundation/Open also supports DPM++ samplers.",
         "values": [
           "pingpong",
           "euler",
@@ -62,6 +62,30 @@
           "dpmpp-3m-sde"
         ],
         "required": false
+      },
+      {
+        "name": "sigma_min",
+        "type": "float",
+        "description": "Foundation/Open DPM++ sigma schedule minimum; must be positive and below sigma_max, default 0.01.",
+        "required": false,
+        "min": 0.0,
+        "default": 0.01
+      },
+      {
+        "name": "sigma_max",
+        "type": "float",
+        "description": "Foundation/Open DPM++ sigma schedule maximum; must be greater than sigma_min, default 100.0.",
+        "required": false,
+        "min": 0.0,
+        "default": 100.0
+      },
+      {
+        "name": "rho",
+        "type": "float",
+        "description": "Foundation/Open DPM++ polyexponential sigma schedule rho; must be positive, default 1.0.",
+        "required": false,
+        "min": 0.0,
+        "default": 1.0
       },
       {
         "name": "apg_scale",
@@ -112,6 +136,7 @@
         "description": "Strength for audio-conditioned generation; default 1.0.",
         "required": false,
         "min": 0.0,
+        "max": 1.0,
         "default": 1.0
       },
       {
@@ -150,14 +175,16 @@
         "type": "int",
         "description": "Maximum prompt batch size; default 1.",
         "required": false,
+        "min": 1,
         "default": 1
       },
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Stable Audio weight storage type.",
+        "description": "Stable Audio weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "mem_saver",

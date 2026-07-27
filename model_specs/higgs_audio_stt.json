@@ -20,15 +20,16 @@
       {
         "name": "language",
         "type": "string",
-        "description": "ASR language code.",
+        "description": "Transcript language code metadata; English is used when omitted.",
         "required": false
       },
       {
         "name": "max_tokens",
         "type": "int",
-        "description": "Maximum generated transcript tokens; omitted uses model generation config, usually 1024.",
+        "description": "Maximum generated transcript tokens; default 1024.",
         "required": false,
-        "min": 0
+        "min": 1,
+        "default": 1024
       },
       {
         "name": "enable_thinking",
@@ -52,7 +53,7 @@
       {
         "name": "audio_chunk_duration_sec",
         "type": "float",
-        "description": "Fixed audio chunk duration in seconds; default 4.",
+        "description": "Fixed audio chunk duration in seconds; must be positive when set; default 4.",
         "required": false,
         "min": 0.0,
         "default": 4.0
@@ -62,21 +63,23 @@
       {
         "name": "weight_type",
         "type": "enum",
-        "description": "Shared text decoder weight storage type.",
+        "description": "Shared text decoder weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "audio_encoder_weight_type",
         "type": "enum",
-        "description": "Audio encoder convolution weight storage type.",
+        "description": "Audio encoder convolution weight storage type; default native.",
         "preset": "weight_type_conv",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "text_decoder_weight_type",
         "type": "enum",
-        "description": "Text decoder matmul weight storage type.",
+        "description": "Text decoder matmul weight storage type; defaults to weight_type when set, otherwise native.",
         "preset": "weight_type_full",
         "required": false
       },

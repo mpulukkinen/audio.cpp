@@ -32,7 +32,7 @@
         "type": "int",
         "description": "Maximum Fish Audio semantic tokens to generate; default 1024.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 1024
       },
       {
@@ -40,7 +40,7 @@
         "type": "int",
         "description": "Maximum characters per generated text chunk; default 200.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 200
       },
       {
@@ -54,7 +54,7 @@
       {
         "name": "top_p",
         "type": "float",
-        "description": "Top-p sampling value; default 0.8.",
+        "description": "Top-p sampling value in (0, 1]; default 0.8.",
         "required": false,
         "min": 0.0,
         "max": 1.0,
@@ -65,15 +65,16 @@
         "type": "int",
         "description": "Top-k sampling value; default 30.",
         "required": false,
-        "min": 0,
+        "min": 1,
         "default": 30
       },
       {
         "name": "temperature",
         "type": "float",
-        "description": "Semantic-token sampling temperature; default 0.8.",
+        "description": "Semantic-token sampling temperature in (0, 2); default 0.8.",
         "required": false,
         "min": 0.0,
+        "max": 2.0,
         "default": 0.8
       },
       {
@@ -105,14 +106,48 @@
         "type": "enum",
         "description": "AR matmul weight storage type; default native.",
         "preset": "weight_type_full",
-        "required": false
+        "required": false,
+        "default": "native"
       },
       {
         "name": "codec_weight_type",
         "type": "enum",
         "description": "Codec conv/matmul weight storage type; default native.",
         "preset": "weight_type_codec_q8",
-        "required": false
+        "required": false,
+        "default": "native"
+      },
+      {
+        "name": "ar_graph_arena_mb",
+        "type": "int",
+        "description": "AR runtime graph arena size in MiB; default 512.",
+        "required": false,
+        "min": 0,
+        "default": 512
+      },
+      {
+        "name": "ar_weight_context_mb",
+        "type": "int",
+        "description": "AR weight context size in MiB; default 512.",
+        "required": false,
+        "min": 0,
+        "default": 512
+      },
+      {
+        "name": "codec_graph_arena_mb",
+        "type": "int",
+        "description": "Codec encode/decode graph arena size in MiB; default 512.",
+        "required": false,
+        "min": 0,
+        "default": 512
+      },
+      {
+        "name": "codec_weight_context_mb",
+        "type": "int",
+        "description": "Codec weight context size in MiB; default 512.",
+        "required": false,
+        "min": 0,
+        "default": 512
       }
     ],
     "load": []

@@ -16,7 +16,16 @@
   "capabilities": {},
   "options": {
     "request": [],
-    "session": [],
+    "session": [
+      {
+        "name": "weight_type",
+        "type": "enum",
+        "description": "Citrinet ASR weight storage type; default native.",
+        "preset": "weight_type_full",
+        "required": false,
+        "default": "native"
+      }
+    ],
     "load": []
   },
   "runtime": {
