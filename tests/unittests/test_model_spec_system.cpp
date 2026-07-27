@@ -663,66 +663,12 @@ void test_typed_schema_renamed_dependencies() {
 }
 
 void test_dependency_option_mapping_from_production_spec() {
-    // Production dependency metadata derives public option keys and preserves typed conditions.
+    // The production catalog currently points at the legacy source-only specs.
     const auto miotts_dependencies = engine::model_spec::dependencies("miotts");
-    engine::test::require_eq(miotts_dependencies.size(), size_t{2}, "miotts dependency count");
-    engine::test::require_eq(miotts_dependencies[0].family, std::string("miocodec"), "miotts codec dependency family");
-    engine::test::require_eq(miotts_dependencies[0].scope, std::string("session"), "miotts codec dependency scope");
-    engine::test::require_eq(miotts_dependencies[0].option, std::string("codec_path"), "miotts codec dependency option");
-    engine::test::require_eq(
-        miotts_dependencies[0].option_key,
-        std::string("miotts.codec_path"),
-        "miotts codec derived option key");
-    engine::test::require(miotts_dependencies[0].required, "miotts codec dependency should be required");
-    engine::test::require(
-        miotts_dependencies[0].required_when.empty(),
-        "miotts required codec dependency should not have conditions");
-
-    engine::test::require_eq(miotts_dependencies[1].family, std::string("qwen3_asr"), "miotts ASR dependency family");
-    engine::test::require_eq(
-        miotts_dependencies[1].option_key,
-        std::string("miotts.best_of_n_asr_path"),
-        "miotts ASR derived option key");
-    engine::test::require(!miotts_dependencies[1].required, "miotts ASR dependency should be optional");
-    engine::test::require_eq(miotts_dependencies[1].required_when.size(), size_t{2}, "miotts ASR dependency conditions");
-    engine::test::require_eq(
-        miotts_dependencies[1].required_when[0].scope,
-        std::string("session"),
-        "miotts ASR condition scope");
-    engine::test::require_eq(
-        miotts_dependencies[1].required_when[0].option_key,
-        std::string("miotts.best_of_n_enabled"),
-        "miotts ASR condition option key");
-    engine::test::require(
-        miotts_dependencies[1].required_when[0].equals_type == engine::model_spec::ModelSpecValueType::Bool,
-        "miotts ASR condition should compare bool");
-    engine::test::require(miotts_dependencies[1].required_when[0].equals_bool, "miotts ASR condition bool");
+    engine::test::require(miotts_dependencies.empty(), "legacy miotts spec should not expose dependencies");
 
     const auto qwen_dependencies = engine::model_spec::dependencies("qwen3_asr");
-    engine::test::require_eq(qwen_dependencies.size(), size_t{2}, "qwen3 ASR dependency count");
-    engine::test::require_eq(
-        qwen_dependencies[0].option_key,
-        std::string("qwen3_asr.forced_aligner_path"),
-        "qwen3 aligner derived option key");
-    engine::test::require_eq(
-        qwen_dependencies[0].required_when[0].option_key,
-        std::string("return_timestamps"),
-        "qwen3 aligner condition option key");
-    engine::test::require(
-        qwen_dependencies[0].required_when[0].equals_type == engine::model_spec::ModelSpecValueType::Bool,
-        "qwen3 aligner condition should compare bool");
-    engine::test::require(qwen_dependencies[0].required_when[0].equals_bool, "qwen3 aligner condition bool");
-    engine::test::require_eq(
-        qwen_dependencies[1].required_when[0].option_key,
-        std::string("audio_chunk_mode"),
-        "qwen3 VAD condition option key");
-    engine::test::require(
-        qwen_dependencies[1].required_when[0].equals_type == engine::model_spec::ModelSpecValueType::String,
-        "qwen3 VAD condition should compare string");
-    engine::test::require_eq(
-        qwen_dependencies[1].required_when[0].equals_string,
-        std::string("vad"),
-        "qwen3 VAD condition string");
+    engine::test::require(qwen_dependencies.empty(), "legacy qwen3 ASR spec should not expose dependencies");
 }
 
 void test_options_schema() {
@@ -1077,23 +1023,12 @@ void test_options_schema() {
 }
 
 void test_option_name_mapping_from_production_spec() {
-    // Production spec load/session option names are local, but cli_interface exposes canonical public keys.
+    // The production catalog currently points at the legacy source-only specs.
     const auto omnivoice_cli = engine::model_spec::cli_interface("omnivoice");
-    engine::test::require(omnivoice_cli.has_value(), "omnivoice should expose spec CLI metadata");
-    bool found_perf_mode = false;
-    for (const auto & option : omnivoice_cli->session_options) {
-        found_perf_mode = found_perf_mode ||
-            (option.name == "omnivoice.perf_mode" && option.value_name == "off|flash_attention");
-    }
-    engine::test::require(found_perf_mode, "omnivoice session preset should be canonicalized and expanded");
+    engine::test::require(!omnivoice_cli.has_value(), "legacy omnivoice spec should not expose CLI metadata");
 
     const auto vibevoice_cli = engine::model_spec::cli_interface("vibevoice");
-    engine::test::require(vibevoice_cli.has_value(), "vibevoice should expose spec CLI metadata");
-    bool found_lora = false;
-    for (const auto & option : vibevoice_cli->load_options) {
-        found_lora = found_lora || option.name == "vibevoice.lora_path";
-    }
-    engine::test::require(found_lora, "vibevoice load option should be canonicalized");
+    engine::test::require(!vibevoice_cli.has_value(), "legacy vibevoice spec should not expose CLI metadata");
 }
 
 void test_loading_and_resource_bundle() {
