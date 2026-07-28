@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <charconv>
 #include <cstdint>
 #include <cerrno>
 #include <iostream>
@@ -151,7 +152,7 @@ void send_all(SocketHandle socket, const std::string & data) {
     }
 }
 
-HttpRequest read_http_request(SocketHandle socket) {
+HttpRequest read_http_request(SocketHandle socket, uint64_t max_request_body_bytes) {
     std::string data;
     std::array<char, 8192> buffer{};
     size_t header_end = std::string::npos;
@@ -204,7 +205,27 @@ HttpRequest read_http_request(SocketHandle socket) {
 
     size_t content_length = 0;
     if (const auto it = request.headers.find("content-length"); it != request.headers.end()) {
-        content_length = static_cast<size_t>(std::stoull(it->second));
+        // std::stoull throws on a non-numeric or overflowing header, and the
+        // body loop below grows request.body until it reaches whatever this
+        // says. An absurd Content-Length is therefore an unbounded in-memory
+        // accumulation driven by a single request.
+        //
+        const std::string & raw = it->second;
+        unsigned long long parsed = 0;
+        const auto * first = raw.data();
+        const auto * last = raw.data() + raw.size();
+        const auto [ptr, ec] = std::from_chars(first, last, parsed);
+        if (ec != std::errc{} || ptr != last) {
+            throw std::runtime_error("invalid Content-Length header");
+        }
+        if (parsed > max_request_body_bytes) {
+            throw std::runtime_error(
+                "request body exceeds the maximum of " + std::to_string(max_request_body_bytes) + " bytes");
+        }
+        if (parsed > std::numeric_limits<size_t>::max()) {
+            throw std::runtime_error("request body exceeds the maximum addressable size");
+        }
+        content_length = static_cast<size_t>(parsed);
     }
     request.body = data.substr(header_end + 4);
     while (request.body.size() < content_length) {
@@ -303,10 +324,10 @@ UniqueSocket bind_listen_socket(const std::string & host, int port) {
     return socket_handle;
 }
 
-void handle_client(SocketHandle client, IHttpHandler & handler) {
+void handle_client(SocketHandle client, IHttpHandler & handler, uint64_t max_request_body_bytes) {
     UniqueSocket socket(client);
     try {
-        const auto request = read_http_request(socket.get());
+        const auto request = read_http_request(socket.get(), max_request_body_bytes);
         const auto response = handler.handle(request);
         if (response.stream_body) {
             send_all(socket.get(), serialize_stream_headers(response));
@@ -376,7 +397,7 @@ HttpResponse error_response(int status, const std::string & message, const std::
     return json_response(body, status);
 }
 
-void serve_http(const std::string & host, int port, IHttpHandler & handler, ShutdownRequested shutdown_requested) {
+void serve_http(const std::string & host, int port, IHttpHandler & handler, ShutdownRequested shutdown_requested, uint64_t max_request_body_bytes) {
     SocketRuntime sockets;
     auto listen_socket = bind_listen_socket(host, port);
     std::cout << "audiocpp_server listening on http://" << host << ":" << port << "\n";
@@ -406,7 +427,7 @@ void serve_http(const std::string & host, int port, IHttpHandler & handler, Shut
             }
             throw std::runtime_error("accept failed");
         }
-        std::thread(handle_client, client, std::ref(handler)).detach();
+        std::thread(handle_client, client, std::ref(handler), max_request_body_bytes).detach();
     }
     std::cout << "audiocpp_server stopped\n";
 }
