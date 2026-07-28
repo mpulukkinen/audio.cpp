@@ -419,6 +419,20 @@ audiocpp_add_model(outetts
         qwen3_forced_aligner
 )
 
+audiocpp_add_model(parakeet_tdt
+    SOURCES
+        src/community_models/parakeet_tdt/assets.cpp
+        src/community_models/parakeet_tdt/session.cpp
+        src/community_models/parakeet_tdt/encoder.cpp
+        src/community_models/parakeet_tdt/decoder.cpp
+        src/community_models/parakeet_tdt/frontend.cpp
+        src/community_models/parakeet_tdt/weights.cpp
+    INCLUDES
+        engine/community_models/parakeet_tdt/session.h
+    LOADERS
+        engine::community_models::parakeet_tdt::make_parakeet_tdt_loader
+)
+
 audiocpp_add_model(pocket_tts
     SOURCES
         src/models/pocket_tts/assets.cpp
@@ -1263,6 +1277,7 @@ if (ENGINE_BUILD_WARMBENCH)
     add_engine_warmbench(nemotron_asr_warm_bench tests/nemotron_asr/nemotron_asr_warm_bench.cpp)
     add_engine_warmbench(omnivoice_warm_bench tests/omnivoice/omnivoice_warm_bench.cpp)
     add_engine_warmbench(outetts_warm_bench tests/outetts/outetts_warm_bench.cpp)
+    add_engine_warmbench(parakeet_warm_bench tests/parakeet_tdt/parakeet_warm_bench.cpp)
     add_engine_warmbench(glm_tts_tokenizer_probe tests/glm_tts/glm_tts_tokenizer_probe.cpp)
     add_engine_warmbench(glm_tts_assets_probe tests/glm_tts/glm_tts_assets_probe.cpp)
     add_engine_warmbench(glm_tts_prompt_probe tests/glm_tts/glm_tts_prompt_probe.cpp)
@@ -1528,6 +1543,14 @@ if (ENGINE_BUILD_TESTS)
         COMMAND model_spec_system_test
     )
 
+    add_engine_unittest(tdt_decoder_duration_loop_test tests/unittests/test_tdt_decoder_duration_loop.cpp)
+    target_include_directories(tdt_decoder_duration_loop_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests/unittests)
+
+    add_test(
+        NAME tdt_decoder_duration_loop_test
+        COMMAND tdt_decoder_duration_loop_test
+    )
+
     add_engine_unittest(scaled_dot_product_attention_test tests/unittests/test_scaled_dot_product_attention.cpp)
 
     add_test(
@@ -1588,6 +1611,49 @@ if (ENGINE_BUILD_TESTS)
         NAME server_config_test
         COMMAND server_config_test
     )
+
+    add_engine_unittest(parakeet_golden_transcription_test tests/parakeet_tdt/test_golden_transcription.cpp)
+    target_compile_definitions(parakeet_golden_transcription_test PRIVATE
+        ENGINE_REPO_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
+    )
+
+    add_test(
+        NAME parakeet_golden_transcription_test
+        COMMAND parakeet_golden_transcription_test
+    )
+    # Requires the real (multi-GB) Parakeet-TDT weights, which aren't
+    # downloaded as part of a normal checkout/CI build; the test itself
+    # detects this and exits with kExitSkip (125) rather than failing.
+    set_tests_properties(parakeet_golden_transcription_test PROPERTIES
+        SKIP_RETURN_CODE 125
+        TIMEOUT 120
+    )
+
+    add_engine_unittest(parakeet_streaming_transcription_test tests/parakeet_tdt/test_streaming_transcription.cpp)
+    target_compile_definitions(parakeet_streaming_transcription_test PRIVATE
+        ENGINE_REPO_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
+    )
+
+    add_test(
+        NAME parakeet_streaming_transcription_test
+        COMMAND parakeet_streaming_transcription_test
+    )
+    set_tests_properties(parakeet_streaming_transcription_test PROPERTIES
+        SKIP_RETURN_CODE 125
+        TIMEOUT 180
+    )
+
+    # Numerical parity dump tool (not registered as an add_test — it's a
+    # manual/pre-release check, not a CI gate). Run it against a NeMo
+    # reference dump via compare_parity.py; see tests/parakeet_tdt/parity/README.md.
+    add_executable(parakeet_parity_dump
+        tests/parakeet_tdt/parity/dump_cpp_reference.cpp
+    )
+    target_include_directories(parakeet_parity_dump PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests/parakeet_tdt/parity)
+    target_link_libraries(parakeet_parity_dump PRIVATE engine_runtime ggml)
+    if (ENGINE_ENABLE_OPENMP)
+        target_link_libraries(parakeet_parity_dump PRIVATE OpenMP::OpenMP_CXX)
+    endif()
 endif()
 
 if (ENGINE_BUILD_EXAMPLES)
