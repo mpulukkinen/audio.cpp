@@ -15,7 +15,7 @@ option(AUDIOCPP_DEPLOYMENT_BUILD
     "Compile model specs into the runtime for self-contained deployments"
     OFF)
 
-# Package layouts remain editable runtime data in normal builds. The converter always
+# Model specs remain editable runtime data in normal builds. The converter always
 # carries the source catalog so the conversion binary is portable. Deployment builds
 # additionally compile the catalog into engine_runtime as a fallback for CLI/server.
 file(GLOB AUDIOCPP_MODEL_SPEC_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/model_specs/*.json")

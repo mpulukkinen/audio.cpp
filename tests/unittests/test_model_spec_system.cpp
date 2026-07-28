@@ -92,21 +92,6 @@ std::string schema_v1_spec_text(const std::string & dependencies) {
   "runtime": {"tags": ["gguf"]},
   "capabilities": {"tts": ["long_form"]},
   "options": {"request": [], "session": [], "load": []},
-  "layouts": {
-    "gguf": {
-      "format": "gguf",
-      "roots": {
-        "model": ".",
-        "weights": "$gguf"
-      },
-      "files": {
-        "config": "model:config.json"
-      },
-      "tensors": {
-        "weights": "weights:"
-      }
-    }
-  },
   "packages": [
     {
       "id": "toy_model_q8",
@@ -157,21 +142,6 @@ std::string schema_v1_spec_with_options(const std::string & options) {
   "runtime": {"tags": ["gguf"]},
   "capabilities": {"tts": ["long_form"]},
   "options": )JSON" + options + R"JSON(,
-  "layouts": {
-    "gguf": {
-      "format": "gguf",
-      "roots": {
-        "model": ".",
-        "weights": "$gguf"
-      },
-      "files": {
-        "config": "model:config.json"
-      },
-      "tensors": {
-        "weights": "weights:"
-      }
-    }
-  },
   "packages": [
     {
       "id": "toy_model_q8",
@@ -412,21 +382,6 @@ void test_typed_schema_renamed_dependencies() {
       "default": true
     }
   ],
-  "layouts": {
-    "gguf": {
-      "format": "gguf",
-      "roots": {
-        "model": ".",
-        "weights": "$gguf"
-      },
-      "files": {
-        "config": "model:config.json"
-      },
-      "tensors": {
-        "weights": "weights:"
-      }
-    }
-  },
   "dependencies": [
     {
       "kind": "model",
@@ -500,14 +455,6 @@ void test_typed_schema_renamed_dependencies() {
               "default": true
             }
           ],
-          "layouts": {
-            "gguf": {
-              "format": "gguf",
-              "roots": {"model": ".", "weights": "$gguf"},
-              "files": {"config": "model:config.json"},
-              "tensors": {"weights": "weights:"}
-            }
-          },
           "companions": [],
           "ui": {
             "recommended_package": "typed_model_q8",
@@ -552,14 +499,6 @@ void test_typed_schema_renamed_dependencies() {
               "default": true
             }
           ],
-          "layouts": {
-            "gguf": {
-              "format": "gguf",
-              "roots": {"model": ".", "weights": "$gguf"},
-              "files": {"config": "model:config.json"},
-              "tensors": {"weights": "weights:"}
-            }
-          },
           "dependencies": [],
           "ui": {
             "recommended_package": "typed_model_q8",
@@ -604,14 +543,6 @@ void test_typed_schema_renamed_dependencies() {
               "default": true
             }
           ],
-          "layouts": {
-            "gguf": {
-              "format": "gguf",
-              "roots": {"model": ".", "weights": "$gguf"},
-              "files": {"config": "model:config.json"},
-              "tensors": {"weights": "weights:"}
-            }
-          },
           "dependencies": [],
           "ui": {
             "recommended_package": "typed_model_q8",
@@ -656,14 +587,6 @@ void test_typed_schema_renamed_dependencies() {
               "default": true
             }
           ],
-          "layouts": {
-            "gguf": {
-              "format": "gguf",
-              "roots": {"model": ".", "weights": "$gguf"},
-              "files": {"config": "model:config.json"},
-              "tensors": {"weights": "weights:"}
-            }
-          },
           "dependencies": [],
           "ui": {
             "recommended_package": "typed_model_q8",

@@ -4,7 +4,7 @@
 framework's expected `models/` layout.
 
 This tool is still useful for safetensors-based packages and a few composite model
-layouts, but it is gradually becoming a legacy path as audio.cpp moves toward
+packages, but it is gradually becoming a legacy path as audio.cpp moves toward
 standalone GGUF packages.
 
 If a model has a ready-to-use GGUF package, prefer that route first.
