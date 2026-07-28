@@ -433,6 +433,25 @@ audiocpp_add_model(parakeet_tdt
         engine::community_models::parakeet_tdt::make_parakeet_tdt_loader
 )
 
+audiocpp_add_model(inflect_v2
+    SOURCES
+        src/community_models/inflect_v2/assets.cpp
+        src/community_models/inflect_v2/frontend.cpp
+        src/community_models/inflect_v2/runtime.cpp
+        src/community_models/inflect_v2/session.cpp
+    INCLUDES
+        engine/community_models/inflect_v2/session.h
+    LOADERS
+        engine::models::inflect_v2::make_inflect_v2_loader
+)
+
+if (MSVC)
+    set_source_files_properties(
+        src/community_models/inflect_v2/frontend.cpp
+        PROPERTIES COMPILE_OPTIONS /utf-8
+    )
+endif()
+
 audiocpp_add_model(pocket_tts
     SOURCES
         src/models/pocket_tts/assets.cpp
@@ -1355,6 +1374,14 @@ if (ENGINE_BUILD_TESTS)
     add_test(
         NAME audio_chunking_test
         COMMAND audio_chunking_test
+    )
+
+    add_engine_unittest(inflect_v2_frontend_test tests/unittests/test_inflect_v2_frontend.cpp)
+    target_include_directories(inflect_v2_frontend_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests/unittests)
+
+    add_test(
+        NAME inflect_v2_frontend_test
+        COMMAND inflect_v2_frontend_test
     )
 
     add_engine_unittest(voxtral_realtime_stream_chunking_test tests/unittests/test_voxtral_realtime_stream_chunking.cpp)
