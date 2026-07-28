@@ -43,7 +43,7 @@ import threading
 import time
 import warnings
 import wave
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 import numpy as np
 import requests
@@ -213,6 +213,76 @@ GGUF_EXE_NAME = "audiocpp_gguf" + EXE_SUFFIX
 SERVER_LAUNCHER = SERVER_EXE_NAME
 
 
+def _safe_local_package_file(remote_path, strip_prefix):
+    prefix = (strip_prefix or "").strip("/")
+    if not prefix or prefix == ".":
+        local = remote_path
+    else:
+        marker = prefix + "/"
+        if not remote_path.startswith(marker):
+            raise ValueError(f"{remote_path!r} does not start with strip_prefix {strip_prefix!r}")
+        local = remote_path[len(marker):]
+    local = local.replace("\\", "/")
+    parts = [part for part in local.split("/") if part]
+    if not parts or any(part == ".." for part in parts):
+        raise ValueError(f"unsafe package file path: {remote_path!r}")
+    return "/".join(parts)
+
+
+def _load_spec_packages():
+    """Package metadata from model_specs/*.json, keyed by package id and family.
+
+    model_specs is the runtime/download source of truth for new GGUF packages. The
+    WebUI catalog still owns UI placement and labels, then this metadata fills in
+    the install id, target directory, and required file list.
+    """
+    by_id, by_family = {}, {}
+    for root in (PROJECT_ROOT, BUNDLE_ROOT):
+        spec_dir = os.path.join(root, "model_specs")
+        if not os.path.isdir(spec_dir):
+            continue
+        for name in sorted(os.listdir(spec_dir)):
+            if not name.endswith(".json"):
+                continue
+            path = os.path.join(spec_dir, name)
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    spec = json.load(f)
+            except (OSError, ValueError) as exc:
+                print(f"[webui] failed to read model spec {path}: {exc}")
+                continue
+            family = spec.get("family") or os.path.splitext(name)[0]
+            defaults = spec.get("package_defaults", {}).get("download", {})
+            for package in spec.get("packages", []):
+                try:
+                    files = tuple(package.get("files") or ())
+                    strip_prefix = package.get("strip_prefix", "")
+                    record = {
+                        "family": family,
+                        "id": package["id"],
+                        "display_name": package.get("display_name", package["id"]),
+                        "format": package["format"],
+                        "precision": package.get("precision", ""),
+                        "target_directory": package["target_directory"],
+                        "files": files,
+                        "required_files": tuple(_safe_local_package_file(f, strip_prefix) for f in files),
+                        "strip_prefix": strip_prefix,
+                        "download": {**defaults, **package.get("download", {})},
+                        "default": bool(package.get("default", False)),
+                    }
+                except (KeyError, TypeError, ValueError) as exc:
+                    print(f"[webui] ignored invalid package in {path}: {exc}")
+                    continue
+                by_id[record["id"]] = record
+                by_family.setdefault(family, []).append(record)
+        if by_id:
+            break
+    return by_id, by_family
+
+
+SPEC_PACKAGE_BY_ID, SPEC_PACKAGES_BY_FAMILY = {}, {}
+
+
 def _cmake_cache_backend(bin_dir):
     """Backend for a build tree whose directory name doesn't say, read from its
     CMakeCache.txt. Returns None when there is no cache to read — an installed
@@ -307,6 +377,7 @@ def _find_bundle_root():
 
 
 BUNDLE_ROOT = _find_bundle_root()
+SPEC_PACKAGE_BY_ID, SPEC_PACKAGES_BY_FAMILY = _load_spec_packages()
 
 def _detect_backend():
     """Which bundle build to launch. AUDIOCPP_BACKEND=gpu|cuda|cpu|metal
@@ -1444,10 +1515,89 @@ def _load_catalog():
     if os.path.isfile(CATALOG_PATH):
         try:
             with open(CATALOG_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
+                return _normalize_catalog_from_specs(json.load(f))
         except Exception as e:
             print(f"[webui] failed to read {CATALOG_PATH}: {e}; using defaults")
-    return DEFAULT_CATALOG
+    return _normalize_catalog_from_specs(DEFAULT_CATALOG)
+
+
+def _variant_key(value):
+    key = re.sub(r"[^a-z0-9]+", "", str(value).lower())
+    for suffix in ("safetensors", "gguf", "q80", "bf16", "f16", "orig"):
+        if key.endswith(suffix):
+            key = key[:-len(suffix)]
+    return key
+
+
+def _prefer_package(candidates):
+    gguf = [p for p in candidates if p.get("format") == "gguf"]
+    if gguf:
+        defaults = [p for p in gguf if p.get("default")]
+        q8 = [p for p in gguf if p.get("precision") == "q8_0"]
+        return (defaults or q8 or gguf)[0]
+    defaults = [p for p in candidates if p.get("default")]
+    return (defaults or candidates)[0] if candidates else None
+
+
+def _matching_spec_package(entry):
+    family = entry.get("family")
+    packages = SPEC_PACKAGES_BY_FAMILY.get(family, [])
+    if not packages:
+        return None
+    download_id = entry.get("download_id") or ""
+    current = SPEC_PACKAGE_BY_ID.get(download_id)
+    if current is not None:
+        if current.get("format") == "gguf":
+            return current
+        stem = re.sub(r"_?safetensors$", "", current["id"])
+        related = [p for p in packages if p["id"].startswith(stem + "_") and p.get("format") == "gguf"]
+        return _prefer_package(related) or current
+
+    direct = [p for p in packages if p["id"] == download_id or p["id"].startswith(download_id + "_")]
+    if direct:
+        return _prefer_package(direct)
+
+    path_base = os.path.basename(str(entry.get("path", "")).rstrip("/\\"))
+    path_key = _variant_key(path_base)
+    same_target = [p for p in packages if _variant_key(p.get("target_directory", "")) == path_key]
+    if same_target:
+        target = _prefer_package(same_target)
+        if target and target.get("format") == "safetensors":
+            stem = re.sub(r"_?safetensors$", "", target["id"])
+            related = [p for p in packages if p["id"].startswith(stem + "_") and p.get("format") == "gguf"]
+            return _prefer_package(related) or target
+        return target
+    return None
+
+
+def _without_legacy_weight_type_options(entry):
+    options = entry.get("session_options")
+    if not isinstance(options, dict):
+        return
+    filtered = {k: v for k, v in options.items()
+                if not (isinstance(k, str) and k.endswith("weight_type"))}
+    if filtered:
+        entry["session_options"] = filtered
+    else:
+        entry.pop("session_options", None)
+
+
+def _normalize_catalog_from_specs(catalog):
+    out = dict(catalog)
+    models = []
+    for raw in catalog.get("models", []):
+        entry = dict(raw)
+        package = _matching_spec_package(entry)
+        if package is not None:
+            entry["download_id"] = package["id"]
+            entry["path"] = "models/" + package["target_directory"]
+            entry["package_format"] = package.get("format")
+            entry["package_precision"] = package.get("precision")
+            if package.get("format") == "gguf":
+                _without_legacy_weight_type_options(entry)
+        models.append(entry)
+    out["models"] = models
+    return out
 
 
 def _load_model_params():
@@ -1468,15 +1618,20 @@ def _load_required_files():
     的最终布局）。用于把“手动拷贝/下载中断的不完整目录”和“已安装”区分开——不完整目录
     server 端只会报 no registered model loader，用户看不出缺了什么。
     文件缺失/损坏 -> {}（完整性检查停用，退回“目录存在即已安装”的旧行为）。"""
+    required = {pkg_id: list(package["required_files"])
+                for pkg_id, package in SPEC_PACKAGE_BY_ID.items()
+                if package.get("required_files")}
     if os.path.isfile(REQUIRED_FILES_PATH):
         try:
             with open(REQUIRED_FILES_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            return {k: v for k, v in data.items() if isinstance(v, list)}
+            for key, value in data.items():
+                if isinstance(value, list) and key not in required:
+                    required[key] = value
         except Exception as e:
             print(f"[webui] failed to read {REQUIRED_FILES_PATH}: {e}; "
                   + _t("跳过模型完整性检查", "skipping model integrity check"))
-    return {}
+    return required
 
 
 CATALOG = _load_catalog()
@@ -2371,6 +2526,36 @@ def package_download_bytes(download_id):
     with _dl_size_lock:
         if download_id in _dl_size_cache:
             return _dl_size_cache[download_id]
+    spec_package = SPEC_PACKAGE_BY_ID.get(download_id)
+    if spec_package is not None:
+        total = None
+        download = spec_package.get("download") or {}
+        if download.get("kind") == "huggingface_snapshot" and download.get("repo"):
+            repo = download["repo"]
+            revision = download.get("revision", "main")
+            headers = {"User-Agent": "audio.cpp webui"}
+            token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+            if token:
+                headers["Authorization"] = f"Bearer {token.strip()}"
+            sizes = []
+            try:
+                for remote in spec_package.get("files", ()):
+                    url = ("https://huggingface.co/"
+                           + repo + "/resolve/" + quote(str(revision), safe="")
+                           + "/" + "/".join(quote(part, safe="") for part in remote.split("/")))
+                    response = requests.head(url, headers=headers, allow_redirects=True, timeout=60)
+                    response.raise_for_status()
+                    length = response.headers.get("Content-Length")
+                    if length is None:
+                        sizes = []
+                        break
+                    sizes.append(int(length))
+                total = sum(sizes) if sizes else None
+            except Exception as exc:
+                print(f"[webui] could not read the download size of {download_id}: {exc}")
+        with _dl_size_lock:
+            _dl_size_cache[download_id] = total
+        return total
     mm = _model_manager_module()
     total = None
     if mm is not None:
