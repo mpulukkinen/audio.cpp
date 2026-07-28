@@ -12,6 +12,15 @@
 | `webui/run_webui.sh` | Linux / macOS WebUI 启动脚本 | `./webui/run_webui.sh` |
 | `webui/_env.bat` | WebUI 环境探测（**不直接运行**） | 被 `run_webui.bat` `call` |
 
+## Windows
+
+在仓库根目录创建 Python 环境、安装 WebUI 依赖，然后启动 WebUI：
+
+```bat
+python -m venv venv && .\venv\Scripts\python.exe -m pip install -r webui\requirements.txt
+webui\run_webui.bat                REM UI -> http://127.0.0.1:7860
+```
+
 ## Linux / macOS
 
 在 Linux / macOS 上用 `webui/run_webui.sh`：
@@ -96,7 +105,7 @@ python3 -m venv venv && ./venv/bin/pip install -r webui/requirements.txt
   **✖️ 取消** 两个按钮。不点确认就不会下载任何东西；切换所选模型会自动收起确认按钮。对尚未下载的模型点
   「📊 下载进度」也会显示同样的信息，方便只看不下。显存估算在 CPU 后端下同样显示（并标注 CPU 后端跑在
   系统内存里）；只有“显存不足”**警告**在 CPU 模式下保持静默，因为没有显存可谈。`models/` 所在分区装不
-  下时直接拒绝（不给出确认按钮）；装得下但下完剩余不足 2 GB 会提醒，但仍允许下载。转换类安装、以及未
+  下时直接拒绝（不给出确认按钮）；装得下但下完剩余不足 20 GB 会提醒，但仍允许下载。转换类安装、以及未
   提供 token 的受限仓库无法取得体积，这类下载行为与以前一致。
 - **下载过程中**进度按整包体积显示（如「已下载 5.00 GB / 17.00 GB（29%）」），显存不足与磁盘不足的提醒
   每次刷新都会重新显示，不会只闪一下就被进度覆盖。磁盘判断按**剩余待下载**的字节数计算，因此正常下载

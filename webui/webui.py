@@ -2278,10 +2278,11 @@ def _live_download_prefix(entry):
                             "❌ **Will run out of disk**: ≈{need} still to fetch, only {free} free "
                             "on models/.", need=_fmt_bytes(remaining), free=_fmt_bytes(usage.free)))
         elif verdict == "alarm":
-            lines.append(_t("🚨 **磁盘告警**：下完将占用 {fill:.0%}（告警线 {limit:.0%}）。",
-                            "🚨 **Disk alarm**: {fill:.0%} full when this finishes "
-                            "(alarm above {limit:.0%}).",
-                            fill=_disk_fill_after(remaining, usage), limit=DISK_USAGE_ALARM))
+            lines.append(_t("🚨 **磁盘告警**：下完仅剩 {left}（告警线低于 {free_limit}）。",
+                            "🚨 **Disk alarm**: {left} left when this finishes "
+                            "(alarm below {free_limit} free).",
+                            left=_fmt_bytes(usage.free - remaining),
+                            free_limit=_fmt_bytes(DISK_FREE_ALARM_BYTES)))
     lines.extend(requirements_info_lines(entry))
     return "\n\n".join(lines) + "\n\n" if lines else ""
 
@@ -2300,10 +2301,13 @@ def hf_token_present():
 
 _dl_size_cache = {}      # download_id -> total remote bytes, or None when unknown
 _dl_size_lock = threading.Lock()
-# A volume this full after the download is worth stopping for — not because the fetch
-# fails (it fits) but because what is left is no longer comfortable to work in. Alarming,
-# not blocking: it is the user's disk, so the download stays available behind a confirm.
-DISK_USAGE_ALARM = 0.75
+
+
+# Leaving too little free space after the download is worth stopping for: not because the
+# fetch fails (it fits), but because the volume is no longer comfortable to work in.
+# Alarming, not blocking: it is the user's disk, so the download stays available behind
+# a confirm.
+DISK_FREE_ALARM_BYTES = 20 * 1000 ** 3
 # Likewise for the device the model runs on: needing more than this share of VRAM (or of
 # system RAM on the CPU backend) means it will run, if at all, with nothing to spare.
 MEMORY_USAGE_ALARM = 0.80
@@ -2443,14 +2447,14 @@ def _disk_fill_after(need_bytes, usage):
 def _disk_verdict(need_bytes, usage):
     """"" | "alarm" | "short" for fetching `need_bytes` onto `usage`'s volume.
 
-    "short" means it cannot fit at all; "alarm" means it fits but leaves the volume over
-    DISK_USAGE_ALARM full."""
+    "short" means it cannot fit at all; "alarm" means it fits but leaves less than
+    DISK_FREE_ALARM_BYTES free."""
     if need_bytes is None or usage is None:
         return ""
     if usage.free < need_bytes:
         return "short"
-    fill = _disk_fill_after(need_bytes, usage)
-    return "alarm" if fill is not None and fill > DISK_USAGE_ALARM else ""
+    left = usage.free - need_bytes
+    return "alarm" if left < DISK_FREE_ALARM_BYTES else ""
 
 
 def requirements_info_lines(entry):
@@ -2468,8 +2472,6 @@ def requirements_info_lines(entry):
         if fill is None:
             lines.append(_t("📦 下载约 {need}", "📦 Download ≈{need}", need=_fmt_bytes(need)))
         else:
-            # Before → after, so a volume that is already past the line is distinguishable
-            # from a download that pushes it there.
             lines.append(_t("📦 下载约 {need} · models/ 可用 {free} · 占用 {before:.0%} → {fill:.0%}",
                             "📦 Download ≈{need} · {free} free on models/ · {before:.0%} → {fill:.0%} full",
                             need=_fmt_bytes(need), free=_fmt_bytes(usage.free),
@@ -2512,15 +2514,11 @@ def download_requirements(entry):
             "on models/. The download was not started.",
             label=entry["label"], need=_fmt_bytes(need), free=_fmt_bytes(usage.free))
     elif verdict == "alarm":
-        already = usage.used / usage.total > DISK_USAGE_ALARM
         lines.append(_t(
-            "🚨 **磁盘告警**：models/ 所在分区{already}将占用 **{fill:.0%}**（告警线 {limit:.0%}），"
-            "下完仅剩约 {left}。确定要下载再点确认。",
-            "🚨 **Disk alarm**: the `models/` volume {already}would be **{fill:.0%}** full "
-            "(alarm above {limit:.0%}), ≈{left} left. Confirm only if you really want it.",
-            already=_t("本来就已超过告警线，下载后", "is already over the line and ") if already else "",
-            fill=_disk_fill_after(need, usage), limit=DISK_USAGE_ALARM,
-            left=_fmt_bytes(usage.free - need)))
+            "🚨 **磁盘告警**：下完 `models/` 所在分区仅剩约 {left}（低于 {free_limit}）。确定要下载再点确认。",
+            "🚨 **Disk alarm**: the `models/` volume would have ≈{left} left "
+            "(below {free_limit}). Confirm only if you really want it.",
+            left=_fmt_bytes(usage.free - need), free_limit=_fmt_bytes(DISK_FREE_ALARM_BYTES)))
     memory = memory_alarm(entry)
     if memory:
         need_gb, available_gb, share, device = memory

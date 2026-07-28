@@ -11,6 +11,15 @@ The launch scripts can be **double-clicked** or invoked from a command line / Po
 | `webui/run_webui.sh` | Linux / macOS WebUI launcher | `./webui/run_webui.sh` |
 | `webui/_env.bat` | WebUI environment detection (**do not run directly**) | `call`ed by `run_webui.bat` |
 
+## Windows
+
+From the repository root, create a Python environment, install the WebUI dependencies, then launch the WebUI:
+
+```bat
+python -m venv venv && .\venv\Scripts\python.exe -m pip install -r webui\requirements.txt
+webui\run_webui.bat                REM UI -> http://127.0.0.1:7860
+```
+
 ## Linux / macOS
 
 On Linux / macOS, use `webui/run_webui.sh`:
@@ -107,7 +116,7 @@ Starts the Gradio web interface (`webui.py`); open **http://127.0.0.1:7860** in 
   model that has not been downloaded yet, if you want to check without arming anything.
   The VRAM estimate is reported on the CPU backend too (labelled as such — the CPU backend runs in system RAM);
   only the low-VRAM *warning* stays CPU-quiet, since there is no VRAM to fall short of. A download the `models/`
-  volume cannot hold is refused outright — no Confirm button is offered — and a fit that leaves under 2 GB free is
+  volume cannot hold is refused outright — no Confirm button is offered — and a fit that leaves under 20 GB free is
   flagged but still allowed.
   Sizes are unavailable for converter installs and for gated repos without a token; those download as before.
 - **While it runs**, progress is shown against the package total ("Downloaded 5.00 GB of 17.00 GB (29%)"), and the
