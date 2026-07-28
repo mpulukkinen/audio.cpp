@@ -13,6 +13,9 @@ param(
     [ValidateSet("ON", "OFF")]
     [string]$Llamafile = $null,
     [switch]$DeploymentBuild,
+    [ValidateSet("full", "core", "custom")]
+    [string]$ModelSet = "full",
+    [string]$Models = "",
     [string]$VsInstall = ""
 )
 
@@ -477,6 +480,10 @@ Write-Host "llamafile SGEMM: $($settings.Llamafile)"
 Write-Host "Vulkan: $($settings.EnableVulkan)"
 $deploymentBuildValue = if ($DeploymentBuild) { "ON" } else { "OFF" }
 Write-Host "Deployment build: $deploymentBuildValue"
+Write-Host "Model composite: $ModelSet"
+if ($Models -ne "") {
+    Write-Host "Selected models: $Models"
+}
 
 if ($Clean) {
     $buildDirForClean = Join-Path (Join-Path (Split-Path $PSScriptRoot -Parent) "build") $Preset
@@ -510,7 +517,9 @@ $configureArgs = @(
     "-DENGINE_ENABLE_NATIVE_CPU=$($settings.Native)",
     "-DENGINE_ENABLE_LLAMAFILE=$($settings.Llamafile)",
     "-DENGINE_BUILD_TESTS=$($settings.BuildTests)",
-    "-DAUDIOCPP_DEPLOYMENT_BUILD=$deploymentBuildValue"
+    "-DAUDIOCPP_DEPLOYMENT_BUILD=$deploymentBuildValue",
+    "-DAUDIOCPP_MODEL_SET=$ModelSet",
+    "-DAUDIOCPP_MODELS=$Models"
 )
 $configureArgs += $cpuArchSettings.CMakeArgs
 if ($settings.CFlagsDebug -ne "") {
