@@ -33,11 +33,11 @@ python3 -m venv venv && ./venv/bin/pip install -r webui/requirements.txt
 - Python 解释器依次探测 `$AUDIOCPP_PYTHON`、`venv/bin/python`、`.venv/bin/python`、
   `webui/venv/bin/python`、`webui/.venv/bin/python`、`python3`、`python`。
 - 后端（cuda/cpu）自动探测：Windows 看 `nvcuda.dll`，其它平台看 `nvidia-smi`，
-  再确认对应的 server 构建存在；用 `AUDIOCPP_BACKEND=gpu|cpu` 覆盖。
-- 二进制既支持 portable 包的 `gpu/`、`cpu/` 目录，也支持从源码构建的
-  `build/<os>-<backend>-<type>/bin`（如 `build/linux-cuda-release/bin`）。
+  再确认对应的 server 构建存在；用 `AUDIOCPP_BACKEND=gpu|cpu|metal` 覆盖。
+- 二进制既支持 portable 包的 `gpu/`、`metal/`、`cpu/` 目录，也支持从源码构建的
+  `build/<os>-<backend>-<type>/bin`（如 `build/linux-cuda-release/bin` 或 `build/macos-metal-release/bin`）。
   直接 `cmake -B build` 产生的 `build/bin` 也能识别——目录名不含后端信息时，
-  从 `CMakeCache.txt` 的 `GGML_CUDA` 判断。
+  从 `CMakeCache.txt` 的 `ENGINE_ENABLE_METAL`、`GGML_METAL` 或 `GGML_CUDA` 判断。
 - `webui/requirements.txt` 里 Windows 专用的包（pywin32 及 SpeakType 用到的
   pythonnet/pywebview）带 `sys_platform` 标记，因此在 Linux 上也能直接安装。
 
@@ -71,7 +71,8 @@ python3 -m venv venv && ./venv/bin/pip install -r webui/requirements.txt
   未安装的 id 会提示 “not installed”，可在 WebUI 里下载，或用
   `python tools/model_manager.py install <download_id>` 安装（见 `models_catalog.json`）。
 - **后端自动选择：** 检测到 CUDA（NVIDIA 驱动）就用 GPU，否则回退 CPU。
-  想强制某个后端，设环境变量 `AUDIOCPP_BACKEND=gpu`（=cuda）或 `AUDIOCPP_BACKEND=cpu`。
+  想强制某个后端，设环境变量 `AUDIOCPP_BACKEND=gpu`（=cuda）、`AUDIOCPP_BACKEND=cpu` 或
+  `AUDIOCPP_BACKEND=metal`。
   CLI、server、WebUI 都遵循这一检测（无 N 卡的机器自动落到 CPU 版，速度较慢、部分大模型不实用）。
 - **路径基准：** 脚本内相对路径（如 `voice\demo_01_man.wav`、`output\xxx.wav`）都相对 `webui\` 目录。
 - **可执行文件来源：** 自动定位整合包 `..\audiocpp-portable`（内含 `cpu\ gpu\ models\`），
@@ -110,7 +111,7 @@ python3 -m venv venv && ./venv/bin/pip install -r webui/requirements.txt
 - **下载过程中**进度按整包体积显示（如「已下载 5.00 GB / 17.00 GB（29%）」），显存不足与磁盘不足的提醒
   每次刷新都会重新显示，不会只闪一下就被进度覆盖。磁盘判断按**剩余待下载**的字节数计算，因此正常下载
   不会随着可用空间减少而误报。下载完成后显存提醒仍然保留——它决定模型能不能跑，而不是能不能下完。
-- 后端自动检测（同上：有 CUDA 用 GPU，否则 CPU）；`AUDIOCPP_BACKEND=gpu|cpu` 可强制。
+- 后端自动检测（同上：有 CUDA 用 GPU，否则 CPU）；`AUDIOCPP_BACKEND=gpu|cpu|metal` 可强制。
   CPU 模式下 ggml 线程数按**物理核数**自动设置（不计超线程的逻辑核，物理核多于 4 时再留一个核给系统），
   这样长任务跑起来机器仍然可用。把逻辑核占满会更快（8 核 16 线程的 5800H 上，一次短文本 CPU TTS 快约 1.4 倍），
   想要这个速度就设 `AUDIOCPP_THREADS=N`。CPU 模式下不显示显存警告。
@@ -299,7 +300,7 @@ GGUF 本身就是下载的模型包，则不会删除，请改用模型列表重
 
 | 变量 | 作用 | 适用 |
 |---|---|---|
-| `AUDIOCPP_BACKEND` | `gpu`(=cuda) / `cpu` 强制后端 | cli / server / webui |
+| `AUDIOCPP_BACKEND` | `gpu`(=cuda) / `cpu` / `metal` 强制后端 | cli / server / webui |
 | `AUDIOCPP_HOST` | server 绑定地址（`0.0.0.0` 开放局域网） | server |
 | `AUDIOCPP_BUNDLE` | 手动指定整合包根目录 | 全部 |
 | `AUDIOCPP_SERVER` | 让 WebUI 连一个已在跑的外部 server | webui |

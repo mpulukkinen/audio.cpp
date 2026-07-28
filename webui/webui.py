@@ -14,7 +14,8 @@ Just launch this (it starts the server for you):
     venv\\Scripts\\python audiocpp-portable\\webui.py
 
 Env overrides:
-    AUDIOCPP_BACKEND=gpu|cpu     which bin dir to launch the server from
+    AUDIOCPP_BACKEND=gpu|cpu|metal
+                                 which bin dir to launch the server from
                                  (default: auto — gpu when an NVIDIA driver and the
                                  gpu server build are both present, else cpu)
     AUDIOCPP_THREADS=N           ggml compute threads (default 1; cpu backend
@@ -213,9 +214,9 @@ SERVER_LAUNCHER = SERVER_EXE_NAME
 
 
 def _cmake_cache_backend(bin_dir):
-    """gpu/cpu for a build tree whose directory name doesn't say, read from its
-    CMakeCache.txt (GGML_CUDA:BOOL=ON). Returns None when there is no cache to
-    read — an installed tree, or a layout we don't recognize."""
+    """Backend for a build tree whose directory name doesn't say, read from its
+    CMakeCache.txt. Returns None when there is no cache to read — an installed
+    tree, or a layout we don't recognize."""
     # Walk up from the bin dir to find the build tree's CMakeCache.txt. Single-config
     # generators put the exe in build/bin (cache one level up); multi-config ones
     # (Visual Studio) nest it in build/bin/Release, so the cache sits two levels up.
@@ -234,9 +235,15 @@ def _cmake_cache_backend(bin_dir):
         return None
     try:
         with open(cache, encoding="utf-8", errors="replace") as fh:
+            enabled = {}
             for line in fh:
-                if line.startswith("GGML_CUDA:"):
-                    return "gpu" if line.rstrip().upper().endswith("ON") else "cpu"
+                key, sep, value = line.partition(":")
+                if sep:
+                    enabled[key] = line.rstrip().upper().endswith("ON")
+            if enabled.get("ENGINE_ENABLE_METAL") or enabled.get("GGML_METAL"):
+                return "metal"
+            if "GGML_CUDA" in enabled:
+                return "gpu" if enabled["GGML_CUDA"] else "cpu"
     except OSError:
         return None
     return "cpu"
@@ -246,12 +253,12 @@ def _discover_dev_bin_dirs():
     """Locate from-source build outputs, newest-wins per backend.
 
     Two layouts are in the wild. The one README documents is
-    build/<os>-<backend>-<type>/bin (windows-cuda-release, linux-cpu-release, …),
+    build/<os>-<backend>-<type>/bin (windows-cuda-release, macos-metal-release, …),
     where the backend is in the directory name. A plain `cmake -B build` instead
     lands in build/bin and says nothing about the backend, so that one is
     classified from its CMakeCache."""
     out = {}
-    for backend, keyword in (("gpu", "*cuda*"), ("cpu", "*cpu*")):
+    for backend, keyword in (("gpu", "*cuda*"), ("metal", "*metal*"), ("cpu", "*cpu*")):
         hits = sorted(d for d in glob.glob(os.path.join(PROJECT_ROOT, "build", keyword, "bin"))
                       if os.path.isfile(os.path.join(d, SERVER_EXE_NAME)))
         if hits:
@@ -292,7 +299,7 @@ def _find_bundle_root():
     for c in (HERE,                                         # webui.py directly in the bundle
               PROJECT_ROOT,                                 # webui/ shipped under the bundle
               os.path.join(PROJECT_ROOT, "audiocpp-portable")):
-        if os.path.isdir(os.path.join(c, "gpu")) or os.path.isdir(os.path.join(c, "cpu")):
+        if any(os.path.isdir(os.path.join(c, b)) for b in ("gpu", "metal", "cpu")):
             return c
     if any(os.path.isfile(_dev_server_exe(b)) for b in DEV_BIN_DIRS):
         return PROJECT_ROOT
@@ -302,7 +309,7 @@ def _find_bundle_root():
 BUNDLE_ROOT = _find_bundle_root()
 
 def _detect_backend():
-    """Which bundle build (gpu/ or cpu/) to launch. AUDIOCPP_BACKEND=gpu|cuda|cpu
+    """Which bundle build to launch. AUDIOCPP_BACKEND=gpu|cuda|cpu|metal
     wins; otherwise auto-detect: gpu when an NVIDIA driver AND the gpu server
     build are both present, else cpu (the server runs fine on the cpu backend,
     just slower and with lower model coverage)."""
@@ -410,15 +417,16 @@ def _find_gguf_exe():
     (linux-cuda-release, a plain build/bin, …) are covered too; the active
     backend is tried first, then the other one.
     """
-    other = "cpu" if BACKEND == "gpu" else "gpu"
     candidates = [
         os.environ.get("AUDIOCPP_GGUF"),
         *(os.path.join(DEV_BIN_DIRS[b], GGUF_EXE_NAME)
-          for b in (BACKEND, other) if b in DEV_BIN_DIRS),
+          for b in (BACKEND, "gpu", "metal", "cpu") if b in DEV_BIN_DIRS),
         os.path.join(BUNDLE_ROOT, BACKEND, GGUF_EXE_NAME),
         os.path.join(BUNDLE_ROOT, "gpu", GGUF_EXE_NAME),
+        os.path.join(BUNDLE_ROOT, "metal", GGUF_EXE_NAME),
         os.path.join(BUNDLE_ROOT, "cpu", GGUF_EXE_NAME),
         os.path.join(PROJECT_ROOT, "audiocpp-portable", "gpu", GGUF_EXE_NAME),
+        os.path.join(PROJECT_ROOT, "audiocpp-portable", "metal", GGUF_EXE_NAME),
         os.path.join(PROJECT_ROOT, "audiocpp-portable", "cpu", GGUF_EXE_NAME),
     ]
     seen = set()
@@ -1845,11 +1853,23 @@ def loaded_ids():
         return []
 
 
+def _is_downloaded_gguf_package(entry):
+    required = REQUIRED_FILES.get(entry.get("download_id") or "") or []
+    return bool(required) and all(str(path).lower().endswith(".gguf") for path in required)
+
+
+def _server_model_path(entry):
+    gguf = _existing_gguf_path(entry)
+    if gguf is not None and _is_downloaded_gguf_package(entry):
+        return gguf
+    return entry["abs_path"]
+
+
 def _write_temp_config(entry):
     model = {
         "id": entry["id"],
         "family": entry["family"],
-        "path": entry["abs_path"],
+        "path": _server_model_path(entry),
         "task": entry.get("task", "tts"),
         "mode": entry.get("mode", "offline"),
     }
@@ -1992,8 +2012,8 @@ def _pump_server_output(proc):
 def _start_server(entry):
     global _server_proc, _loaded_id
     if not os.path.isfile(SERVER_EXE):
-        raise gr.Error(_t("找不到 server：{path}（可用 AUDIOCPP_BACKEND=gpu|cpu 指定）",
-                          "Server not found: {path}. Set AUDIOCPP_BACKEND=gpu|cpu.",
+        raise gr.Error(_t("找不到 server：{path}（可用 AUDIOCPP_BACKEND=gpu|cpu|metal 指定）",
+                          "Server not found: {path}. Set AUDIOCPP_BACKEND=gpu|cpu|metal.",
                           path=SERVER_EXE))
     cfg = _write_temp_config(entry)
     flags = subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0
