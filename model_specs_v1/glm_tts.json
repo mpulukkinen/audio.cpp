@@ -237,7 +237,6 @@
         "Text to audio (TTS)/GLM-TTS_Q8.gguf"
       ],
       "strip_prefix": "Text to audio (TTS)",
-      "description": "Standalone GGUF with the autoregressive Llama tensors retained in F16 and the speech tokenizer, Flow, HiFT, and CAMPPlus tensors stored as Q8_0.",
       "download": {
         "kind": "huggingface_snapshot",
         "repo": "mirek190/audio.cpp"
