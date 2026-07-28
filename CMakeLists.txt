@@ -1569,6 +1569,21 @@ if (ENGINE_BUILD_TESTS)
         COMMAND asr_standalone_gguf_test
     )
 
+    add_executable(cli_request_options_test
+        tests/unittests/test_cli_request_options.cpp
+        app/cli/args.cpp
+        app/cli/request.cpp
+    )
+    target_link_libraries(cli_request_options_test PRIVATE engine_runtime ggml)
+    if (ENGINE_ENABLE_OPENMP)
+        target_link_libraries(cli_request_options_test PRIVATE OpenMP::OpenMP_CXX)
+    endif()
+
+    add_test(
+        NAME cli_request_options_test
+        COMMAND cli_request_options_test
+    )
+
     add_executable(server_multipart_test
         tests/unittests/test_server_multipart.cpp
         app/server/multipart.cpp

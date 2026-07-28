@@ -220,6 +220,10 @@ curl http://127.0.0.1:8080/v1/audio/speech \
   }'
 ```
 
+For full `uint64` seed values, pass `seed` as a JSON string. JSON numeric seeds
+below `2^53` are accepted, but larger JSON numbers may lose precision before
+option parsing.
+
 If no request voice is provided and the configured model has `default_voice_preset`, the server injects that preset automatically. Request-level `voice`, `voice_ref`, and `reference_text` override the configured default.
 
 Set `"response_format": "json"` to receive base64 WAV in a JSON response.
