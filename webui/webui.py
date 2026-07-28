@@ -2013,6 +2013,22 @@ def _is_downloaded_gguf_package(entry):
     return bool(required) and all(str(path).lower().endswith(".gguf") for path in required)
 
 
+def _declared_package_gguf_path(entry):
+    if not _is_downloaded_gguf_package(entry):
+        return None
+    model_path = entry["abs_path"]
+    if not os.path.isdir(model_path):
+        return None
+    required = REQUIRED_FILES.get(entry.get("download_id") or "") or []
+    found = []
+    for rel in required:
+        parts = [part for part in str(rel).replace("\\", "/").split("/") if part]
+        candidate = os.path.join(model_path, *parts)
+        if os.path.isfile(candidate):
+            found.append(candidate)
+    return found[0] if len(found) == 1 else None
+
+
 def _server_model_path(entry):
     gguf = _existing_gguf_path(entry)
     if gguf is not None and _is_downloaded_gguf_package(entry):
@@ -2995,12 +3011,9 @@ def _gguf_output_path(entry):
 def _existing_gguf_path(entry):
     """The GGUF this entry would actually load, or None.
 
-    Mirrors find_directory_gguf() in src/framework/assets/tensor_source.cpp: an
-    explicitly configured .gguf path, else model.gguf in the model directory, else
-    the sole .gguf in it. Published packages keep their release name
-    (vevo2-q8_0.gguf, voxtral-mini-4b-realtime-2602-q8_0.gguf), so matching only
-    model.gguf reported an installed GGUF package as "no GGUF yet" and offered to
-    convert weights that were never downloaded."""
+    Mirrors find_directory_gguf() in src/framework/assets/tensor_source.cpp for
+    ordinary directories, and also follows downloaded package manifests whose
+    GGUF is nested under the install root."""
     model_path = entry["abs_path"]
     if os.path.isfile(model_path) and model_path.lower().endswith(".gguf"):
         return model_path
@@ -3009,6 +3022,9 @@ def _existing_gguf_path(entry):
     default = os.path.join(model_path, "model.gguf")
     if os.path.isfile(default):
         return default
+    declared = _declared_package_gguf_path(entry)
+    if declared is not None:
+        return declared
     found = sorted(f for f in os.listdir(model_path)
                    if f.lower().endswith(".gguf") and os.path.isfile(os.path.join(model_path, f)))
     # Several GGUFs with no model.gguf are ambiguous for the loader too; it refuses

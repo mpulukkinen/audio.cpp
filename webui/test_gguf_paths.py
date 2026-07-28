@@ -58,6 +58,18 @@ class ExistingGgufPathTests(unittest.TestCase):
         self._touch("model.safetensors")
         self.assertIsNone(app._existing_gguf_path(_entry(self.model_dir)))
 
+    def test_declared_nested_package_gguf_is_found(self):
+        nested_dir = os.path.join(self.model_dir, "turbo")
+        os.makedirs(nested_dir)
+        expected = os.path.join(nested_dir, "ace-step-1.5-turbo-q8_0.gguf")
+        open(expected, "w").close()
+        entry = _entry(self.model_dir, download_id="ace_step_turbo_q8_0")
+        self.original_required_files = app.REQUIRED_FILES
+        app.REQUIRED_FILES = {"ace_step_turbo_q8_0": ["turbo/ace-step-1.5-turbo-q8_0.gguf"]}
+        self.addCleanup(setattr, app, "REQUIRED_FILES", self.original_required_files)
+
+        self.assertEqual(app._existing_gguf_path(entry), expected)
+
     def test_explicit_gguf_model_path_is_itself(self):
         path = os.path.join(self.root, "direct.gguf")
         open(path, "w").close()
@@ -104,6 +116,18 @@ class ServerConfigGgufPathTests(unittest.TestCase):
         open(target, "w").close()
         entry = _entry(self.root, download_id="fish_audio_s2_pro")
         app.REQUIRED_FILES = {"fish_audio_s2_pro": [name]}
+
+        cfg = self._read_temp_config(entry)
+
+        self.assertEqual(cfg["models"][0]["path"], target)
+
+    def test_downloaded_nested_gguf_package_writes_explicit_gguf_path(self):
+        name = "turbo/ace-step-1.5-turbo-q8_0.gguf"
+        target = os.path.join(self.root, "turbo", "ace-step-1.5-turbo-q8_0.gguf")
+        os.makedirs(os.path.dirname(target))
+        open(target, "w").close()
+        entry = _entry(self.root, download_id="ace_step_turbo_q8_0")
+        app.REQUIRED_FILES = {"ace_step_turbo_q8_0": [name]}
 
         cfg = self._read_temp_config(entry)
 
