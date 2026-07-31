@@ -37,12 +37,10 @@ audio.cpp would not be moving this quickly without generous contributors bringin
 
 ## News
 
-> **2026-07-27 - Panic release note:** Confucius4-TTS is being published early as the current schema-v1 model spec example. DramaBox and RVC may appear alongside it because they live on the same branch, but they have not gone through the same refactor/release pass yet. Stay tuned for release 0.5.
-
 > [!IMPORTANT]
-> **2026-07-23 - Release 0.4:** This release brings audio.cpp to **35** model families listed across the supported and community tables and adds **Higgs Audio v3 TTS 4B**, **Fish Audio S2 Pro**, and **Voxtral Realtime ASR**, with GGUF-first CUDA validation for the new paths. On warmed TTS requests, Higgs Audio Q8_0 runs about 8.8x-**10.1x** faster than real time, while Fish Audio Q8_0 runs about 3.1x-**3.4x** faster than real time. Voxtral adds offline and streaming ASR, with Q8_0 GGUF around **15.7x** faster than real time and about **171 ms** streaming TTFT.
+> **2026-07-30 - Release 0.5:** This release adds **9** new model families: DramaBox, Confucius4-TTS, RVC, BS-RoFormer, GLM-TTS, Kroko ASR, Parakeet-TDT, Inflect v2, and Fun-ASR-Nano, bringing audio.cpp to **44** total model families while continuing the move toward GGUF-first packages, schema-v1 model specs, WebUI download/load improvements, composite builds, and broader CUDA/Vulkan/CPU validation.
 >
-> Also new: community models **OuteTTS** and **VieNeu-TTS**, the [WebUI](#webui) surface thanks to [@kigner](https://github.com/kigner) and [@patrickjchen](https://github.com/patrickjchen), broader standalone GGUF/package-spec support, and reusable framework work for vocoders, sampling, attention, Whisper frontend, and model metadata.
+> **2026-07-23 - Release 0.4:** audio.cpp expanded to **35 model families**, adding Higgs Audio v3 TTS 4B, Fish Audio S2 Pro, Voxtral Realtime ASR, community OuteTTS and VieNeu-TTS, broader GGUF/package-spec support, reusable framework improvements, and the integrated WebUI thanks to [@kigner](https://github.com/kigner) and [@patrickjchen](https://github.com/patrickjchen).
 >
 > **2026-07-14 - Release 0.3:** This release added IndexTTS2, Irodori-TTS, MOSS-TTS-Nano, MOSS-TTS-Local, Supertonic 3, Chatterbox voice conversion, and the first broad GGUF loading/conversion wave. Thanks to [@justinjohn0306](https://github.com/justinjohn0306) for MOSS-TTS-Local and [@mirek190](https://github.com/mirek190) for driving GGUF forward.
 
@@ -95,6 +93,8 @@ Runtime tags: safetensors is the default model loading path. `GGUF 16/Q8/Q4` mea
 | **moss_tts_local** | TTS, Clone, Ctrl | auto, optional language hint | MOSS-TTS-Local-Transformer-v1.5 | GGUF 16/Q8 |
 | **supertonic** | TTS | en, ko, ja, ar, bg, cs, da, de, el, es, et, fi, fr, hi, hr, hu, id, it, lt, lv, nl, pl, pt, ro, ru, sk, sl, sv, tr, uk, vi, na | Supertonic 3 | GGUF F32, Stream |
 
+Some model families in the supported table started as outside contributions before being promoted into the core release surface. Thanks to Mirek [@mirek190](https://github.com/mirek190) for BS-RoFormer, [@justinjohn0306](https://github.com/justinjohn0306) for MOSS-TTS-Local, and [@LauraGPT](https://github.com/LauraGPT) from the official FunASR team for Fun-ASR-Nano.
+
 ## Community Models
 
 Community model ports live under `community_models` to make the ownership boundary clear while keeping them available through the normal audio.cpp CLI and server paths. Some community-contributed models graduate into the core model tree when they become part of the main release surface. Huge thanks to the contributors who bring these models in, test them, and keep pushing the framework into new territory. See [docs/community_models/models.md](docs/community_models/models.md) for community-model expectations and current entries.
@@ -108,8 +108,6 @@ Community model ports live under `community_models` to make the ownership bounda
 | **outetts** | TTS, Clone | en, ar, zh, nl, fr, de, it, ja, ko, lt, ru, es, pt, be, bn, ka, hu, lv, fa, pl, sw, ta, uk | GGUF | Mirek [@mirek190](https://github.com/mirek190) | Llama-OuteTTS-1.0-1B TTS and voice cloning support |
 | **parakeet_tdt** | ASR | auto, bg, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, mt, nl, pl, pt, ro, ru, sk, sl, sv, uk | GGUF F32/16/Q8, Stream | [@dleiferives](https://github.com/dleiferives) | [Parakeet-TDT 0.6B v3](docs/community_models/parakeet_tdt.md) offline, long-form, and buffered-streaming ASR support |
 | **vietneu_tts** | TTS, Clone | vi, en | GGUF | Phuoc [@phuocnguyen90](https://github.com/phuocnguyen90) | [VieNeu-TTS-v3-Turbo](docs/community_models/vietneu_tts.md) TTS and voice cloning support |
-
-PocketTTS language selection is a model-load option. When the model path points at the PocketTTS root, the loader uses `english` unless you pass `--load-option language=<name>`. Kyutai's normal non-English PocketTTS releases are smaller distilled language models intended for the fast PocketTTS path. The `_24l` variants are larger 24-layer, undistilled preview models that can sound better but are slower. Kyutai currently publishes French only as `french_24l`, not as a normal distilled `french` language directory, so French is not listed as a normal PocketTTS language here.
 
 ## Docker
 
@@ -306,7 +304,7 @@ Windows (the helper script auto-detects ROCm, GPU targets, cmake, and ninja):
 powershell -ExecutionPolicy Bypass -File scripts\build_windows_hip.ps1
 ```
 
-Run with `--backend hip` (`rocm` is accepted as an alias). For GPU target selection, hipBLASLt GEMM notes, iGPU tuning, and known limitations, see [docs/HIP.md](docs/HIP.md).
+Run with `--backend hip` (`rocm` is accepted as an alias). For GPU target selection, hipBLASLt GEMM notes, iGPU tuning, and known limitations, see [docs/build/HIP.md](docs/build/HIP.md).
 
 ### Build Options
 
