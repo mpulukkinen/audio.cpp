@@ -116,11 +116,13 @@ available images, build commands and working Docker examples.
 
 ## Model Manager and GGUF Downloads
 
-The repository still ships a Python model manager at `tools/model_manager.py` for
-downloading supported packages into the expected `models/` layout.
+Use `tools/model_manager_v2.py` for normal model downloads. It reads
+`model_specs/*.json` and installs the default package for each family, preferring
+ready-to-use GGUF packages when they are available.
 
-This path is gradually becoming legacy as the project moves toward standalone GGUF
-packages. If a model has a ready-to-use GGUF package, prefer that route first.
+The old safetensors/converter catalog has been renamed to
+`tools/model_manager_deprecated.py`. Use it only for legacy model layouts that
+have not moved to spec-backed GGUF packages yet.
 
 GGUF downloads:
 
@@ -420,7 +422,7 @@ Useful CLI features:
 - `--help` with `--model <path>` and optional `--family <family>` shows model-owned request, session, and load options
 - `--inspect` prints discovered configs, weights, and capabilities
 - `--list-loaders` prints registered model families (`--json` for the machine-readable contract)
-- `python tools/model_manager.py list --json` prints installable packages; keep it synced with loaders ([docs/maintainers/loader_and_catalog.md](docs/maintainers/loader_and_catalog.md))
+- `python tools/model_manager_v2.py list --json` prints installable packages from `model_specs/*.json`
 - `--batch-text-file <txt>` runs one offline request per non-empty line
 - `--batch-text-dir <dir>` runs one offline request per `.txt`, `.md`, or `.json` file, normalizing each file as one paragraph
 - `--batch-audio-dir <dir>` runs one offline request per `.wav`

@@ -96,7 +96,7 @@ Portuguese, Swedish, and Turkish. The model manager defaults to the standalone
 English Q8_0 GGUF package:
 
 ```powershell
-python .\tools\model_manager.py install kroko_asr_community_q8_0 --models-root .\models --overwrite
+python .\tools\model_manager_v2.py install kroko_asr_community_q8_0 --models-root .\models --overwrite
 ```
 
 ```powershell
@@ -259,7 +259,7 @@ long-form, and buffered-streaming transcription. The model manager defaults to
 the standalone Q8_0 GGUF package.
 
 ```bash
-python3 tools/model_manager.py install parakeet_tdt_q8_0 --models-root models
+python3 tools/model_manager_v2.py install parakeet_tdt_q8_0 --models-root models
 audiocpp_cli --task asr --family parakeet_tdt \
   --model models/Parakeet-TDT-0.6B-v3-GGUF/parakeet-tdt-0.6b-v3-q8_0.gguf \
   --backend cuda --audio speech_16k.wav --text-out transcript.txt

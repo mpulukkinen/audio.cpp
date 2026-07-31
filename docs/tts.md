@@ -424,7 +424,7 @@ audiocpp_cli --task tts --family higgs_audio_tts --model models/Higgs-Audio-v3-T
 The model manager installs the Q8_0 standalone GGUF package by default:
 
 ```bash
-python3 tools/model_manager.py install --models-root models higgs_audio_v3_tts_4b
+python3 tools/model_manager_v2.py install --models-root models higgs_audio_tts_4b_q8_0
 ```
 
 | Option | Values | Default | Meaning |
@@ -467,7 +467,7 @@ audiocpp_cli --task tts --family fish_audio --model models/Fish-Audio-S2-Pro-GGU
 The model manager installs the Q8_0 standalone GGUF package by default:
 
 ```bash
-python3 tools/model_manager.py install --models-root models fish_audio_s2_pro
+python3 tools/model_manager_v2.py install --models-root models fish_audio_s2_pro_q8_0
 ```
 
 | Option | Values | Default | Meaning |
@@ -608,17 +608,17 @@ audiocpp_cli --task clon --family irodori_tts --model /path/to/Irodori-TTS-500M-
 
 ## OuteTTS
 
-OuteTTS 1.0 1B is a community model for 24 kHz TTS and voice cloning. Install both the language model and DAC dependency:
+OuteTTS 1.0 1B is a community model for 24 kHz TTS and voice cloning. The model manager installs the standalone Q8 GGUF package by default:
 
 ```bash
-python tools/model_manager.py install outetts_1_0_1b --models-dir models
+python tools/model_manager_v2.py install outetts_1_0_1b_q8_0 --models-root models
 ```
 
 Quick start:
 
 ```bash
 audiocpp_cli --task tts --family outetts \
-  --model models/Llama-OuteTTS-1.0-1B \
+  --model models/Llama-OuteTTS-1.0-1B_Q8/Llama-OuteTTS-1.0-1B_Q8.gguf \
   --backend cuda --text "Hello from OuteTTS." \
   --max-tokens 1024 --out out.wav
 ```
@@ -627,7 +627,7 @@ Voice clone quick start:
 
 ```bash
 audiocpp_cli --task clon --family outetts \
-  --model models/Llama-OuteTTS-1.0-1B \
+  --model models/Llama-OuteTTS-1.0-1B_Q8/Llama-OuteTTS-1.0-1B_Q8.gguf \
   --backend cuda \
   --voice-ref reference.wav \
   --reference-text "The exact words spoken in reference.wav." \
@@ -645,10 +645,10 @@ Both the `tts` and `clon` routes require a clean reference WAV and its exact
 transcript:
 
 ```bash
-python tools/model_manager.py install glm_tts --models-dir models
+python tools/model_manager_v2.py install glm_tts --models-root models
 
 audiocpp_cli --task clon --family glm_tts \
-  --model models/GLM-TTS --backend cuda \
+  --model models/GLM-TTS-Q8/GLM-TTS_Q8.gguf --backend cuda \
   --voice-ref reference.wav \
   --reference-text "The exact words spoken in reference.wav." \
   --text "Hello from GLM-TTS." \
@@ -666,7 +666,7 @@ original source/conversion path remains documented in the community guide.
 Inflect requires an external eSpeak-ng installation:
 
 ```bash
-python3 tools/model_manager.py install inflect_micro_v2_orig --models-root models
+python3 tools/model_manager_v2.py install inflect_micro_v2_orig --models-root models
 
 audiocpp_cli --task tts --family inflect_v2 \
   --model models/Inflect-Micro-v2-GGUF/inflect-micro-v2-orig.gguf --backend cuda \

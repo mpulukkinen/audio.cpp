@@ -232,10 +232,9 @@ the referenced scope. Multiple `required_when` rows use OR semantics.
 }
 ```
 
-Supported download kinds are `huggingface_snapshot`, `local_snapshot`,
-`converter`, and `unsupported`. `tools/model_manager_v2.py` intentionally
-installs only simple `huggingface_snapshot` packages; use the legacy manager for
-composite or converter-driven installs.
+Release download packages should use ready-to-run `huggingface_snapshot` GGUF
+entries. Publish a GGUF package first, then expose it through
+`tools/model_manager_v2.py`.
 
 The C++ `framework/model_spec` subsystem is the authoritative schema gate.
 `audiocpp_cli`, `audiocpp_server`, and GGUF loading fail when a typed schema field
