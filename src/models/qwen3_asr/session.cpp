@@ -202,7 +202,9 @@ runtime::TaskResult Qwen3ASRSession::run(const runtime::TaskRequest & request) {
             merged_words,
             item.word_timestamps,
             chunks.front().source_span,
-            chunks.front().keep_span);
+            chunks.front().keep_span,
+            audio.sample_rate,
+            assets_->config.sample_rate);
         item.word_timestamps = std::move(merged_words);
         return item;
     }
@@ -227,7 +229,9 @@ runtime::TaskResult Qwen3ASRSession::run(const runtime::TaskRequest & request) {
             merged.word_timestamps,
             item.word_timestamps,
             chunk.source_span,
-            chunk.keep_span);
+            chunk.keep_span,
+            audio.sample_rate,
+            assets_->config.sample_rate);
     }
     if (merged.text_output.has_value()) {
         if (request_return_timestamps(request) && !merged.word_timestamps.empty()) {
