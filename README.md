@@ -44,6 +44,8 @@ audio.cpp would not be moving this quickly without generous contributors bringin
 >
 > **HIP/ROCm support:** Platform coverage also takes a big step forward! Early HIP/ROCm support lands for AMD GPUs thanks to [@IIIIIllllIIIIIlllll](https://github.com/IIIIIllllIIIIIlllll), with Nix ROCm/HIP build support from [@francescobozzo](https://github.com/francescobozzo).
 >
+> **Metal performance boost:** Thanks to [@liuzl](https://github.com/liuzl), Metal ops were optimized, making tested VoxCPM2 end-to-end runs up to **2.56x faster** on Apple Silicon. Many models should benefit from these optimizations.
+>
 > This release is a major GGUF-first usability pass. The WebUI now uses model-spec package links for downloads, prefers standalone GGUF packages when available, and handles more models directly from the normal UI flow. New schema-v1 specs make model options, packages, metadata, and UI-facing behavior much easier to keep in sync.
 >
 > **2026-07-23 - Release 0.4:** audio.cpp expanded to **35 model families**, adding Higgs Audio v3 TTS 4B, Fish Audio S2 Pro, Voxtral Realtime ASR, community OuteTTS and VieNeu-TTS, broader GGUF/package-spec support, reusable framework improvements, and the integrated WebUI thanks to [@kigner](https://github.com/kigner) and [@patrickjchen](https://github.com/patrickjchen).
