@@ -84,12 +84,13 @@ BUILD_ARGS=(
     --build-dir "$BUILD_DIR"
     --build-type RelWithDebInfo
     --deployment-build
-    --cpu-all-variants
     --jobs "$JOBS"
     --target audiocpp_cli
     --target audiocpp_server
     --target audiocpp_gguf
 )
+
+BUILD_ARGS+=(--cpu-all-variants)
 
 (
     cd "$REPO_ROOT"
