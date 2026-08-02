@@ -185,7 +185,7 @@ jobs:
   publish:
     name: Publish Linux packages
     if: github.event_name == 'push'
-    needs: [build-linux, build-windows, build-windows-cuda]
+    needs: [build, build-windows, build-windows-cuda]
     runs-on: ubuntu-24.04
     steps:
       - name: Download packages
