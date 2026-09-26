@@ -49,3 +49,50 @@ jobs:
           .\scripts\build_windows.ps1 `
             -Preset windows-cpu-release `
             -Target audiocpp_gguf
+
+  build-arm64:
+    name: Windows ARM64 CPU
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check loader/spec sync
+        shell: pwsh
+        run: |
+          python tools/check_loader_catalog_sync.py --self-test
+          python tools/check_loader_catalog_sync.py
+
+      - name: Build native ARM64 package
+        shell: pwsh
+        run: |
+          .\scripts\package_windows_arm64_prebuilt.ps1 `
+            -Jobs $env:NUMBER_OF_PROCESSORS
+
+      - name: Validate ARM64 PE machine type
+        shell: pwsh
+        run: |
+          function Get-PeMachine([string]$Path) {
+            $bytes = [System.IO.File]::ReadAllBytes($Path)
+            $peOffset = [BitConverter]::ToInt32($bytes, 0x3c)
+            return [BitConverter]::ToUInt16($bytes, $peOffset + 4)
+          }
+
+          $package = ".\build\prebuilt\audiocpp-windows-arm64-cpu"
+          foreach ($name in @("audiocpp_cli.exe", "audiocpp_server.exe", "audiocpp_gguf.exe")) {
+            $path = Join-Path $package $name
+            if (-not (Test-Path $path)) { throw "Missing $path" }
+            $machine = Get-PeMachine $path
+            if ($machine -ne 0xAA64) {
+              throw "$name is not ARM64 PE (machine=0x$('{0:X4}' -f $machine))"
+            }
+            Write-Host "$name => ARM64 (0xAA64)"
+          }
+
+      - name: Upload ARM64 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: audiocpp-windows-arm64-cpu
+          path: build/prebuilt/audiocpp-windows-arm64-cpu.zip
+          if-no-files-found: error
