@@ -126,6 +126,62 @@ jobs:
             build/prebuilt/*.sha256
           if-no-files-found: error
 
+  build-windows-arm64:
+    name: Windows ARM64 CPU
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Check loader/catalog sync
+        shell: pwsh
+        run: |
+          python tools/check_loader_catalog_sync.py --self-test
+          python tools/check_loader_catalog_sync.py
+
+      - name: Build native ARM64 package
+        shell: pwsh
+        run: |
+          .\scripts\package_windows_arm64_prebuilt.ps1 `
+            -Jobs $env:NUMBER_OF_PROCESSORS
+
+      - name: Validate ARM64 PE machine type
+        shell: pwsh
+        run: |
+          function Get-PeMachine([string]$Path) {
+            $bytes = [System.IO.File]::ReadAllBytes($Path)
+            $peOffset = [BitConverter]::ToInt32($bytes, 0x3c)
+            return [BitConverter]::ToUInt16($bytes, $peOffset + 4)
+          }
+
+          $package = ".\build\prebuilt\audiocpp-windows-arm64-cpu"
+          foreach ($name in @("audiocpp_cli.exe", "audiocpp_server.exe", "audiocpp_gguf.exe")) {
+            $path = Join-Path $package $name
+            if (-not (Test-Path $path)) { throw "Missing $path" }
+            $machine = Get-PeMachine $path
+            if ($machine -ne 0xAA64) {
+              throw "$name is not ARM64 PE (machine=0x$('{0:X4}' -f $machine))"
+            }
+            Write-Host "$name => ARM64 (0xAA64)"
+          }
+
+      - name: Create checksum
+        shell: pwsh
+        run: |
+          $zip = Get-Item .\build\prebuilt\audiocpp-windows-arm64-cpu.zip
+          $hash = (Get-FileHash -Algorithm SHA256 $zip.FullName).Hash.ToLowerInvariant()
+          "$hash *$($zip.Name)" |
+            Set-Content -Encoding ascii "$($zip.FullName).sha256"
+
+      - name: Upload package
+        uses: actions/upload-artifact@v7
+        with:
+          name: audiocpp-windows-arm64-cpu
+          path: |
+            build/prebuilt/audiocpp-windows-arm64-cpu.zip
+            build/prebuilt/audiocpp-windows-arm64-cpu.zip.sha256
+          if-no-files-found: error
+
   build-windows-cuda:
     name: Windows x86_64 CUDA 13
     runs-on: windows-2022
@@ -177,9 +233,9 @@ jobs:
           if-no-files-found: error
 
   publish:
-    name: Publish Linux packages
+    name: Publish release packages
     if: github.event_name == 'push'
-    needs: [build, build-windows, build-windows-cuda]
+    needs: [build, build-windows, build-windows-arm64, build-windows-cuda]
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -198,8 +254,8 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           mapfile -d '' assets < <(find dist -type f -print0)
-          if [[ "${#assets[@]}" -ne 10 ]]; then
-            printf 'Expected 10 release files, found %s:\n' "${#assets[@]}" >&2
+          if [[ "${#assets[@]}" -ne 12 ]]; then
+            printf 'Expected 12 release files, found %s:\n' "${#assets[@]}" >&2
             printf '  %s\n' "${assets[@]}" >&2
             exit 1
           fi
