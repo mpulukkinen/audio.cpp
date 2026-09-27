@@ -2,6 +2,8 @@ name: Linux release packages
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
       - "release-*"
@@ -251,7 +253,7 @@ jobs:
       - name: Create release and upload packages
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.11' }}
         run: |
           mapfile -d '' assets < <(find dist -type f -print0)
           if [[ "${#assets[@]}" -ne 12 ]]; then
