@@ -2,6 +2,7 @@
 param(
     [int]$Jobs = 0,
     [string]$Version = "dev",
+    [switch]$Vulkan,
     [switch]$Clean
 )
 
@@ -22,7 +23,8 @@ function Invoke-Checked {
 }
 
 $repoRoot = Split-Path $PSScriptRoot -Parent
-$buildDir = Join-Path $repoRoot "build\windows-arm64-cpu-release"
+$backend = if ($Vulkan) { "vulkan" } else { "cpu" }
+$buildDir = Join-Path $repoRoot "build\windows-arm64-$backend-release"
 $binDir = Join-Path $buildDir "bin"
 
 if ($Clean) {
@@ -39,7 +41,7 @@ $configureArgs = @(
     "-DAUDIOCPP_DEPLOYMENT_BUILD=ON",
     "-DENGINE_ENABLE_CUDA=OFF",
     "-DENGINE_ENABLE_HIP=OFF",
-    "-DENGINE_ENABLE_VULKAN=OFF",
+    "-DENGINE_ENABLE_VULKAN=$($Vulkan.IsPresent.ToString().ToUpperInvariant())",
     "-DENGINE_ENABLE_METAL=OFF",
     "-DENGINE_ENABLE_LLAMAFILE=OFF",
     "-DENGINE_ENABLE_CUDA_GRAPHS=OFF",
@@ -53,6 +55,28 @@ $configureArgs = @(
     "-DBUILD_SHARED_LIBS=OFF",
     "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded"
 )
+
+if ($Vulkan) {
+    if (-not $env:VULKAN_SDK) {
+        throw "Vulkan build requested but VULKAN_SDK is not set"
+    }
+
+    $vulkanLibrary = Join-Path $env:VULKAN_SDK "Lib-ARM64\vulkan-1.lib"
+    $vulkanInclude = Join-Path $env:VULKAN_SDK "Include"
+    $glslc = Join-Path $env:VULKAN_SDK "Bin\glslc.exe"
+
+    foreach ($required in @($vulkanLibrary, $vulkanInclude, $glslc)) {
+        if (-not (Test-Path -LiteralPath $required)) {
+            throw "Missing Vulkan SDK component required for ARM64 cross-build: $required"
+        }
+    }
+
+    $configureArgs += @(
+        "-DVulkan_LIBRARY=$vulkanLibrary",
+        "-DVulkan_INCLUDE_DIR=$vulkanInclude",
+        "-DVulkan_GLSLC_EXECUTABLE=$glslc"
+    )
+}
 
 Invoke-Checked "cmake.exe" $configureArgs
 
@@ -102,4 +126,4 @@ Get-ChildItem -LiteralPath $buildDir -Recurse -File -Filter "*.dll" |
     Where-Object { $_.DirectoryName -ne $binDir } |
     ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $binDir -Force }
 
-Write-Host "Windows ARM64 CPU build ready in $binDir"
+Write-Host "Windows ARM64 $backend build ready in $binDir"
