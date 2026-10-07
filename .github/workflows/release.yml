@@ -357,6 +357,59 @@ jobs:
           name: audio-${{ needs.get-version.outputs.tag }}-bin-windows-arm64-cpu
           path: build/windows-arm64-cpu-release/bin/*
 
+  windows-arm64-vulkan:
+    name: Windows ARM64 (Vulkan)
+    needs: [check-release, get-version]
+    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Vulkan SDK
+        shell: pwsh
+        run: |
+          curl.exe -o "$env:RUNNER_TEMP\VulkanSDK-Installer.exe" -L "https://sdk.lunarg.com/sdk/download/${env:VULKAN_VERSION}/windows/vulkansdk-windows-X64-${env:VULKAN_VERSION}.exe"
+          & "$env:RUNNER_TEMP\VulkanSDK-Installer.exe" --accept-licenses --default-answer --confirm-command install
+          Add-Content $env:GITHUB_ENV "VULKAN_SDK=C:\\VulkanSDK\\${env:VULKAN_VERSION}"
+          Add-Content $env:GITHUB_PATH "C:\\VulkanSDK\\${env:VULKAN_VERSION}\\Bin"
+      - name: Build
+        shell: pwsh
+        run: |
+          .\scripts\build_windows_arm64.ps1 -Version ${{ needs.get-version.outputs.version }} -Vulkan -Clean
+      - name: Validate ARM64 PE machine type
+        shell: pwsh
+        run: |
+          function Get-PeMachine([string]$Path) {
+            $bytes = [System.IO.File]::ReadAllBytes($Path)
+            $peOffset = [BitConverter]::ToInt32($bytes, 0x3c)
+            return [BitConverter]::ToUInt16($bytes, $peOffset + 4)
+          }
+
+          $bin = ".\build\windows-arm64-vulkan-release\bin"
+          foreach ($name in @("audiocpp_cli.exe", "audiocpp_server.exe", "audiocpp_gguf.exe")) {
+            $path = Join-Path $bin $name
+            if (-not (Test-Path $path)) {
+              throw "Missing $path"
+            }
+            $machine = Get-PeMachine $path
+            if ($machine -ne 0xAA64) {
+              throw "$name is not ARM64 PE (machine=0x$('{0:X4}' -f $machine))"
+            }
+            Write-Host "$name => ARM64 (0xAA64)"
+          }
+      - name: Stage bundle
+        shell: pwsh
+        working-directory: build/windows-arm64-vulkan-release/bin
+        run: |
+          cp ..\..\..\LICENSE . 2>$null
+          Copy-Item -Recurse ..\..\..\tools .\tools -ErrorAction SilentlyContinue
+          Copy-Item -Recurse ..\..\..\model_specs .\model_specs -ErrorAction SilentlyContinue
+      - uses: actions/upload-artifact@v4
+        with:
+          name: audio-${{ needs.get-version.outputs.tag }}-bin-windows-arm64-vulkan
+          path: build/windows-arm64-vulkan-release/bin/*
+
   windows-cpu:
     name: Windows x64 (CPU)
     needs: [check-release, get-version]
@@ -639,6 +692,7 @@ jobs:
       - linux-vulkan
       - linux-vulkan-portable
       - windows-arm64-cpu
+      - windows-arm64-vulkan
       - windows-cpu
       - windows-cpu-portable
       - windows-vulkan
@@ -656,6 +710,7 @@ jobs:
         needs.linux-vulkan.result == 'success' &&
         needs.linux-vulkan-portable.result == 'success' &&
         needs.windows-arm64-cpu.result == 'success' &&
+        needs.windows-arm64-vulkan.result == 'success' &&
         needs.windows-cpu.result == 'success' &&
         needs.windows-cpu-portable.result == 'success' &&
         needs.windows-vulkan.result == 'success' &&
