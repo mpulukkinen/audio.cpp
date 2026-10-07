@@ -30,7 +30,16 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
-          .\scripts\build_windows_arm64.ps1 -Version ci -Clean
+          $log = Join-Path $env:RUNNER_TEMP "audio-cpp-arm64-build.log"
+          try {
+            .\scripts\build_windows_arm64.ps1 -Version ci -Clean *> $log
+          }
+          catch {
+            Write-Host "::error::Windows ARM64 build failed. Showing the final 300 log lines."
+            Get-Content -LiteralPath $log -Tail 300
+            throw
+          }
+          Get-Content -LiteralPath $log -Tail 80
 
       - name: Validate ARM64 PE machine type
         shell: pwsh
