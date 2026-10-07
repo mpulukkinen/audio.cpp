@@ -156,8 +156,9 @@ if (Vulkan_FOUND)
         AND CMAKE_GENERATOR MATCHES "Visual Studio"
         AND CMAKE_GENERATOR_PLATFORM MATCHES "^(ARM64|ARM)$")
         list(APPEND VULKAN_SHADER_GEN_GENERATOR_ARGS
+            CMAKE_GENERATOR "${CMAKE_GENERATOR}"
             CMAKE_GENERATOR_PLATFORM x64)
-        message(STATUS "vulkan-shaders-gen generator platform: x64 host (target platform: ${CMAKE_GENERATOR_PLATFORM})")
+        message(STATUS "vulkan-shaders-gen generator: ${CMAKE_GENERATOR}; platform: x64 host (target platform: ${CMAKE_GENERATOR_PLATFORM})")
     endif()
 
     ExternalProject_Add(
