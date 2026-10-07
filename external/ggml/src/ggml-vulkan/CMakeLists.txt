@@ -141,14 +141,30 @@ if (Vulkan_FOUND)
 
     include(ExternalProject)
 
+    set(VULKAN_SHADER_GEN_GENERATOR_ARGS "")
     if (CMAKE_CROSSCOMPILING)
         list(APPEND VULKAN_SHADER_GEN_CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${HOST_CMAKE_TOOLCHAIN_FILE})
         message(STATUS "vulkan-shaders-gen toolchain file: ${HOST_CMAKE_TOOLCHAIN_FILE}")
     endif()
 
+    # Windows x64 -> Windows ARM64 is not reported by CMake as
+    # CMAKE_CROSSCOMPILING because the host and target OS are both Windows.
+    # ExternalProject therefore inherits the ARM64 VS platform unless we
+    # override it explicitly. vulkan-shaders-gen is a build-time helper and
+    # must run on the x64 GitHub runner.
+    if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows"
+        AND CMAKE_GENERATOR MATCHES "Visual Studio"
+        AND CMAKE_GENERATOR_PLATFORM MATCHES "^(ARM64|ARM)$")
+        list(APPEND VULKAN_SHADER_GEN_GENERATOR_ARGS
+            CMAKE_GENERATOR "${CMAKE_GENERATOR}"
+            CMAKE_GENERATOR_PLATFORM x64)
+        message(STATUS "vulkan-shaders-gen generator: ${CMAKE_GENERATOR}; platform: x64 host (target platform: ${CMAKE_GENERATOR_PLATFORM})")
+    endif()
+
     ExternalProject_Add(
         vulkan-shaders-gen
         SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vulkan-shaders
+        ${VULKAN_SHADER_GEN_GENERATOR_ARGS}
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/$<CONFIG>
                    -DCMAKE_INSTALL_BINDIR=.
                    -DCMAKE_BUILD_TYPE=$<CONFIG>
