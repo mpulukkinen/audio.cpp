@@ -75,19 +75,26 @@ New-Item -ItemType Directory -Force -Path $binDir | Out-Null
 
 $expected = @("audiocpp_cli.exe", "audiocpp_server.exe", "audiocpp_gguf.exe")
 foreach ($name in $expected) {
-    $binary = Get-ChildItem -LiteralPath $buildDir -Recurse -File -Filter $name |
-        Where-Object { $_.FullName -notlike "$binDir\*" } |
-        Select-Object -First 1
-
-    if (-not $binary) {
-        $binary = Get-ChildItem -LiteralPath $binDir -File -Filter $name | Select-Object -First 1
+    # Multi-config Visual Studio generators place Release outputs under bin\Release.
+    # Prefer that exact location, then fall back to a recursive search while
+    # ignoring the flattened destination copy in $binDir itself.
+    $releaseBinary = Join-Path $binDir "Release\$name"
+    if (Test-Path -LiteralPath $releaseBinary) {
+        $binary = Get-Item -LiteralPath $releaseBinary
+    } else {
+        $destinationBinary = Join-Path $binDir $name
+        $binary = Get-ChildItem -LiteralPath $buildDir -Recurse -File -Filter $name |
+            Where-Object { $_.FullName -ne $destinationBinary } |
+            Select-Object -First 1
     }
+
     if (-not $binary) {
         throw "Missing $name under $buildDir"
     }
 
-    if ($binary.DirectoryName -ne $binDir) {
-        Copy-Item -LiteralPath $binary.FullName -Destination $binDir -Force
+    $destinationBinary = Join-Path $binDir $name
+    if ($binary.FullName -ne $destinationBinary) {
+        Copy-Item -LiteralPath $binary.FullName -Destination $destinationBinary -Force
     }
 }
 
