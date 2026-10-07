@@ -3,13 +3,30 @@ name: windows-arm64-build
 on:
   push:
     branches:
-      - ci/**
       - main
-      - dev
+    paths:
+      - "CMakeLists.txt"
+      - "cmake/**"
+      - "app/**"
+      - "include/**"
+      - "src/**"
+      - "external/**"
+      - "model_specs/**"
+      - "scripts/build_windows_arm64.ps1"
+      - ".github/workflows/windows-arm64-build.yml"
   pull_request:
     branches:
       - main
-      - dev
+    paths:
+      - "CMakeLists.txt"
+      - "cmake/**"
+      - "app/**"
+      - "include/**"
+      - "src/**"
+      - "external/**"
+      - "model_specs/**"
+      - "scripts/build_windows_arm64.ps1"
+      - ".github/workflows/windows-arm64-build.yml"
   workflow_dispatch:
 
 jobs:
