@@ -13,10 +13,6 @@
 name: Build and publish Docker images
 
 on:
-  # Runs daily at 03:21 UTC
-  schedule:
-    - cron: '21 3 * * *'
-  # or when triggered manually
   workflow_dispatch:
     inputs:
       force_build:
