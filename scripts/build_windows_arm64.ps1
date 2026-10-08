@@ -126,4 +126,27 @@ Get-ChildItem -LiteralPath $buildDir -Recurse -File -Filter "*.dll" |
     Where-Object { $_.DirectoryName -ne $binDir } |
     ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $binDir -Force }
 
+if ($Vulkan) {
+    $cache = Join-Path $buildDir "CMakeCache.txt"
+    foreach ($expectedSetting in @(
+        "ENGINE_ENABLE_VULKAN:BOOL=ON",
+        "GGML_VULKAN:BOOL=ON"
+    )) {
+        if (-not (Select-String -LiteralPath $cache -SimpleMatch $expectedSetting -Quiet)) {
+            throw "ARM64 Vulkan configure validation failed: missing '$expectedSetting' in CMakeCache.txt"
+        }
+    }
+
+    # The Vulkan backend ultimately links against the Windows Vulkan loader.
+    # Check the flattened release executables themselves so a CPU-only binary
+    # cannot be accidentally published under the Vulkan package name.
+    foreach ($name in @("audiocpp_cli.exe", "audiocpp_server.exe")) {
+        $path = Join-Path $binDir $name
+        $binaryText = [System.Text.Encoding]::ASCII.GetString([System.IO.File]::ReadAllBytes($path))
+        if ($binaryText.IndexOf("vulkan-1.dll", [System.StringComparison]::OrdinalIgnoreCase) -lt 0) {
+            throw "$name does not reference vulkan-1.dll; refusing to publish a CPU-only ARM64 Vulkan build"
+        }
+    }
+}
+
 Write-Host "Windows ARM64 $backend build ready in $binDir"
