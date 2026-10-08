@@ -363,6 +363,22 @@ if (NOT EXISTS "${AUDIOCPP_GGML_SOURCE_DIR}/CMakeLists.txt")
 endif()
 message(STATUS "Using ggml source: ${AUDIOCPP_GGML_SOURCE_DIR}")
 add_subdirectory("${AUDIOCPP_GGML_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/ggml")
+
+# Windows ARM64 static Vulkan builds need the Vulkan backend to survive the final
+# executable link.  The normal ggml transitive link is sufficient on the other
+# release targets, but MSVC/ClangCL ARM64 can discard the backend archive while
+# retaining the CPU registry.  The result looks like a valid Vulkan build but
+# reports only CPU devices at runtime.
+if (WIN32 AND ENGINE_ENABLE_VULKAN AND
+    (CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64"))
+    if (NOT TARGET ggml-vulkan)
+        message(FATAL_ERROR "ARM64 Vulkan build requested but ggml-vulkan target was not created")
+    endif()
+    target_compile_definitions(ggml PUBLIC GGML_USE_VULKAN)
+    target_link_options(ggml INTERFACE "/WHOLEARCHIVE:$<TARGET_FILE:ggml-vulkan>")
+    message(STATUS "Windows ARM64: force-linking static ggml Vulkan backend")
+endif()
+
 add_subdirectory(external/sentencepiece EXCLUDE_FROM_ALL)
 
 add_compile_options(
