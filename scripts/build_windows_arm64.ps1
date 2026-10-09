@@ -128,6 +128,7 @@ Get-ChildItem -LiteralPath $buildDir -Recurse -File -Filter "*.dll" |
 
 if ($Vulkan) {
     $cache = Join-Path $buildDir "CMakeCache.txt"
+    # CMake accepts several canonical true spellings; validate the value semantically.
     foreach ($settingName in @(
         "ENGINE_ENABLE_VULKAN",
         "GGML_VULKAN"
