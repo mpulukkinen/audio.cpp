@@ -5318,6 +5318,12 @@ static vk_device ggml_vk_get_device(size_t idx) {
                                  (vk11_props.subgroupSupportedOperations & vk::SubgroupFeatureFlagBits::eBasic);
         device->subgroup_arithmetic = (vk11_props.subgroupSupportedStages & vk::ShaderStageFlagBits::eCompute) &&
                                       (vk11_props.subgroupSupportedOperations & vk::SubgroupFeatureFlagBits::eArithmetic);
+        if (device->vendor_id == VK_VENDOR_ID_QUALCOMM &&
+            device->driver_id == vk::DriverId::eQualcommProprietary) {
+            // Adreno X1 Windows currently fails to create ggml's subgroup-reduction
+            // mat-vec pipelines even though subgroup arithmetic is advertised.
+            device->subgroup_arithmetic = false;
+        }
 #ifdef __APPLE__
         // Workaround for subgroup arithmetic failing on MoltenVK with AMD GPUs (issue 15846)
         if (device->vendor_id == VK_VENDOR_ID_AMD) {
