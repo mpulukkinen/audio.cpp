@@ -26,6 +26,7 @@ $repoRoot = Split-Path $PSScriptRoot -Parent
 $backend = if ($Vulkan) { "vulkan" } else { "cpu" }
 $buildDir = Join-Path $repoRoot "build\windows-arm64-$backend-release"
 $binDir = Join-Path $buildDir "bin"
+$vulkanEnabled = if ($Vulkan) { "ON" } else { "OFF" }
 
 if ($Clean) {
     Remove-Item -LiteralPath $buildDir -Recurse -Force -ErrorAction SilentlyContinue
@@ -41,7 +42,7 @@ $configureArgs = @(
     "-DAUDIOCPP_DEPLOYMENT_BUILD=ON",
     "-DENGINE_ENABLE_CUDA=OFF",
     "-DENGINE_ENABLE_HIP=OFF",
-    "-DENGINE_ENABLE_VULKAN=$(if ($Vulkan) { \"ON\" } else { \"OFF\" })",
+    "-DENGINE_ENABLE_VULKAN=$vulkanEnabled",
     "-DENGINE_ENABLE_METAL=OFF",
     "-DENGINE_ENABLE_LLAMAFILE=OFF",
     "-DENGINE_ENABLE_CUDA_GRAPHS=OFF",
